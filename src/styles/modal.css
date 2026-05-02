@@ -1,0 +1,63 @@
+/* 🔥 BACKDROP (fundo escuro atrás do modal) */
+.modal-backdrop.show {
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+/* 🔥 CONTAINER DO MODAL */
+.modal-content {
+    background-color: var(--bg-elev);
+    /* mesmo dos cards */
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    color: var(--text);
+}
+
+/* HEADER */
+.modal-header {
+    border-bottom: 1px solid var(--border);
+}
+
+.modal-title {
+    font-weight: 600;
+    font-size: 32px;
+}
+
+/* BODY */
+.modal-body {
+    background-color: var(--bg-elev);
+}
+
+/* INPUTS */
+.modal-content .form-control,
+.modal-content .form-select {
+    background-color: var(--bg);
+    color: var(--text);
+    border: 1px solid var(--border);
+    font-size: x-large;
+}
+
+.modal-content .form-control:focus,
+.modal-content .form-select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px var(--primary-soft);
+}
+
+/* BOTÃO CLOSE (X) */
+.btn-close {
+    filter: invert(1);
+}
+
+/* BOTÃO PRINCIPAL */
+.modal-content .btn-success {
+    background-color: var(--primary);
+    border: none;
+}
+
+.modal-content .btn-success:hover {
+    background-color: var(--primary-modal);
+}
+
+.form-label {
+    font-size: 22px;
+    font-weight: 600;
+}

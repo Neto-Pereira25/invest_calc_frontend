@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 import {
-    Row,
-    Col,
-    Card,
     Button,
-    Modal
+    Card,
+    Col,
+    Row
 } from 'react-bootstrap';
+import { FaEdit, FaTrash } from 'react-icons/fa';
+import TransactionModal from '../components/TransactionModal';
 import { useTransactionsStore } from '../store/transactionsStore';
-import { FaTrash, FaEdit } from 'react-icons/fa';
 
 export default function TransactionsPage() {
     const transactions = useTransactionsStore((s) => s.items);
@@ -179,19 +179,10 @@ export default function TransactionsPage() {
             </Row>
 
             {/* 🔥 MODAL (BASE) */}
-            <Modal
+            <TransactionModal
                 show={showModal}
-                onHide={() => setShowModal(false)}
-                centered
-            >
-                <Modal.Header closeButton>
-                    <Modal.Title>Nova Transação</Modal.Title>
-                </Modal.Header>
-
-                <Modal.Body>
-                    <p>Formulário em construção...</p>
-                </Modal.Body>
-            </Modal>
+                onClose={() => setShowModal(false)}
+            />
         </div>
     );
 }
