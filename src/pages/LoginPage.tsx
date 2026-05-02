@@ -12,9 +12,11 @@ const loginSchema = z.object({
 });
 
 type LoginResponse = {
-    token: string;
-    refreshToken: string;
-    message: string;
+    data: {
+        token: string;
+        refreshToken: string;
+        message: string;
+    }
 };
 
 export default function LoginPage() {
@@ -46,9 +48,7 @@ export default function LoginPage() {
                 password,
             });
 
-            const { token, refreshToken } = response.data;
-
-            console.log(response.data);
+            const { token, refreshToken } = response.data.data;
 
             setAuth(token, refreshToken);
 
