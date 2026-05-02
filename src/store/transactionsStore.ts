@@ -1,50 +1,23 @@
 import { create } from 'zustand';
-import { api } from '../lib/api';
-import { createTransaction } from '../lib/transactionService';
-
-// export type Transaction = {
-//     id: number;
-//     description: string;
-//     amount: number;
-//     type: 'INCOME' | 'EXPENSE';
-//     category: string;
-//     subcategory: string;
-//     date: string;
-// };
-
-// type TransactionsState = {
-//     items: Transaction[];
-//     isLoading: boolean;
-
-//     fetchTransactions: () => Promise<void>;
-//     clear: () => void;
-// };
-
-export interface CreateTransactionDTO {
-    description: string;
-    amount: number;
-    date: string;
-    subcategoryId: number;
-}
-
-interface Transaction {
-    id: number;
-    description: string;
-    amount: number;
-    type: 'INCOME' | 'EXPENSE';
-    category: string;
-    subcategory: string;
-    date: string;
-}
+import {
+    createTransaction,
+    deleteTransaction,
+    getTransactions,
+    updateTransaction
+} from '../lib/transactionService';
+import type { CreateTransactionPayload, Transaction } from '../types/transaction';
 
 interface TransactionsState {
     items: Transaction[];
     isLoading: boolean;
+
     fetchTransactions: () => Promise<void>;
-    addTransaction: (data: CreateTransactionDTO) => Promise<void>;
+    addTransaction: (data: CreateTransactionPayload) => Promise<void>;
+    editTransaction: (id: number, data: CreateTransactionPayload) => Promise<void>;
+    removeTransaction: (id: number) => Promise<void>;
 }
 
-export const useTransactionsStore = create<TransactionsState>((set, get) => ({
+export const useTransactionsStore = create<TransactionsState>((set) => ({
     items: [],
     isLoading: false,
 
@@ -52,11 +25,9 @@ export const useTransactionsStore = create<TransactionsState>((set, get) => ({
         set({ isLoading: true });
 
         try {
-            const response = await api.get('/financial-transactions');
+            const response = await getTransactions();
 
-            const data = response.data.data;
-
-            set({ items: data });
+            set({ items: response.data });
         } catch (error) {
             console.error('Erro ao buscar transações', error);
         } finally {
@@ -68,11 +39,26 @@ export const useTransactionsStore = create<TransactionsState>((set, get) => ({
         try {
             await createTransaction(data);
 
-            // 🔥 atualiza lista depois de criar
-            await get().fetchTransactions();
+            const res = await getTransactions();
+            set({ items: res.data });
         } catch (error) {
             console.error('Erro ao criar transação', error);
         }
+    },
+
+    editTransaction: async (id, data) => {
+        await updateTransaction(id, data);
+
+        const res = await getTransactions();
+        set({ items: res.data });
+    },
+
+    removeTransaction: async (id) => {
+        await deleteTransaction(id);
+
+        set((state) => ({
+            items: state.items.filter((t) => t.id !== id),
+        }));
     },
 
     clear: () => set({ items: [] }),

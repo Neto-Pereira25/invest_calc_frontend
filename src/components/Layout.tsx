@@ -33,7 +33,13 @@ export default function Layout() {
                     <Navbar.Brand
                         as={Link}
                         to="/dashboard"
-                        style={{ color: 'var(--text)', fontWeight: 700 }}
+                        style={{
+                            padding: '8px 16px',
+                            borderRadius: '8px',
+                            color: 'var(--text)',
+                            background: 'linear-gradient(135deg, var(--primary), var(--accent))',
+                            fontWeight: 700
+                        }}
                     >
                         InvestCalc
                     </Navbar.Brand>
