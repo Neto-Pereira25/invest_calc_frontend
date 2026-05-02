@@ -1,25 +1,17 @@
 import { api } from './api';
+import type { CreateTransactionPayload, Transaction } from '../types/transaction';
 
-export interface CreateTransactionDTO {
-    description: string;
-    amount: number;
-    date: string;
-    subcategoryId: number;
-}
+export const getTransactions = async (): Promise<{ data: Transaction[] }> => {
+    const res = await api.get('/financial-transactions');
+    return res.data;
+};
 
-export interface UpdateTransactionDTO {
-    description: string;
-    amount: number;
-    date: string;
-    subcategoryId: number;
-}
-
-export async function createTransaction(data: CreateTransactionDTO) {
+export async function createTransaction(data: CreateTransactionPayload) {
     const response = await api.post('/financial-transactions', data);
     return response.data;
 }
 
-export const updateTransaction = async (id: number, data: UpdateTransactionDTO) => {
+export const updateTransaction = async (id: number, data: CreateTransactionPayload) => {
     await api.put(`/financial-transactions/${id}`, data);
 };
 

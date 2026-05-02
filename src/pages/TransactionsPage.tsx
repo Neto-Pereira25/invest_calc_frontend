@@ -8,13 +8,14 @@ import {
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import TransactionModal from '../components/TransactionModal';
 import { useTransactionsStore } from '../store/transactionsStore';
+import type { Transaction } from '../types/transaction';
 
 export default function TransactionsPage() {
     const transactions = useTransactionsStore((s) => s.items);
     const fetchTransactions = useTransactionsStore((s) => s.fetchTransactions);
 
     const [showModal, setShowModal] = useState(false);
-    const [editingTransaction, setEditingTransaction] = useState(null);
+    const [editingTransaction, setEditingTransaction] = useState<Transaction | null>(null);
     const removeTransaction = useTransactionsStore((s) => s.removeTransaction);
 
     useEffect(() => {
@@ -26,10 +27,6 @@ export default function TransactionsPage() {
         if (confirm('Deseja realmente excluir este lançamento?')) {
             await removeTransaction(id);
         }
-    };
-
-    const handleEdit = (id: number) => {
-        console.log('Editar:', id);
     };
 
     return (
@@ -162,7 +159,10 @@ export default function TransactionsPage() {
                                             <Button
                                                 variant="outline-primary"
                                                 size="lg"
-                                                onClick={() => handleEdit(t.id)}
+                                                onClick={() => {
+                                                    setEditingTransaction(t);
+                                                    setShowModal(true);
+                                                }}
                                             >
                                                 <FaEdit />
                                             </Button>
