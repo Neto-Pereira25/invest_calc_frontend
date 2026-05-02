@@ -1,33 +1,17 @@
-import { useEffect, useState } from 'react';
-import { api } from '../lib/api';
+import { useEffect } from 'react';
+import { useTransactionsStore } from '../store/transactionsStore';
 import s from './Dashboard.module.css';
 
-type Transaction = {
-    id: string;
-    description: string;
-    amount: number;
-    type: 'INCOME' | 'EXPENSE';
-    date: string;
-};
-
 export default function DashboardPage() {
-    const [transactions, setTransactions] = useState<Transaction[]>([]);
+    const transactions = useTransactionsStore((state) => state.items);
+    const fetchTransactions = useTransactionsStore((state) => state.fetchTransactions);
+
 
     useEffect(() => {
-        async function fetchTransactions() {
-            try {
-                const response = await api.get('/financial-transactions');
-
-                const data = response.data.data;
-
-                setTransactions(data);
-            } catch (error) {
-                console.error('Erro ao buscar transações', error);
-            }
+        if (transactions.length === 0) {
+            fetchTransactions();
         }
-
-        fetchTransactions();
-    }, []);
+    }, [transactions.length, fetchTransactions]);
 
     // 🔥 adapta para seu backend (INCOME / EXPENSE)
     const income = transactions
@@ -72,8 +56,7 @@ export default function DashboardPage() {
                 <div className={s.stat}>
                     <div className={s.statLabel}>Saldo</div>
                     <div
-                        className={`${s.statValue} ${balance >= 0 ? s.pos : s.neg
-                            }`}
+                        className={`${s.statValue} ${balance >= 0 ? s.pos : s.neg}`}
                     >
                         R$ {balance.toFixed(2)}
                     </div>
