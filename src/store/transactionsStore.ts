@@ -2,10 +2,12 @@ import { create } from 'zustand';
 import { api } from '../lib/api';
 
 export type Transaction = {
-    id: string;
+    id: number;
     description: string;
     amount: number;
     type: 'INCOME' | 'EXPENSE';
+    category: string;
+    subcategory: string;
     date: string;
 };
 
