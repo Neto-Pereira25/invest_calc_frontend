@@ -14,13 +14,18 @@ export default function TransactionsPage() {
     const fetchTransactions = useTransactionsStore((s) => s.fetchTransactions);
 
     const [showModal, setShowModal] = useState(false);
+    const [editingTransaction, setEditingTransaction] = useState(null);
+    const removeTransaction = useTransactionsStore((s) => s.removeTransaction);
 
     useEffect(() => {
         fetchTransactions();
     }, [fetchTransactions]);
 
-    const handleDelete = (id: number) => {
-        console.log('Excluir:', id);
+
+    const handleDelete = async (id: number) => {
+        if (confirm('Deseja realmente excluir este lançamento?')) {
+            await removeTransaction(id);
+        }
     };
 
     const handleEdit = (id: number) => {
@@ -181,7 +186,11 @@ export default function TransactionsPage() {
             {/* 🔥 MODAL (BASE) */}
             <TransactionModal
                 show={showModal}
-                onClose={() => setShowModal(false)}
+                onClose={() => {
+                    setShowModal(false);
+                    setEditingTransaction(null);
+                }}
+                transaction={editingTransaction}
             />
         </div>
     );

@@ -1,24 +1,6 @@
 import { create } from 'zustand';
 import { api } from '../lib/api';
-import { createTransaction } from '../lib/transactionService';
-
-// export type Transaction = {
-//     id: number;
-//     description: string;
-//     amount: number;
-//     type: 'INCOME' | 'EXPENSE';
-//     category: string;
-//     subcategory: string;
-//     date: string;
-// };
-
-// type TransactionsState = {
-//     items: Transaction[];
-//     isLoading: boolean;
-
-//     fetchTransactions: () => Promise<void>;
-//     clear: () => void;
-// };
+import { createTransaction, deleteTransaction, updateTransaction } from '../lib/transactionService';
 
 export interface CreateTransactionDTO {
     description: string;
@@ -42,6 +24,8 @@ interface TransactionsState {
     isLoading: boolean;
     fetchTransactions: () => Promise<void>;
     addTransaction: (data: CreateTransactionDTO) => Promise<void>;
+    updateTransaction: (id: number, data: CreateTransactionDTO) => Promise<void>;
+    removeTransaction: (id: number) => Promise<void>;
 }
 
 export const useTransactionsStore = create<TransactionsState>((set, get) => ({
@@ -73,6 +57,21 @@ export const useTransactionsStore = create<TransactionsState>((set, get) => ({
         } catch (error) {
             console.error('Erro ao criar transação', error);
         }
+    },
+
+    updateTransaction: async (id, data) => {
+        await updateTransaction(id, data);
+
+        const res = await getTransactions();
+        set({ items: res.data });
+    },
+
+    removeTransaction: async (id) => {
+        await deleteTransaction(id);
+
+        set((state) => ({
+            items: state.items.filter((t) => t.id !== id),
+        }));
     },
 
     clear: () => set({ items: [] }),

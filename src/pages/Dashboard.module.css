@@ -9,7 +9,7 @@
 
 .sub {
     color: var(--text-dim);
-    font-size: 14px;
+    font-size: 20px;
 }
 
 .grid {
@@ -33,7 +33,7 @@
 }
 
 .statLabel {
-    font-size: 12px;
+    font-size: 18px;
     color: var(--text-dim);
     text-transform: uppercase;
     letter-spacing: .05em;
@@ -56,7 +56,7 @@
 }
 
 .statSub {
-    font-size: 12px;
+    font-size: 18px;
     color: var(--text-muted);
     margin-top: 6px;
 }
@@ -69,7 +69,7 @@
 }
 
 .sectionTitle {
-    font-size: 16px;
+    font-size: 24px;
     margin-bottom: 16px;
     display: flex;
     justify-content: space-between;
@@ -78,7 +78,7 @@
 
 .empty {
     color: var(--text-muted);
-    font-size: 14px;
+    font-size: 24px;
     padding: 24px 0;
     text-align: center;
 }
@@ -96,13 +96,14 @@
 }
 
 .rowIcon {
-    width: 36px;
-    height: 36px;
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
     display: grid;
     place-items: center;
     background: var(--bg-elev-2);
-    font-size: 16px;
+    font-size: 30px;
+    font-weight: 900;
 }
 
 .rowIcon.income {
@@ -122,11 +123,11 @@
 
 .rowDesc {
     font-weight: 500;
-    font-size: 14px;
+    font-size: 24px;
 }
 
 .rowMeta {
-    font-size: 12px;
+    font-size: 18px;
     color: var(--text-muted);
     margin-top: 2px;
 }
@@ -134,7 +135,7 @@
 .rowAmount {
     font-family: var(--font-mono);
     font-weight: 600;
-    font-size: 14px;
+    font-size: 24px;
 }
 
 .rowAmount.income {
