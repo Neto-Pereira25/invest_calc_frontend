@@ -1,73 +1,180 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Button, Form, Modal } from 'react-bootstrap';
+import { Modal, Button, Form } from 'react-bootstrap';
+import { useTransactionsStore } from '../store/transactionsStore';
+import { getCategories } from '../lib/categoryService';
+import type { Category } from '../types/category';
 import { FaPiggyBank } from 'react-icons/fa';
 import { MdAttachMoney } from 'react-icons/md';
-import { getCategories } from '../lib/categoryService';
 import '../styles/modal.css';
-import type { Category } from '../types/category';
 
-type Props = {
+interface Props {
     show: boolean;
     onClose: () => void;
-};
+}
 
 export default function TransactionModal({ show, onClose }: Props) {
-    const [type, setType] = useState<'INCOME' | 'EXPENSE'>('INCOME');
+    const addTransaction = useTransactionsStore((state) => state.addTransaction);
+
     const [categories, setCategories] = useState<Category[]>([]);
+    const [type, setType] = useState<'INCOME' | 'EXPENSE'>('EXPENSE');
 
     const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
-    const [subcategory, setSubcategory] = useState<string | null>(null);
+    const [subcategoryId, setSubcategoryId] = useState<number | null>(null);
 
     const [description, setDescription] = useState('');
     const [amount, setAmount] = useState('');
-    const [date, setDate] = useState('');
+    const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
 
-    // 🔥 carregar categorias
+    // ✅ carregar categorias (único useEffect necessário)
     useEffect(() => {
         async function load() {
             const data = await getCategories();
             setCategories(data);
         }
+        load();
+    }, []);
 
-        if (show) load();
-    }, [show]);
-
-    // 🔥 categorias filtradas (DERIVADO)
+    // ✅ filtrar categorias por tipo
     const filteredCategories = useMemo(() => {
         return categories.filter((c) => c.type === type);
     }, [categories, type]);
 
-    // 🔥 categoria selecionada (DERIVADO)
-    const selectedCategory = useMemo(() => {
-        return (
-            filteredCategories.find((c) => c.id === selectedCategoryId) ||
-            filteredCategories[0] ||
-            null
-        );
-    }, [filteredCategories, selectedCategoryId]);
+    // ✅ categoria selecionada (ou primeira)
+    const selectedCategory =
+        filteredCategories.find((c) => c.id === selectedCategoryId) ||
+        filteredCategories[0] ||
+        null;
 
-    // 🔥 subcategoria FINAL (DERIVADA + CONTROLADA)
-    const finalSubcategory =
-        subcategory ??
-        selectedCategory?.subcategories[0]?.name ??
-        '';
+    // ✅ subcategoria selecionada (ou primeira)
+    const selectedSubcategoryId =
+        subcategoryId ||
+        selectedCategory?.subcategories[0]?.id ||
+        null;
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
 
-        console.log({
+        if (!selectedSubcategoryId) return;
+
+        await addTransaction({
             description,
             amount: Number(amount),
-            type,
-            category: selectedCategory?.name,
-            subcategory: finalSubcategory,
             date,
+            subcategoryId: selectedSubcategoryId,
         });
 
+        // reset
+        setDescription('');
+        setAmount('');
+        setSelectedCategoryId(null);
+        setSubcategoryId(null);
+
         onClose();
-    };
-    // FaArrowUp, FaArrowDown
+    }
+
     return (
+        // <Modal show={show} onHide={onClose} centered size="lg">
+        //     <Modal.Header closeButton>
+        //         <Modal.Title>Novo lançamento</Modal.Title>
+        //     </Modal.Header>
+
+        //     <Modal.Body>
+        //         <Form onSubmit={handleSubmit}>
+        //             {/* TIPO */}
+        //             <div className="d-flex gap-2 mb-3">
+        //                 <Button
+        //                     variant={type === 'INCOME' ? 'success' : 'outline-success'}
+        //                     onClick={() => {
+        //                         setType('INCOME');
+        //                         setSelectedCategoryId(null);
+        //                         setSubcategoryId(null);
+        //                     }}
+        //                 >
+        //                     Receita
+        //                 </Button>
+
+        //                 <Button
+        //                     variant={type === 'EXPENSE' ? 'danger' : 'outline-danger'}
+        //                     onClick={() => {
+        //                         setType('EXPENSE');
+        //                         setSelectedCategoryId(null);
+        //                         setSubcategoryId(null);
+        //                     }}
+        //                 >
+        //                     Despesa
+        //                 </Button>
+        //             </div>
+
+        //             {/* DESCRIÇÃO */}
+        //             <Form.Group className="mb-3">
+        //                 <Form.Label>Descrição</Form.Label>
+        //                 <Form.Control
+        //                     value={description}
+        //                     onChange={(e) => setDescription(e.target.value)}
+        //                     required
+        //                 />
+        //             </Form.Group>
+
+        //             {/* CATEGORIA */}
+        //             <Form.Group className="mb-3">
+        //                 <Form.Label>Categoria</Form.Label>
+        //                 <Form.Select
+        //                     value={selectedCategory?.id ?? ''}
+        //                     onChange={(e) => {
+        //                         setSelectedCategoryId(Number(e.target.value));
+        //                         setSubcategoryId(null);
+        //                     }}
+        //                 >
+        //                     {filteredCategories.map((cat) => (
+        //                         <option key={cat.id} value={cat.id}>
+        //                             {cat.name}
+        //                         </option>
+        //                     ))}
+        //                 </Form.Select>
+        //             </Form.Group>
+
+        //             {/* SUBCATEGORIA */}
+        //             <Form.Group className="mb-3">
+        //                 <Form.Label>Subcategoria</Form.Label>
+        //                 <Form.Select
+        //                     value={selectedSubcategoryId ?? ''}
+        //                     onChange={(e) => setSubcategoryId(Number(e.target.value))}
+        //                 >
+        //                     {selectedCategory?.subcategories.map((sub) => (
+        //                         <option key={sub.id} value={sub.id}>
+        //                             {sub.name}
+        //                         </option>
+        //                     ))}
+        //                 </Form.Select>
+        //             </Form.Group>
+
+        //             {/* VALOR */}
+        //             <Form.Group className="mb-3">
+        //                 <Form.Label>Valor</Form.Label>
+        //                 <Form.Control
+        //                     value={amount}
+        //                     onChange={(e) => setAmount(e.target.value)}
+        //                     required
+        //                 />
+        //             </Form.Group>
+
+        //             {/* DATA */}
+        //             <Form.Group className="mb-3">
+        //                 <Form.Label>Data</Form.Label>
+        //                 <Form.Control
+        //                     type="date"
+        //                     value={date}
+        //                     onChange={(e) => setDate(e.target.value)}
+        //                     required
+        //                 />
+        //             </Form.Group>
+
+        //             <Button type="submit" className="w-100" variant="success">
+        //                 Salvar
+        //             </Button>
+        //         </Form>
+        //     </Modal.Body>
+        // </Modal>
         <Modal show={show} onHide={onClose} centered size='lg'>
             <Modal.Header closeButton>
                 <Modal.Title
@@ -100,7 +207,7 @@ export default function TransactionModal({ show, onClose }: Props) {
                             onClick={() => {
                                 setType('INCOME');
                                 setSelectedCategoryId(null);
-                                setSubcategory(null);
+                                setSubcategoryId(null);
                             }}
                             style={{
                                 fontSize: '24px',
@@ -117,7 +224,7 @@ export default function TransactionModal({ show, onClose }: Props) {
                             onClick={() => {
                                 setType('EXPENSE');
                                 setSelectedCategoryId(null);
-                                setSubcategory(null);
+                                setSubcategoryId(null);
                             }}
                             style={{
                                 fontSize: '24px',
@@ -146,7 +253,7 @@ export default function TransactionModal({ show, onClose }: Props) {
                             value={selectedCategory?.id || ''}
                             onChange={(e) => {
                                 setSelectedCategoryId(Number(e.target.value));
-                                setSubcategory(null); // 🔥 reset subcategoria
+                                setSubcategoryId(null); // 🔥 reset subcategoria
                             }}
                         >
                             {filteredCategories.map((c) => (
@@ -162,11 +269,11 @@ export default function TransactionModal({ show, onClose }: Props) {
                         <Form.Label>Subcategoria</Form.Label>
                         <Form.Select
                             size="lg"
-                            value={finalSubcategory}
-                            onChange={(e) => setSubcategory(e.target.value)}
+                            value={subcategoryId || ''}
+                            onChange={(e) => setSubcategoryId(Number(e.target.value))}
                         >
                             {selectedCategory?.subcategories.map((sub) => (
-                                <option key={sub.id} value={sub.name}>
+                                <option key={sub.id} value={sub.id}>
                                     {sub.name}
                                 </option>
                             ))}

@@ -21,4 +21,6 @@
     --shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
 
     --font-mono: "JetBrains Mono", monospace;
+
+    --accent: #4cc9ff;
 }
