@@ -1,5 +1,8 @@
 .tableWrap {
     overflow-x: auto;
+    overflow-y: auto;
+    max-height: 500px;
+    border-radius: 8px;
 }
 
 .table {
@@ -9,6 +12,8 @@
 }
 
 .table thead th {
+    position: sticky;
+    top: 0;
     background: var(--bg-elev-2);
     color: var(--text);
     text-align: center;
@@ -16,6 +21,7 @@
     font-weight: 700;
     white-space: nowrap;
     border-color: var(--border);
+    z-index: 10;
 }
 
 .table tbody td {

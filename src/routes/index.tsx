@@ -1,4 +1,5 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import AuthAwareLayout from '../components/AuthAwareLayout';
 import Layout from '../components/Layout';
 import CompoundInterestSimulationPage from '../pages/CompoundInterestSimulationPage';
 import DashboardPage from '../pages/DashboardPage';
@@ -12,9 +13,11 @@ export default function AppRoutes() {
     return (
         <BrowserRouter>
             <Routes>
-                <Route path="/" element={<LoginPage />} />
-                <Route path="/register" element={<RegisterPage />} />
-                <Route path="/compound-interest-simulator" element={<CompoundInterestSimulationPage />} />
+                <Route element={<AuthAwareLayout />}>
+                    <Route path="/" element={<LoginPage />} />
+                    <Route path="/register" element={<RegisterPage />} />
+                    <Route path="/compound-interest-simulator" element={<CompoundInterestSimulationPage />} />
+                </Route>
                 <Route
                     element={
                         <ProtectedRoute>
