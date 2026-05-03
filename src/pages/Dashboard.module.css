@@ -1,22 +1,23 @@
 .header {
-    margin-bottom: 28px;
+    margin-bottom: 24px;
 }
 
 .greet {
-    font-size: 26px;
-    margin-bottom: 4px;
+    font-size: clamp(1.9rem, 3vw, 2.5rem);
+    margin-bottom: 6px;
+    color: #edf9ff;
 }
 
 .sub {
-    color: var(--text-dim);
-    font-size: 20px;
+    color: #7da1ca;
+    font-size: 1.05rem;
 }
 
 .grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
-    margin-bottom: 28px;
+    gap: 14px;
+    margin-bottom: 22px;
 }
 
 @media (max-width: 760px) {
@@ -26,22 +27,25 @@
 }
 
 .stat {
-    background: var(--bg-elev);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
+    background:
+        linear-gradient(180deg, rgba(8, 21, 44, 0.96), rgba(5, 16, 36, 0.96)),
+        radial-gradient(100% 120% at 90% -30%, rgba(76, 201, 255, 0.08), transparent 65%);
+    border: 1px solid rgba(76, 201, 255, 0.2);
+    border-radius: 16px;
     padding: 20px;
+    box-shadow: 0 16px 28px rgba(2, 6, 15, 0.28);
 }
 
 .statLabel {
-    font-size: 18px;
-    color: var(--text-dim);
+    font-size: 0.9rem;
+    color: #6f8eb4;
     text-transform: uppercase;
     letter-spacing: .05em;
     margin-bottom: 10px;
 }
 
 .statValue {
-    font-size: 26px;
+    font-size: clamp(1.4rem, 2.3vw, 2rem);
     font-weight: 700;
     font-family: var(--font-mono);
     letter-spacing: -0.02em;
@@ -56,38 +60,47 @@
 }
 
 .statSub {
-    font-size: 18px;
-    color: var(--text-muted);
+    font-size: 0.98rem;
+    color: #7da1ca;
     margin-top: 6px;
 }
 
 .section {
-    background: var(--bg-elev);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: 22px;
+    border: 1px solid rgba(76, 201, 255, 0.22);
+    border-radius: 18px;
+    overflow: hidden;
+    background:
+        linear-gradient(180deg, rgba(8, 21, 44, 0.96), rgba(5, 16, 36, 0.96)),
+        radial-gradient(100% 120% at 90% -30%, rgba(76, 201, 255, 0.08), transparent 65%);
+    box-shadow: 0 22px 42px rgba(2, 6, 15, 0.35);
 }
 
 .sectionTitle {
-    font-size: 24px;
-    margin-bottom: 16px;
+    font-size: 1rem;
+    color: #6f8eb4;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    margin: 0;
+    padding: 20px 24px;
+    border-bottom: 1px solid rgba(76, 201, 255, 0.16);
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
 .empty {
-    color: var(--text-muted);
-    font-size: 24px;
-    padding: 24px 0;
+    color: #80a0c4;
+    font-size: 1.08rem;
+    padding: 36px 24px;
     text-align: center;
 }
 
 .row {
-    display: flex;
+    display: grid;
+    grid-template-columns: 44px minmax(0, 1fr) auto;
     align-items: center;
-    padding: 12px 0;
-    border-bottom: 1px solid var(--border);
+    padding: 18px 24px;
+    border-bottom: 1px solid rgba(76, 201, 255, 0.14);
     gap: 12px;
 }
 
@@ -96,24 +109,23 @@
 }
 
 .rowIcon {
-    width: 50px;
-    height: 50px;
+    width: 42px;
+    height: 42px;
     border-radius: 50%;
     display: grid;
     place-items: center;
-    background: var(--bg-elev-2);
-    font-size: 30px;
-    font-weight: 900;
+    font-size: 1.35rem;
+    font-weight: 700;
 }
 
 .rowIcon.income {
-    background: var(--primary-soft);
-    color: var(--primary);
+    color: #1de29a;
+    background: rgba(24, 182, 130, 0.18);
 }
 
 .rowIcon.expense {
-    background: var(--danger-soft);
-    color: var(--danger);
+    color: #ff5b74;
+    background: rgba(255, 91, 116, 0.14);
 }
 
 .rowMain {
@@ -122,20 +134,22 @@
 }
 
 .rowDesc {
-    font-weight: 500;
-    font-size: 24px;
+    font-weight: 600;
+    color: #edf8ff;
+    font-size: 1.25rem;
 }
 
 .rowMeta {
-    font-size: 18px;
-    color: var(--text-muted);
+    font-size: 0.98rem;
+    color: #6f8eb4;
     margin-top: 2px;
 }
 
 .rowAmount {
     font-family: var(--font-mono);
-    font-weight: 600;
-    font-size: 24px;
+    font-weight: 700;
+    font-size: clamp(1rem, 2.1vw, 1.5rem);
+    white-space: nowrap;
 }
 
 .rowAmount.income {
@@ -144,4 +158,20 @@
 
 .rowAmount.expense {
     color: var(--danger);
+}
+
+@media (max-width: 760px) {
+    .sectionTitle {
+        padding: 16px;
+    }
+
+    .row {
+        grid-template-columns: 42px minmax(0, 1fr);
+        padding: 14px 16px;
+    }
+
+    .rowAmount {
+        grid-column: 2;
+        justify-self: start;
+    }
 }

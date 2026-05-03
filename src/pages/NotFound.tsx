@@ -1,12 +1,16 @@
 import { Link } from 'react-router-dom';
+import s from './NotFound.module.css';
 
 export default function NotFound() {
     return (
-        <div style={{ minHeight: '100vh', display: 'grid', placeItems: 'center', textAlign: 'center', padding: 20 }}>
-            <div>
-                <h1 style={{ fontSize: 64, marginBottom: 12, background: 'linear-gradient(135deg, var(--primary), var(--accent))', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>404</h1>
-                <p style={{ color: 'var(--text-dim)', marginBottom: 20 }}>Página não encontrada.</p>
-                <Link to='/'>Voltar ao início</Link>
+        <div className={s.wrap}>
+            <div className={s.card}>
+                <h1 className={s.code}>404</h1>
+                <h2 className={s.title}>Pagina nao encontrada</h2>
+                <p className={s.text}>A rota que voce tentou acessar nao existe.</p>
+                <Link className={s.link} to='/'>
+                    Voltar ao inicio
+                </Link>
             </div>
         </div>
     );
