@@ -1,0 +1,218 @@
+.page {
+    width: min(1100px, 100%);
+    margin: 0 auto;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.title {
+    margin: 0;
+    font-size: clamp(1.8rem, 3vw, 2.5rem);
+    font-weight: 700;
+    color: #edf9ff;
+}
+
+.subtitle {
+    margin: 6px 0 0;
+    color: #7da1ca;
+    font-size: 1.1rem;
+}
+
+.newButton {
+    border: 1px solid rgba(46, 232, 169, 0.3) !important;
+    border-radius: 12px !important;
+    background: linear-gradient(145deg, #1db784, #12996f) !important;
+    color: #ecfff6 !important;
+    font-weight: 700 !important;
+    padding-inline: 18px !important;
+}
+
+.newButton:hover {
+    filter: brightness(1.05);
+}
+
+.tableCard {
+    border: 1px solid rgba(76, 201, 255, 0.22);
+    border-radius: 18px;
+    overflow: hidden;
+    background:
+        linear-gradient(180deg, rgba(8, 21, 44, 0.96), rgba(5, 16, 36, 0.96)),
+        radial-gradient(100% 120% at 90% -30%, rgba(76, 201, 255, 0.08), transparent 65%);
+    box-shadow: 0 22px 42px rgba(2, 6, 15, 0.35);
+}
+
+.tableHead {
+    display: grid;
+    grid-template-columns: 48px minmax(0, 1fr) auto auto;
+    gap: 14px;
+    align-items: center;
+    padding: 20px 28px;
+    border-bottom: 1px solid rgba(76, 201, 255, 0.16);
+    color: #6f8eb4;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    font-size: 0.95rem;
+    font-weight: 700;
+}
+
+.descriptionLabel {
+    grid-column: 2;
+}
+
+.amountLabel {
+    justify-self: end;
+}
+
+.actionsLabel {
+    justify-self: start;
+    margin-left: 12px;
+}
+
+.row {
+    display: grid;
+    grid-template-columns: 48px minmax(0, 1fr) auto auto;
+    gap: 14px;
+    align-items: center;
+    padding: 20px 28px;
+    border-bottom: 1px solid rgba(76, 201, 255, 0.14);
+}
+
+.row:last-child {
+    border-bottom: 0;
+}
+
+.icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-size: 1.4rem;
+    font-weight: 700;
+}
+
+.incomeIcon {
+    color: #1de29a;
+    background: rgba(24, 182, 130, 0.18);
+}
+
+.expenseIcon {
+    color: #ff5b74;
+    background: rgba(255, 91, 116, 0.14);
+}
+
+.info {
+    min-width: 0;
+}
+
+.description {
+    color: #edf8ff;
+    font-size: 1.45rem;
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+.meta {
+    margin-top: 4px;
+    color: #6f8eb4;
+    font-size: 1.05rem;
+}
+
+.amount {
+    font-family: var(--font-mono);
+    font-size: clamp(1.2rem, 2.4vw, 2rem);
+    font-weight: 700;
+    justify-self: end;
+    white-space: nowrap;
+}
+
+.income {
+    color: #1de29a;
+}
+
+.expense {
+    color: #ff5b74;
+}
+
+.actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: 12px;
+}
+
+.actionButton {
+    border: 1px solid rgba(103, 140, 190, 0.42) !important;
+    background: rgba(8, 22, 44, 0.84) !important;
+    color: #b8cde8 !important;
+    border-radius: 10px !important;
+    padding: 8px 13px !important;
+    display: inline-flex !important;
+    align-items: center;
+    gap: 7px;
+    font-size: 0.95rem !important;
+    font-weight: 600 !important;
+}
+
+.actionButton:hover {
+    border-color: rgba(76, 201, 255, 0.6) !important;
+    color: #e6f5ff !important;
+}
+
+.deleteButton:hover {
+    border-color: rgba(255, 127, 127, 0.58) !important;
+    color: #ffd7d7 !important;
+}
+
+.empty {
+    padding: 40px;
+    text-align: center;
+    color: #80a0c4;
+    font-size: 1.1rem;
+}
+
+@media (max-width: 992px) {
+    .header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .newButton {
+        width: 100%;
+    }
+
+    .tableHead {
+        display: none;
+    }
+
+    .row {
+        grid-template-columns: 42px minmax(0, 1fr);
+        gap: 10px;
+        padding: 16px;
+    }
+
+    .description {
+        font-size: 1.2rem;
+    }
+
+    .meta {
+        font-size: 0.94rem;
+        margin-bottom: 8px;
+    }
+
+    .amount {
+        justify-self: start;
+        font-size: 1.2rem;
+    }
+
+    .actions {
+        margin-left: 0;
+        flex-wrap: wrap;
+    }
+}

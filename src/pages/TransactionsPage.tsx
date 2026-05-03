@@ -1,14 +1,10 @@
 import { useEffect, useState } from 'react';
-import {
-    Button,
-    Card,
-    Col,
-    Row
-} from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import TransactionModal from '../components/TransactionModal';
 import { useTransactionsStore } from '../store/transactionsStore';
 import type { Transaction } from '../types/transaction';
+import s from './TransactionsPage.module.css';
 
 export default function TransactionsPage() {
     const transactions = useTransactionsStore((s) => s.items);
@@ -29,161 +25,83 @@ export default function TransactionsPage() {
         }
     };
 
+    function formatDate(date: string) {
+        return new Date(date).toLocaleDateString('pt-BR', {
+            day: '2-digit',
+            month: 'short',
+            year: 'numeric',
+        });
+    }
+
+    function formatAmount(amount: number) {
+        return amount.toLocaleString('pt-BR', {
+            style: 'currency',
+            currency: 'BRL',
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+        });
+    }
+
     return (
-        <div>
-            {/* 🔥 HEADER DA PÁGINA */}
-            <div className="d-flex justify-content-between align-items-center mb-4">
+        <div className={s.page}>
+            <div className={s.header}>
                 <div>
-                    <h1 style={{ marginBottom: 0 }}>Transações</h1>
-                    <p style={{ color: '#aaa', fontSize: '20px' }}>
-                        Gerencie suas receitas e despesas
-                    </p>
+                    <h1 className={s.title}>Lancamentos</h1>
+                    <p className={s.subtitle}>Gerencie suas receitas e despesas</p>
                 </div>
 
-                <Button
-                    style={{
-                        fontWeight: 650
-                    }}
-                    size='lg'
-                    variant="success"
-                    onClick={() => setShowModal(true)}>
-                    + Nova Transação
+                <Button className={s.newButton} size="lg" onClick={() => setShowModal(true)}>
+                    + Nova transacao
                 </Button>
             </div>
 
-            <Row>
-                <Col>
-                    <Card bg="dark" text="light">
-                        <Card.Header>
-                            <div
-                                className="d-grid border-bottom pb-2 mb-3 text-muted"
-                                style={{
-                                    gridTemplateColumns: '40px 1fr auto auto 40px',
-                                    fontSize: '20px',
-                                    letterSpacing: '0.05em',
-                                    textTransform: 'uppercase',
-                                    opacity: 1,
-                                }}
-                            >
-                                <div></div>
-                                <div style={{
-                                    color: '#aaa',
-                                    fontWeight: 700,
-                                }}>Descrição</div>
-                                <div style={{
-                                    color: '#aaa',
-                                    fontWeight: 700,
-                                    marginRight: '40px',
-                                }}>Valor</div>
-                                <div style={{
-                                    color: '#aaa',
-                                    fontWeight: 700,
-                                }}>Ações</div>
-                                <div></div>
+            <section className={s.tableCard}>
+                <header className={s.tableHead}>
+                    <span className={s.descriptionLabel}>Descricao</span>
+                    <span className={s.amountLabel}>Valor</span>
+                    <span className={s.actionsLabel}>Acoes</span>
+                </header>
+
+                {transactions.length === 0 ? (
+                    <div className={s.empty}>Nenhum lancamento ainda.</div>
+                ) : (
+                    transactions.map((t) => (
+                        <article key={t.id} className={s.row}>
+                            <div className={`${s.icon} ${t.type === 'INCOME' ? s.incomeIcon : s.expenseIcon}`}>
+                                {t.type === 'INCOME' ? '↑' : '↓'}
                             </div>
-                        </Card.Header>
-                        <Card.Body>
-                            {/* 🔹 LISTA */}
-                            {transactions.length === 0 ? (
-                                <div style={{ textAlign: 'center', padding: '40px' }}>
-                                    Nenhuma transação ainda
+
+                            <div className={s.info}>
+                                <div className={s.description}>{t.description}</div>
+                                <div className={s.meta}>
+                                    {t.subcategory || t.category} • {formatDate(t.date)}
                                 </div>
-                            ) : (
-                                transactions.map((t) => (
-                                    <div
-                                        key={t.id}
-                                        className="d-grid align-items-center border-bottom py-3"
-                                        style={{
-                                            gridTemplateColumns: '40px 1fr auto auto',
-                                            gap: '12px',
-                                        }}
-                                    >
-                                        {/* 🔥 ÍCONE */}
-                                        <div
-                                            className="d-flex justify-content-center align-items-center"
-                                            style={{
-                                                width: '40px',
-                                                height: '40px',
-                                                borderRadius: '50%',
-                                                background:
-                                                    t.type === 'INCOME'
-                                                        ? 'var(--primary-soft)'
-                                                        : 'var(--danger-soft)',
-                                                color:
-                                                    t.type === 'INCOME'
-                                                        ? 'var(--primary)'
-                                                        : 'var(--danger)',
-                                                fontWeight: 700,
-                                                fontSize: '40px',
-                                            }}
-                                        >
-                                            {t.type === 'INCOME' ? '↑' : '↓'}
-                                        </div>
+                            </div>
 
-                                        {/* 🔹 INFO */}
-                                        <div>
-                                            <div style={{ fontWeight: 500, fontSize: '26px', }}>
-                                                {t.description}
-                                            </div>
+                            <div className={`${s.amount} ${t.type === 'INCOME' ? s.income : s.expense}`}>
+                                {t.type === 'INCOME' ? '+' : '-'} {formatAmount(t.amount)}
+                            </div>
 
-                                            <div
-                                                style={{
-                                                    fontSize: '18px',
-                                                    color: '#aaa',
-                                                    marginTop: '2px',
-                                                }}
-                                            >
-                                                {t.subcategory} •{' '}
-                                                {new Date(t.date).toLocaleDateString()}
-                                            </div>
-                                        </div>
+                            <div className={s.actions}>
+                                <Button
+                                    className={s.actionButton}
+                                    onClick={() => {
+                                        setEditingTransaction(t);
+                                        setShowModal(true);
+                                    }}
+                                >
+                                    <FaEdit /> Editar
+                                </Button>
 
-                                        {/* 🔹 VALOR */}
-                                        <div
-                                            style={{
-                                                fontWeight: 600,
-                                                fontFamily: 'monospace',
-                                                color:
-                                                    t.type === 'INCOME'
-                                                        ? 'var(--primary)'
-                                                        : 'var(--danger)',
-                                                fontSize: '26px',
-                                                marginRight: '20px',
-                                            }}
-                                        >
-                                            {t.type === 'INCOME' ? '+' : '-'} R$ {t.amount}
-                                        </div>
+                                <Button className={`${s.actionButton} ${s.deleteButton}`} onClick={() => handleDelete(t.id)}>
+                                    <FaTrash /> Excluir
+                                </Button>
+                            </div>
+                        </article>
+                    ))
+                )}
+            </section>
 
-                                        {/* 🔥 AÇÕES */}
-                                        <div className="d-flex gap-2">
-                                            <Button
-                                                variant="outline-primary"
-                                                size="lg"
-                                                onClick={() => {
-                                                    setEditingTransaction(t);
-                                                    setShowModal(true);
-                                                }}
-                                            >
-                                                <FaEdit />
-                                            </Button>
-
-                                            <Button
-                                                variant="outline-danger"
-                                                size="lg"
-                                                onClick={() => handleDelete(t.id)}
-                                            >
-                                                <FaTrash />
-                                            </Button>
-                                        </div>
-                                    </div>
-                                ))
-                            )}
-                        </Card.Body>
-                    </Card>
-                </Col>
-            </Row>
-
-            {/* 🔥 MODAL (BASE) */}
             <TransactionModal
                 show={showModal}
                 onClose={() => {
