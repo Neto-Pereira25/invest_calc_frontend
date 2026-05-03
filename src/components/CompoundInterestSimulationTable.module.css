@@ -1,0 +1,54 @@
+.tableWrap {
+    overflow-x: auto;
+}
+
+.table {
+    margin-top: 6px;
+    border-color: var(--border);
+    background: var(--bg-elev);
+}
+
+.table thead th {
+    background: var(--bg-elev-2);
+    color: var(--text);
+    text-align: center;
+    font-size: 15px;
+    font-weight: 700;
+    white-space: nowrap;
+    border-color: var(--border);
+}
+
+.table tbody td {
+    text-align: center;
+    color: var(--text-dim);
+    font-size: 15px;
+    padding: 16px 10px;
+    background: var(--bg);
+    border-color: var(--border);
+}
+
+.table tbody tr:nth-child(even) td {
+    background: var(--bg-elev);
+}
+
+.interestColumn {
+    color: var(--accent);
+}
+
+.totalInterestColumn {
+    color: var(--primary);
+}
+
+.totalColumn {
+    font-weight: 700;
+    color: var(--text);
+}
+
+.empty {
+    text-align: center;
+    color: var(--text-dim);
+    padding: 20px;
+    border: 1px dashed var(--border);
+    border-radius: 8px;
+    background: var(--bg-elev);
+}

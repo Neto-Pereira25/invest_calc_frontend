@@ -1,0 +1,205 @@
+.page {
+    color: var(--text);
+}
+
+.section {
+    border: 1px solid var(--border);
+    background: var(--bg-elev);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    margin-bottom: 18px;
+}
+
+.sectionHeader {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-elev-2);
+}
+
+.iconBlock {
+    width: 64px;
+    height: 60px;
+    display: grid;
+    place-items: center;
+    background: var(--bg);
+    color: var(--accent);
+    border-right: 1px solid var(--border);
+}
+
+.sectionTitle {
+    margin: 0;
+    padding: 0 22px;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    font-size: clamp(18px, 1.4vw, 24px);
+    font-weight: 800;
+    color: var(--text);
+}
+
+.sectionBody {
+    padding: 22px 28px 26px;
+    background: var(--bg-elev);
+}
+
+.simForm :global(.form-label) {
+    font-size: 16px;
+    color: var(--text-dim);
+    margin-bottom: 8px;
+}
+
+.simForm :global(.input-group-text) {
+    background: var(--bg);
+    border-color: var(--border);
+    color: var(--text-dim);
+    font-size: 20px;
+    font-weight: 700;
+    min-width: 58px;
+    justify-content: center;
+}
+
+.simForm :global(.form-control),
+.simForm :global(.form-select) {
+    background: var(--bg);
+    border-color: var(--border);
+    color: var(--text);
+    min-height: 50px;
+    font-size: 18px;
+}
+
+.simForm :global(.form-control::placeholder) {
+    color: var(--text-muted);
+}
+
+.simForm :global(.form-control:focus),
+.simForm :global(.form-select:focus) {
+    background: var(--bg);
+    color: var(--text);
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px rgba(76, 201, 255, 0.14);
+}
+
+.actions {
+    margin-top: 26px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+.actions :global(.btn) {
+    border-radius: 10px;
+    text-transform: uppercase;
+    font-size: 14px;
+    padding: 10px 20px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+}
+
+.clearButton {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+}
+
+.clearButton:hover,
+.clearButton:focus {
+    background: var(--bg);
+    border-color: var(--accent);
+    color: var(--text);
+}
+
+.calculateButton {
+    background: var(--primary-modal);
+    border: 1px solid var(--primary-modal);
+    color: #e8fff1;
+}
+
+.calculateButton:hover,
+.calculateButton:focus {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: #082013;
+}
+
+.resultCard {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    min-height: 138px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    text-align: center;
+}
+
+.resultLabel {
+    margin: 0;
+    font-size: 18px;
+    color: var(--text-dim);
+}
+
+.resultValue {
+    margin: 0;
+    font-size: clamp(28px, 2.4vw, 38px);
+    color: var(--text);
+    font-weight: 700;
+    font-family: var(--font-mono);
+}
+
+.highlight {
+    color: var(--accent);
+}
+
+@media (max-width: 992px) {
+    .sectionBody {
+        padding: 18px;
+    }
+
+    .sectionTitle {
+        font-size: 20px;
+    }
+
+    .simForm :global(.input-group-text) {
+        font-size: 18px;
+    }
+
+    .simForm :global(.form-control),
+    .simForm :global(.form-select) {
+        font-size: 16px;
+    }
+
+    .resultLabel {
+        font-size: 16px;
+    }
+
+    .resultValue {
+        font-size: 30px;
+    }
+}
+
+@media (max-width: 768px) {
+    .iconBlock {
+        width: 56px;
+        height: 56px;
+    }
+
+    .sectionTitle {
+        padding: 0 14px;
+        font-size: 18px;
+    }
+
+    .actions {
+        justify-content: stretch;
+    }
+
+    .actions :global(.btn) {
+        flex: 1;
+    }
+
+    .simForm :global(.input-group-text),
+    .simForm :global(.form-control),
+    .simForm :global(.form-select) {
+        font-size: 16px;
+    }
+}
