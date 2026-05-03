@@ -1,0 +1,68 @@
+.title {
+    font-size: 1.45rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.incomeTitle {
+    color: #1de29a;
+}
+
+.expenseTitle {
+    color: #ff6d86;
+}
+
+.typeSwitch {
+    display: flex;
+    margin-bottom: 16px;
+    gap: 10px;
+}
+
+.typeButton {
+    width: 100%;
+    border-radius: 10px !important;
+    border: 1px solid rgba(103, 140, 190, 0.42) !important;
+    background: rgba(8, 22, 44, 0.84) !important;
+    color: #b8cde8 !important;
+    font-weight: 700 !important;
+    font-size: 1rem !important;
+    padding: 10px 12px !important;
+}
+
+.typeButton:hover {
+    border-color: rgba(76, 201, 255, 0.6) !important;
+    color: #e6f5ff !important;
+}
+
+.typeButtonActiveIncome {
+    border-color: rgba(46, 232, 169, 0.45) !important;
+    background: linear-gradient(145deg, rgba(16, 88, 68, 0.7), rgba(9, 58, 48, 0.76)) !important;
+    color: #d9fff0 !important;
+}
+
+.typeButtonActiveExpense {
+    border-color: rgba(255, 91, 116, 0.42) !important;
+    background: linear-gradient(145deg, rgba(89, 24, 43, 0.78), rgba(59, 16, 31, 0.82)) !important;
+    color: #ffe5ea !important;
+}
+
+.submit {
+    width: 100%;
+    margin-top: 8px;
+    border-radius: 12px !important;
+    font-size: 1rem !important;
+    font-weight: 700 !important;
+    padding: 11px !important;
+}
+
+@media (max-width: 768px) {
+    .title {
+        font-size: 1.2rem;
+    }
+
+    .typeSwitch {
+        flex-direction: column;
+    }
+}

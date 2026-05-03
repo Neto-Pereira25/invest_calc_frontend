@@ -3,84 +3,84 @@
 }
 
 .section {
-    border: 1px solid var(--border);
-    background: var(--bg-elev);
-    border-radius: var(--radius-lg);
+    border: 1px solid rgba(76, 201, 255, 0.22);
+    background:
+        linear-gradient(180deg, rgba(8, 21, 44, 0.96), rgba(5, 16, 36, 0.96)),
+        radial-gradient(100% 120% at 90% -30%, rgba(76, 201, 255, 0.08), transparent 65%);
+    border-radius: 18px;
     overflow: hidden;
-    margin-bottom: 18px;
+    margin-bottom: 20px;
+    box-shadow: 0 22px 42px rgba(2, 6, 15, 0.35);
 }
 
 .sectionHeader {
     display: flex;
     align-items: center;
-    border-bottom: 1px solid var(--border);
-    background: var(--bg-elev-2);
+    border-bottom: 1px solid rgba(76, 201, 255, 0.16);
 }
 
 .iconBlock {
-    width: 64px;
-    height: 60px;
+    width: 58px;
+    height: 58px;
     display: grid;
     place-items: center;
-    background: var(--bg);
-    color: var(--accent);
-    border-right: 1px solid var(--border);
+    color: #42c8ff;
+    border-right: 1px solid rgba(76, 201, 255, 0.16);
 }
 
 .sectionTitle {
     margin: 0;
-    padding: 0 22px;
+    padding: 0 18px;
     text-transform: uppercase;
-    letter-spacing: 0.02em;
-    font-size: clamp(18px, 1.4vw, 24px);
-    font-weight: 800;
-    color: var(--text);
+    letter-spacing: 0.07em;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #6f8eb4;
 }
 
 .sectionBody {
-    padding: 22px 28px 26px;
-    background: var(--bg-elev);
+    padding: 22px;
 }
 
 .simForm :global(.form-label) {
-    font-size: 16px;
-    color: var(--text-dim);
+    font-size: 0.95rem;
+    color: #9ab3d2;
     margin-bottom: 8px;
 }
 
 .simForm :global(.input-group-text) {
-    background: var(--bg);
-    border-color: var(--border);
-    color: var(--text-dim);
-    font-size: 20px;
+    background: rgba(8, 22, 44, 0.84);
+    border-color: rgba(103, 140, 190, 0.42);
+    color: #9ab3d2;
+    font-size: 1rem;
     font-weight: 700;
-    min-width: 58px;
+    min-width: 48px;
     justify-content: center;
 }
 
 .simForm :global(.form-control),
 .simForm :global(.form-select) {
-    background: var(--bg);
-    border-color: var(--border);
-    color: var(--text);
-    min-height: 50px;
-    font-size: 18px;
+    background: rgba(8, 22, 44, 0.84);
+    border-color: rgba(103, 140, 190, 0.42);
+    color: #ecf8ff;
+    min-height: 48px;
+    font-size: 1rem;
 }
 
 .simForm :global(.form-control::placeholder) {
-    color: var(--text-muted);
+    color: #6f8eb4;
 }
 
 .simForm :global(.form-control:focus),
 .simForm :global(.form-select:focus) {
-    background: var(--bg);
-    color: var(--text);
-    border-color: var(--accent);
-    box-shadow: 0 0 0 2px rgba(76, 201, 255, 0.14);
+    background: rgba(8, 22, 44, 0.94);
+    color: #f2fbff;
+    border-color: rgba(76, 201, 255, 0.66);
+    box-shadow: 0 0 0 3px rgba(76, 201, 255, 0.15);
 }
 
 .actions {
-    margin-top: 26px;
+    margin-top: 24px;
     display: flex;
     justify-content: flex-end;
     gap: 12px;
@@ -89,42 +89,40 @@
 .actions :global(.btn) {
     border-radius: 10px;
     text-transform: uppercase;
-    font-size: 14px;
+    font-size: 0.82rem;
     padding: 10px 20px;
     font-weight: 700;
-    letter-spacing: 0.02em;
+    letter-spacing: 0.06em;
 }
 
 .clearButton {
-    background: transparent;
-    border: 1px solid var(--border);
-    color: var(--text-dim);
+    background: rgba(8, 22, 44, 0.84);
+    border: 1px solid rgba(103, 140, 190, 0.42);
+    color: #b8cde8;
 }
 
 .clearButton:hover,
 .clearButton:focus {
-    background: var(--bg);
-    border-color: var(--accent);
-    color: var(--text);
+    border-color: rgba(76, 201, 255, 0.6);
+    color: #e6f5ff;
 }
 
 .calculateButton {
-    background: var(--primary-modal);
-    border: 1px solid var(--primary-modal);
+    background: linear-gradient(145deg, #1db784, #12996f);
+    border: 1px solid rgba(46, 232, 169, 0.3);
     color: #e8fff1;
 }
 
 .calculateButton:hover,
 .calculateButton:focus {
-    background: var(--primary);
-    border-color: var(--primary);
-    color: #082013;
+    filter: brightness(1.04);
+    color: #f3fff9;
 }
 
 .resultCard {
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
+    background: rgba(8, 22, 44, 0.84);
+    border: 1px solid rgba(103, 140, 190, 0.42);
+    border-radius: 14px;
     min-height: 138px;
     display: flex;
     justify-content: center;
@@ -135,14 +133,14 @@
 
 .resultLabel {
     margin: 0;
-    font-size: 18px;
-    color: var(--text-dim);
+    font-size: 0.95rem;
+    color: #9ab3d2;
 }
 
 .resultValue {
     margin: 0;
-    font-size: clamp(28px, 2.4vw, 38px);
-    color: var(--text);
+    font-size: clamp(1.35rem, 2.3vw, 2rem);
+    color: #ecf8ff;
     font-weight: 700;
     font-family: var(--font-mono);
 }
@@ -157,24 +155,24 @@
     }
 
     .sectionTitle {
-        font-size: 20px;
+        font-size: 0.88rem;
     }
 
     .simForm :global(.input-group-text) {
-        font-size: 18px;
+        font-size: 0.95rem;
     }
 
     .simForm :global(.form-control),
     .simForm :global(.form-select) {
-        font-size: 16px;
+        font-size: 0.95rem;
     }
 
     .resultLabel {
-        font-size: 16px;
+        font-size: 0.9rem;
     }
 
     .resultValue {
-        font-size: 30px;
+        font-size: 1.35rem;
     }
 }
 
@@ -186,7 +184,7 @@
 
     .sectionTitle {
         padding: 0 14px;
-        font-size: 18px;
+        font-size: 0.84rem;
     }
 
     .actions {

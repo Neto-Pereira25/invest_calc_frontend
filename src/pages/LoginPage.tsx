@@ -96,9 +96,7 @@ export default function LoginPage() {
                         />
                     </div>
 
-                    <button className={s.btn}>
-                        'Entrar'
-                    </button>
+                    <button className={s.btn}>Entrar</button>
                 </form>
 
                 <div className={s.alt}>

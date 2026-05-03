@@ -7,6 +7,7 @@ import { FaPiggyBank } from 'react-icons/fa';
 import { MdAttachMoney } from 'react-icons/md';
 import '../styles/modal.css';
 import type { Transaction } from '../types/transaction';
+import s from './TransactionModal.module.css';
 
 interface Props {
     show: boolean;
@@ -103,20 +104,9 @@ export default function TransactionModal({ show, onClose, transaction }: Props) 
             centered
             size='lg'>
             <Modal.Header closeButton>
-                <Modal.Title
-                    style={{
-                        fontSize: '28px',
-                        fontWeight: 700,
-                        color: type === 'INCOME' ? '#198754' : '#dc3545',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '10px'
-                    }}
-                >
+                <Modal.Title className={`${s.title} ${type === 'INCOME' ? s.incomeTitle : s.expenseTitle}`}>
                     {
-                        type === 'INCOME'
-                            ? <FaPiggyBank style={{ marginRight: 8 }} size={32} />
-                            : <MdAttachMoney style={{ marginRight: 8 }} size={32} />
+                        type === 'INCOME' ? <FaPiggyBank size={30} /> : <MdAttachMoney size={30} />
                     }
                     {isEdit ? 'Editar Transação' : 'Nova Transação'}
                 </Modal.Title>
@@ -124,20 +114,14 @@ export default function TransactionModal({ show, onClose, transaction }: Props) 
 
             <Modal.Body>
                 <Form onSubmit={handleSubmit}>
-                    {/* 🔥 TOGGLE */}
-                    <div className="d-flex mb-3 gap-2">
+                    <div className={s.typeSwitch}>
                         <Button
                             type="button"
-                            variant={type === 'INCOME' ? 'success' : 'outline-secondary'}
-                            className="w-100"
+                            className={`${s.typeButton} ${type === 'INCOME' ? s.typeButtonActiveIncome : ''}`}
                             onClick={() => {
                                 setType('INCOME');
                                 setSelectedCategoryId(null);
                                 setSubcategoryId(null);
-                            }}
-                            style={{
-                                fontSize: '24px',
-                                fontWeight: 700
                             }}
                         >
                             ↑ Receita
@@ -145,16 +129,11 @@ export default function TransactionModal({ show, onClose, transaction }: Props) 
 
                         <Button
                             type="button"
-                            variant={type === 'EXPENSE' ? 'danger' : 'outline-secondary'}
-                            className="w-100"
+                            className={`${s.typeButton} ${type === 'EXPENSE' ? s.typeButtonActiveExpense : ''}`}
                             onClick={() => {
                                 setType('EXPENSE');
                                 setSelectedCategoryId(null);
                                 setSubcategoryId(null);
-                            }}
-                            style={{
-                                fontSize: '24px',
-                                fontWeight: 700
                             }}
                         >
                             ↓ Despesa
@@ -233,11 +212,7 @@ export default function TransactionModal({ show, onClose, transaction }: Props) 
                     <Button
                         type="submit"
                         variant="success"
-                        className="w-100"
-                        style={{
-                            fontSize: '24px',
-                            fontWeight: 700
-                        }}
+                        className={s.submit}
                     >
                         {isEdit ? 'Salvar alterações' : 'Adicionar lançamento'}
                     </Button>
