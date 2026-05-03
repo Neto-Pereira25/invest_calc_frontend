@@ -1,27 +1,32 @@
 import { Table } from 'react-bootstrap';
 import type { MonthlyBreakdown } from '../types/compoundInterestSimulation';
+import styles from './CompoundInterestSimulationTable.module.css';
 
 interface Props {
     data: MonthlyBreakdown[];
 }
 
+const currencyFormatter = new Intl.NumberFormat('pt-BR', {
+    style: 'currency',
+    currency: 'BRL',
+    minimumFractionDigits: 2,
+});
+
 export default function CompoundInterestSimulationTable({ data }: Props) {
+    if (!data.length) {
+        return <div className={styles.empty}>Nenhum dado disponível para a tabela.</div>;
+    }
+
     return (
-        <div style={{ overflowX: 'auto' }}>
-            <Table
-                striped
-                bordered
-                hover
-                variant="dark"
-                style={{ marginTop: '20px' }}
-            >
+        <div className={styles.tableWrap}>
+            <Table bordered hover className={styles.table}>
                 <thead>
                     <tr>
-                        <th>Mês</th>
-                        <th>Total Investido</th>
+                        <th>Meses</th>
                         <th>Juros do Mês</th>
+                        <th>Total Investido</th>
                         <th>Juros Acumulados</th>
-                        <th>Total</th>
+                        <th>Acumulado</th>
                     </tr>
                 </thead>
 
@@ -30,20 +35,18 @@ export default function CompoundInterestSimulationTable({ data }: Props) {
                         <tr key={item.month}>
                             <td>{item.month}</td>
 
-                            <td>
-                                R$ {item.invested.toFixed(2)}
+                            <td className={styles.interestColumn}>
+                                {currencyFormatter.format(item.interest)}
                             </td>
 
-                            <td style={{ color: '#00ff9d' }}>
-                                R$ {item.interest.toFixed(2)}
+                            <td>{currencyFormatter.format(item.invested)}</td>
+
+                            <td className={styles.totalInterestColumn}>
+                                {currencyFormatter.format(item.totalInterest)}
                             </td>
 
-                            <td style={{ color: '#00c3ff' }}>
-                                R$ {item.totalInterest.toFixed(2)}
-                            </td>
-
-                            <td style={{ fontWeight: 600 }}>
-                                R$ {item.accumulated.toFixed(2)}
+                            <td className={styles.totalColumn}>
+                                {currencyFormatter.format(item.accumulated)}
                             </td>
                         </tr>
                     ))}
