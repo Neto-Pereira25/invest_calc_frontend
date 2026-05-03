@@ -55,6 +55,8 @@ export default function CompoundInterestSimulationPage() {
         monthlyContribution: '',
         interestRate: '',
         period: '',
+        rateType: 'YEARLY',
+        periodType: 'ANNUAL',
     });
 
     const [result, setResult] = useState<SimulationResponse | null>(null);
@@ -66,13 +68,14 @@ export default function CompoundInterestSimulationPage() {
     const handleSubmit = async (event: FormEvent) => {
         event.preventDefault();
 
+
         const data = await simulate({
             initialValue: parseLocaleNumber(form.initialValue),
             monthlyContribution: parseLocaleNumber(form.monthlyContribution),
             interestRate: parseLocaleNumber(form.interestRate),
             period: parseLocaleNumber(form.period),
-            periodType: 'ANNUAL',
-            rateType: 'YEARLY',
+            periodType: form.periodType as 'ANNUAL' | 'MONTHLY',
+            rateType: form.rateType as 'YEARLY' | 'MONTHLY',
         });
 
         setResult(data);
@@ -84,6 +87,8 @@ export default function CompoundInterestSimulationPage() {
             monthlyContribution: '',
             interestRate: '',
             period: '',
+            rateType: 'YEARLY',
+            periodType: 'ANNUAL',
         });
         setResult(null);
     };
@@ -122,8 +127,12 @@ export default function CompoundInterestSimulationPage() {
                                         value={form.interestRate}
                                         onChange={(e) => handleChange('interestRate', e.target.value)}
                                     />
-                                    <Form.Select defaultValue="ANUAL" disabled>
-                                        <option>ANUAL</option>
+                                    <Form.Select
+                                        value={form.rateType}
+                                        onChange={(e) => handleChange('rateType', e.target.value)}
+                                    >
+                                        <option value='YEARLY'>ANUAL</option>
+                                        <option value='MONTHLY'>MENSAL</option>
                                     </Form.Select>
                                 </InputGroup>
                             </Col>
@@ -132,12 +141,16 @@ export default function CompoundInterestSimulationPage() {
                                 <Form.Label>Período</Form.Label>
                                 <InputGroup>
                                     <Form.Control
-                                        placeholder="2"
+                                        placeholder="1"
                                         value={form.period}
                                         onChange={(e) => handleChange('period', e.target.value)}
                                     />
-                                    <Form.Select defaultValue="ANOS" disabled>
-                                        <option>ANOS</option>
+                                    <Form.Select
+                                        value={form.periodType}
+                                        onChange={(e) => handleChange('periodType', e.target.value)}
+                                    >
+                                        <option value='ANNUAL'>ANOS</option>
+                                        <option value='MONTHLY'>MESES</option>
                                     </Form.Select>
                                 </InputGroup>
                             </Col>
@@ -213,21 +226,6 @@ export default function CompoundInterestSimulationPage() {
                 <section className={styles.section}>
                     <header className={styles.sectionHeader}>
                         <span className={styles.iconBlock}>
-                            <FiList size={20} />
-                        </span>
-                        <h2 className={styles.sectionTitle}>Tabela</h2>
-                    </header>
-
-                    <div className={styles.sectionBody}>
-                        <CompoundInterestSimulationTable data={result.monthlyBreakdown} />
-                    </div>
-                </section>
-            )}
-
-            {result && (
-                <section className={styles.section}>
-                    <header className={styles.sectionHeader}>
-                        <span className={styles.iconBlock}>
                             <FiBarChart2 size={20} />
                         </span>
                         <h2 className={styles.sectionTitle}>Gráfico</h2>
@@ -239,6 +237,21 @@ export default function CompoundInterestSimulationPage() {
                             totalInterest={result.totalInterest}
                             totalInvested={result.totalInvested}
                         />
+                    </div>
+                </section>
+            )}
+
+            {result && (
+                <section className={styles.section}>
+                    <header className={styles.sectionHeader}>
+                        <span className={styles.iconBlock}>
+                            <FiList size={20} />
+                        </span>
+                        <h2 className={styles.sectionTitle}>Tabela</h2>
+                    </header>
+
+                    <div className={styles.sectionBody}>
+                        <CompoundInterestSimulationTable data={result.monthlyBreakdown} />
                     </div>
                 </section>
             )}
