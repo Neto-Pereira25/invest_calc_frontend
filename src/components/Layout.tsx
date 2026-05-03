@@ -55,6 +55,10 @@ export default function Layout() {
                             <Nav.Link as={Link} to="/transactions" style={{ color: 'var(--text-dim)' }}>
                                 Transações
                             </Nav.Link>
+
+                            <Nav.Link as={Link} to="/compound-interest-simulator" style={{ color: 'var(--text-dim)' }}>
+                                Simulador de Juros Compostos
+                            </Nav.Link>
                         </Nav>
 
                         <Nav>
