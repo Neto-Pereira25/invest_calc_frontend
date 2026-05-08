@@ -88,10 +88,10 @@ export default function Layout() {
                         <span>Simulador</span>
                     </NavLink>
 
-                    <div className={`${s.navItem} ${s.disabled}`}>
+                    <NavLink to="/profile" className={({ isActive }) => `${s.navItem} ${isActive ? s.active : ''}`}>
                         <FaUser />
                         <span>Perfil</span>
-                    </div>
+                    </NavLink>
 
                     <div className={`${s.navItem} ${s.disabled}`}>
                         <FaInfoCircle />

@@ -5,6 +5,7 @@ import CompoundInterestSimulationPage from '../pages/CompoundInterestSimulationP
 import DashboardPage from '../pages/DashboardPage';
 import LoginPage from '../pages/LoginPage';
 import NotFound from '../pages/NotFound';
+import ProfilePage from '../pages/ProfilePage';
 import RegisterPage from '../pages/RegisterPage';
 import TransactionsPage from '../pages/TransactionsPage';
 import ProtectedRoute from './ProtectedRoute';
@@ -27,6 +28,7 @@ export default function AppRoutes() {
                 >
                     <Route path="/dashboard" element={<DashboardPage />} />
                     <Route path="/transactions" element={<TransactionsPage />} />
+                    <Route path="/profile" element={<ProfilePage />} />
                 </Route>
                 <Route path="*" element={<NotFound />} />
             </Routes>
