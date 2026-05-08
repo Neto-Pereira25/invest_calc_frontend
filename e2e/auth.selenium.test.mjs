@@ -71,7 +71,7 @@ async function typeByTestId(driver, testId, value) {
   const element = await findByTestId(driver, testId);
   await element.clear();
   await element.sendKeys(value);
-  await driver.sleep(300);
+  await driver.sleep(1200);
 }
 
 async function clickByTestId(driver, testId) {
@@ -82,13 +82,20 @@ async function clickByTestId(driver, testId) {
     element,
   );
 
-  await driver.sleep(300);
+  await driver.sleep(1200);
 
   await driver.wait(until.elementIsVisible(element), 10000);
   await driver.wait(until.elementIsEnabled(element), 10000);
 
   await element.click();
-  await driver.sleep(300);
+  await driver.sleep(1200);
+}
+
+async function scrollToElement(driver, element) {
+  await driver.executeScript(
+    'arguments[0].scrollIntoView({ block: "center", inline: "center" });',
+    element,
+  );
 }
 
 function uniqueEmail() {
@@ -105,7 +112,11 @@ async function registerUserByUi(driver, { name, email, password }) {
 
   await clickByTestId(driver, "register-submit");
 
+  await driver.sleep(2000);
+
   await waitForPath(driver, "/");
+  await driver.sleep(2000);
+
 }
 
 test("deve cadastrar usuário e fazer login com sucesso", async () => {
@@ -119,7 +130,7 @@ test("deve cadastrar usuário e fazer login com sucesso", async () => {
     const password = "12345678";
 
     await registerUserByUi(driver, {
-      name: "Maria Selenium",
+      name: "Maria Helena",
       email,
       password,
     });
@@ -193,6 +204,7 @@ test("deve exibir erro ao tentar cadastrar com senhas diferentes", async () => {
     await clickByTestId(driver, "register-submit");
 
     const error = await findByTestId(driver, "register-error");
+    await scrollToElement(driver, error);
     const errorText = await error.getText();
 
     assert.equal(errorText, "As senhas não coincidem");
