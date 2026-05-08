@@ -72,11 +72,12 @@ export default function LoginPage() {
                 <p className={s.subtitle}>Acesse sua conta para continuar</p>
 
                 <form onSubmit={onSubmit}>
-                    {error && <div className={s.error}>{error}</div>}
+                    {error && (<div data-testid="login-error"  className={s.error}>{error}</div>)}
 
                     <div className={s.field}>
                         <label className={s.label}>E-mail</label>
                         <input
+                            data-testid="login-email"
                             className={s.input}
                             type='email'
                             value={email}
@@ -88,6 +89,7 @@ export default function LoginPage() {
                     <div className={s.field}>
                         <label className={s.label}>Senha</label>
                         <input
+                            data-testid="login-password"
                             className={s.input}
                             type='password'
                             value={password}
@@ -96,7 +98,9 @@ export default function LoginPage() {
                         />
                     </div>
 
-                    <button className={s.btn}>Entrar</button>
+                    <button data-testid="login-submit" className={s.btn} type='submit'>
+                        Entrar
+                    </button>
                 </form>
 
                 <div className={s.alt}>

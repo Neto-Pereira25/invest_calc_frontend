@@ -80,11 +80,12 @@ export default function RegisterPage() {
                 </p>
 
                 <form onSubmit={onSubmit}>
-                    {error && <div className={s.error}>{error}</div>}
+                    {error && (<div data-testid="register-error" className={s.error}>{error}</div>)}
 
                     <div className={s.field}>
                         <label className={s.label}>Nome</label>
                         <input
+                            data-testid="register-name"
                             className={s.input}
                             value={form.name}
                             onChange={(e) =>
@@ -97,6 +98,7 @@ export default function RegisterPage() {
                     <div className={s.field}>
                         <label className={s.label}>E-mail</label>
                         <input
+                            data-testid="register-email"
                             className={s.input}
                             type='email'
                             value={form.email}
@@ -110,6 +112,7 @@ export default function RegisterPage() {
                     <div className={s.field}>
                         <label className={s.label}>Senha</label>
                         <input
+                            data-testid="register-password"
                             className={s.input}
                             type='password'
                             value={form.password}
@@ -123,6 +126,7 @@ export default function RegisterPage() {
                     <div className={s.field}>
                         <label className={s.label}>Confirmar senha</label>
                         <input
+                            data-testid="register-confirm-password"
                             className={s.input}
                             type='password'
                             value={form.confirmPassword}
@@ -135,8 +139,7 @@ export default function RegisterPage() {
                             placeholder='Repita a senha'
                         />
                     </div>
-
-                    <button className={s.btn}>
+                    <button data-testid="register-submit" className={s.btn} type='submit'>
                         Criar conta
                     </button>
                 </form>
