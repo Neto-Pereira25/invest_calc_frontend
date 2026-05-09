@@ -17,6 +17,16 @@ interface TransactionsState {
     removeTransaction: (id: number) => Promise<void>;
 }
 
+export class TransactionError extends Error {
+    public errors: string[];
+
+    constructor(message: string, errors: string[] = []) {
+        super(message);
+        this.name = 'TransactionError';
+        this.errors = errors;
+    }
+}
+
 export const useTransactionsStore = create<TransactionsState>((set) => ({
     items: [],
     isLoading: false,
@@ -42,15 +52,25 @@ export const useTransactionsStore = create<TransactionsState>((set) => ({
             const res = await getTransactions();
             set({ items: res.data });
         } catch (error) {
-            console.error('Erro ao criar transação', error);
+            const response = (error as any)?.response?.data;
+            const errorMessage = response?.message || 'Erro ao criar transação';
+            const errorList = Array.isArray(response?.data) ? response.data : [];
+            throw new TransactionError(errorMessage, errorList);
         }
     },
 
     editTransaction: async (id, data) => {
-        await updateTransaction(id, data);
+        try {
+            await updateTransaction(id, data);
 
-        const res = await getTransactions();
-        set({ items: res.data });
+            const res = await getTransactions();
+            set({ items: res.data });
+        } catch (error) {
+            const response = (error as any)?.response?.data;
+            const errorMessage = response?.message || 'Erro ao editar transação';
+            const errorList = Array.isArray(response?.data) ? response.data : [];
+            throw new TransactionError(errorMessage, errorList);
+        }
     },
 
     removeTransaction: async (id) => {
