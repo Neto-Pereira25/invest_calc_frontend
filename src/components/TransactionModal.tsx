@@ -1,10 +1,11 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
-import { useTransactionsStore } from '../store/transactionsStore';
+import { useTransactionsStore, TransactionError } from '../store/transactionsStore';
 import { getCategories } from '../lib/categoryService';
 import type { Category } from '../types/category';
 import { FaPiggyBank } from 'react-icons/fa';
 import { MdAttachMoney } from 'react-icons/md';
+import { toast } from 'react-toastify';
 import '../styles/modal.css';
 import type { Transaction } from '../types/transaction';
 import s from './TransactionModal.module.css';
@@ -76,7 +77,7 @@ export default function TransactionModal({ show, onClose, transaction }: Props) 
         e.preventDefault();
 
         if (!subcategoryId) {
-            alert('Selecione uma subcategoria');
+            toast.error('Selecione uma subcategoria');
             return;
         }
 
@@ -87,13 +88,27 @@ export default function TransactionModal({ show, onClose, transaction }: Props) 
             subcategoryId,
         };
 
-        if (isEdit && transaction) {
-            await editTransaction(transaction.id, payload);
-        } else {
-            await addTransaction(payload);
-        }
+        try {
+            if (isEdit && transaction) {
+                await editTransaction(transaction.id, payload);
+                toast.success('Transação editada com sucesso!');
+            } else {
+                await addTransaction(payload);
+                toast.success('Transação criada com sucesso!');
+            }
 
-        onClose();
+            onClose();
+        } catch (error) {
+            if (error instanceof TransactionError) {
+                if (error.errors.length > 0) {
+                    error.errors.forEach((msg) => toast.error(msg));
+                } else {
+                    toast.error(error.message);
+                }
+            } else {
+                toast.error('Erro ao processar transação');
+            }
+        }
     };
 
     return (
