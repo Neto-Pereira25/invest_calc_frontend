@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from 'react';
-import { FaUser } from 'react-icons/fa';
 import Loading from '../components/Loading';
 import { getUserProfile } from '../lib/userService';
 import { useAuthStore } from '../store/authStore';

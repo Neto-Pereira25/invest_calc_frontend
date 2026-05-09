@@ -1,21 +1,9 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { z } from 'zod';
 import s from '../styles/forms.module.css';
 import { api } from '../lib/api';
 import { useUIStore } from '../store/uiStore';
-
-const registerSchema = z
-    .object({
-        name: z.string().min(3, { message: 'Nome deve ter pelo menos 3 caracteres' }),
-        email: z.string().email({ message: 'E-mail inválido' }),
-        password: z.string().min(8, { message: 'Senha deve ter no mínimo 8 caracteres' }),
-        confirmPassword: z.string(),
-    })
-    .refine((data) => data.password === data.confirmPassword, {
-        message: 'As senhas não coincidem',
-        path: ['confirmPassword'],
-    });
+import { RegisterSchema } from '../lib/schemas/authSchema';
 
 type RegisterForm = {
     name: string;
@@ -41,7 +29,7 @@ export default function RegisterPage() {
         e.preventDefault();
         setError('');
 
-        const result = registerSchema.safeParse(form);
+        const result = RegisterSchema.safeParse(form);
 
         if (!result.success) {
             setError(result.error.issues[0]?.message ?? 'Dados inválidos.');

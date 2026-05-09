@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import { useTransactionsStore, TransactionError } from '../store/transactionsStore';
 import { getCategories } from '../lib/categoryService';
+import { CreateTransactionSchema } from '../lib/schemas/transactionSchema';
 import type { Category } from '../types/category';
 import { FaPiggyBank } from 'react-icons/fa';
 import { MdAttachMoney } from 'react-icons/md';
@@ -31,6 +32,8 @@ export default function TransactionModal({ show, onClose, transaction }: Props) 
 
     const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
     const [subcategoryId, setSubcategoryId] = useState<number | null>(null);
+
+    const [errors, setErrors] = useState<Record<string, string>>({});
 
     // ✅ carregar categorias (único useEffect necessário)
     useEffect(() => {
@@ -75,9 +78,10 @@ export default function TransactionModal({ show, onClose, transaction }: Props) 
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        setErrors({});
 
         if (!subcategoryId) {
-            toast.error('Selecione uma subcategoria');
+            setErrors(prev => ({ ...prev, subcategoryId: 'Selecione uma subcategoria' }));
             return;
         }
 
@@ -87,6 +91,19 @@ export default function TransactionModal({ show, onClose, transaction }: Props) 
             date,
             subcategoryId,
         };
+
+        // Validar com Zod
+        const result = CreateTransactionSchema.safeParse(payload);
+
+        if (!result.success) {
+            const fieldErrors: Record<string, string> = {};
+            result.error.issues.forEach((issue) => {
+                const field = issue.path[0] as string;
+                fieldErrors[field] = issue.message;
+            });
+            setErrors(fieldErrors);
+            return;
+        }
 
         try {
             if (isEdit && transaction) {
@@ -162,7 +179,11 @@ export default function TransactionModal({ show, onClose, transaction }: Props) 
                             size="lg"
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}
+                            isInvalid={!!errors.description}
                         />
+                        <Form.Control.Feedback type="invalid">
+                            {errors.description}
+                        </Form.Control.Feedback>
                     </Form.Group>
 
                     {/* CATEGORIA */}
@@ -192,6 +213,7 @@ export default function TransactionModal({ show, onClose, transaction }: Props) 
                             size="lg"
                             value={subcategoryId || ''}
                             onChange={(e) => setSubcategoryId(Number(e.target.value))}
+                            isInvalid={!!errors.subcategoryId}
                         >
                             <option value="">Selecione</option>
                             {selectedCategory?.subcategories.map((sub) => (
@@ -200,6 +222,9 @@ export default function TransactionModal({ show, onClose, transaction }: Props) 
                                 </option>
                             ))}
                         </Form.Select>
+                        <Form.Control.Feedback type="invalid">
+                            {errors.subcategoryId}
+                        </Form.Control.Feedback>
                     </Form.Group>
 
                     {/* VALOR */}
@@ -210,7 +235,13 @@ export default function TransactionModal({ show, onClose, transaction }: Props) 
                             type="number"
                             value={amount}
                             onChange={(e) => setAmount(e.target.value)}
+                            step="0.01"
+                            min="0"
+                            isInvalid={!!errors.amount}
                         />
+                        <Form.Control.Feedback type="invalid">
+                            {errors.amount}
+                        </Form.Control.Feedback>
                     </Form.Group>
 
                     {/* DATA */}
@@ -221,7 +252,11 @@ export default function TransactionModal({ show, onClose, transaction }: Props) 
                             type="date"
                             value={date}
                             onChange={(e) => setDate(e.target.value)}
+                            isInvalid={!!errors.date}
                         />
+                        <Form.Control.Feedback type="invalid">
+                            {errors.date}
+                        </Form.Control.Feedback>
                     </Form.Group>
 
                     <Button
