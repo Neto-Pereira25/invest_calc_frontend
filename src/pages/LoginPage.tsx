@@ -1,15 +1,10 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { z } from 'zod';
 import s from '../styles/forms.module.css';
 import { api } from '../lib/api';
 import { useAuthStore } from '../store/authStore';
 import { useUIStore } from '../store/uiStore';
-
-const loginSchema = z.object({
-    email: z.string().email({ message: 'E-mail inválido' }),
-    password: z.string().min(6, { message: 'Senha obrigatória' }),
-});
+import { LoginSchema } from '../lib/schemas/authSchema';
 
 type LoginResponse = {
     data: {
@@ -33,7 +28,7 @@ export default function LoginPage() {
         e.preventDefault();
         setError('');
 
-        const result = loginSchema.safeParse({ email, password });
+        const result = LoginSchema.safeParse({ email, password });
 
         if (!result.success) {
             setError(result.error.issues[0]?.message ?? 'Dados inválidos.');
