@@ -50,7 +50,12 @@ export default function TransactionsPage() {
                     <p className={s.subtitle}>Gerencie suas receitas e despesas</p>
                 </div>
 
-                <Button className={s.newButton} size="lg" onClick={() => setShowModal(true)}>
+                <Button
+                    data-testid="transaction-new"
+                    className={s.newButton}
+                    size="lg"
+                    onClick={() => setShowModal(true)}
+                >
                     + Nova transacao
                 </Button>
             </div>
@@ -63,10 +68,10 @@ export default function TransactionsPage() {
                 </header>
 
                 {transactions.length === 0 ? (
-                    <div className={s.empty}>Nenhum lancamento ainda.</div>
+                    <div data-testid="transactions-empty" className={s.empty}>Nenhum lancamento ainda.</div>
                 ) : (
                     transactions.map((t) => (
-                        <article key={t.id} className={s.row}>
+                        <article key={t.id} data-testid="transaction-row" className={s.row}>
                             <div className={`${s.icon} ${t.type === 'INCOME' ? s.incomeIcon : s.expenseIcon}`}>
                                 {t.type === 'INCOME' ? '↑' : '↓'}
                             </div>
@@ -84,6 +89,7 @@ export default function TransactionsPage() {
 
                             <div className={s.actions}>
                                 <Button
+                                    data-testid="transaction-edit"
                                     className={s.actionButton}
                                     onClick={() => {
                                         setEditingTransaction(t);
@@ -93,7 +99,11 @@ export default function TransactionsPage() {
                                     <FaEdit /> Editar
                                 </Button>
 
-                                <Button className={`${s.actionButton} ${s.deleteButton}`} onClick={() => handleDelete(t.id)}>
+                                <Button
+                                    data-testid="transaction-delete"
+                                    className={`${s.actionButton} ${s.deleteButton}`}
+                                    onClick={() => handleDelete(t.id)}
+                                >
                                     <FaTrash /> Excluir
                                 </Button>
                             </div>
