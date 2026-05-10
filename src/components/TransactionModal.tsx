@@ -148,6 +148,7 @@ export default function TransactionModal({ show, onClose, transaction }: Props) 
                 <Form onSubmit={handleSubmit}>
                     <div className={s.typeSwitch}>
                         <Button
+                            data-testid="transaction-type-income"
                             type="button"
                             className={`${s.typeButton} ${type === 'INCOME' ? s.typeButtonActiveIncome : ''}`}
                             onClick={() => {
@@ -160,6 +161,7 @@ export default function TransactionModal({ show, onClose, transaction }: Props) 
                         </Button>
 
                         <Button
+                            data-testid="transaction-type-expense"
                             type="button"
                             className={`${s.typeButton} ${type === 'EXPENSE' ? s.typeButtonActiveExpense : ''}`}
                             onClick={() => {
@@ -176,6 +178,7 @@ export default function TransactionModal({ show, onClose, transaction }: Props) 
                     <Form.Group className="mb-3">
                         <Form.Label>Descrição</Form.Label>
                         <Form.Control
+                            data-testid="transaction-description"
                             size="lg"
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}
@@ -190,6 +193,7 @@ export default function TransactionModal({ show, onClose, transaction }: Props) 
                     <Form.Group className="mb-3">
                         <Form.Label>Categoria</Form.Label>
                         <Form.Select
+                            data-testid="transaction-category"
                             size="lg"
                             value={selectedCategory?.id || ''}
                             onChange={(e) => {
@@ -210,6 +214,7 @@ export default function TransactionModal({ show, onClose, transaction }: Props) 
                     <Form.Group className="mb-3">
                         <Form.Label>Subcategoria</Form.Label>
                         <Form.Select
+                            data-testid="transaction-subcategory"
                             size="lg"
                             value={subcategoryId || ''}
                             onChange={(e) => setSubcategoryId(Number(e.target.value))}
@@ -231,6 +236,7 @@ export default function TransactionModal({ show, onClose, transaction }: Props) 
                     <Form.Group className="mb-3">
                         <Form.Label>Valor (R$)</Form.Label>
                         <Form.Control
+                            data-testid="transaction-amount"
                             size="lg"
                             type="number"
                             value={amount}
@@ -248,6 +254,7 @@ export default function TransactionModal({ show, onClose, transaction }: Props) 
                     <Form.Group className="mb-3">
                         <Form.Label>Data</Form.Label>
                         <Form.Control
+                            data-testid="transaction-date"
                             size="lg"
                             type="date"
                             value={date}
@@ -260,6 +267,7 @@ export default function TransactionModal({ show, onClose, transaction }: Props) 
                     </Form.Group>
 
                     <Button
+                        data-testid="transaction-submit"
                         type="submit"
                         variant="success"
                         className={s.submit}
