@@ -12,6 +12,7 @@ import {
 } from 'react-icons/fa';
 import { useAuthStore } from '../store/authStore';
 import s from './Layout.module.css';
+import { infoToast } from './ui/toast';
 
 type DecodedToken = {
     name?: string;
@@ -56,6 +57,7 @@ export default function Layout() {
 
     function handleLogout() {
         logout();
+        infoToast('Logout realizado com sucesso');
         navigate('/');
     }
 

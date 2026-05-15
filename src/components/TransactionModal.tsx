@@ -108,22 +108,22 @@ export default function TransactionModal({ show, onClose, transaction }: Props) 
         try {
             if (isEdit && transaction) {
                 await editTransaction(transaction.id, payload);
-                toast.success('Transação editada com sucesso!');
+                toast.success('Lançamento financeiro editado com sucesso!');
             } else {
                 await addTransaction(payload);
-                toast.success('Transação criada com sucesso!');
+                toast.success('Lançamento financeiro criado com sucesso!');
             }
 
             onClose();
-        } catch (error) {
-            if (error instanceof TransactionError) {
-                if (error.errors.length > 0) {
-                    error.errors.forEach((msg) => toast.error(msg));
+        } catch (ex) {
+            if (ex instanceof TransactionError) {
+                if (ex.errors.length > 0) {
+                    ex.errors.forEach((msg) => toast.error(msg));
                 } else {
-                    toast.error(error.message);
+                    toast.error(ex.message);
                 }
             } else {
-                toast.error('Erro ao processar transação');
+                toast.error('Erro ao processar lançamento financeiro');
             }
         }
     };
