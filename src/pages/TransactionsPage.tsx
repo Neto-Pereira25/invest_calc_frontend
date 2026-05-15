@@ -5,6 +5,8 @@ import TransactionModal from '../components/TransactionModal';
 import { useTransactionsStore } from '../store/transactionsStore';
 import type { Transaction } from '../types/transaction';
 import s from './TransactionsPage.module.css';
+import { errorToast, successToast } from '../components/ui/toast';
+import ConfirmDeleteModal from '../components/ConfirmDeleteModal';
 
 export default function TransactionsPage() {
     const transactions = useTransactionsStore((s) => s.items);
@@ -12,6 +14,8 @@ export default function TransactionsPage() {
 
     const [showModal, setShowModal] = useState(false);
     const [editingTransaction, setEditingTransaction] = useState<Transaction | null>(null);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [transactionToDelete, setTransactionToDelete] = useState<number | null>(null);
     const removeTransaction = useTransactionsStore((s) => s.removeTransaction);
 
     useEffect(() => {
@@ -19,10 +23,18 @@ export default function TransactionsPage() {
     }, [fetchTransactions]);
 
 
-    const handleDelete = async (id: number) => {
-        if (confirm('Deseja realmente excluir este lançamento?')) {
-            await removeTransaction(id);
+    const confirmDelete = async () => {
+        if (!transactionToDelete) return;
+
+        try {
+            await removeTransaction(transactionToDelete);
+            successToast('Lançamento removido com sucesso!');
+        } catch {
+            errorToast('Erro ao remover lançamento');
         }
+
+        setShowDeleteModal(false);
+        setTransactionToDelete(null);
     };
 
     function formatDate(date: string) {
@@ -102,7 +114,10 @@ export default function TransactionsPage() {
                                 <Button
                                     data-testid="transaction-delete"
                                     className={`${s.actionButton} ${s.deleteButton}`}
-                                    onClick={() => handleDelete(t.id)}
+                                    onClick={() => {
+                                        setTransactionToDelete(t.id);
+                                        setShowDeleteModal(true);
+                                    }}
                                 >
                                     <FaTrash /> Excluir
                                 </Button>
@@ -119,6 +134,12 @@ export default function TransactionsPage() {
                     setEditingTransaction(null);
                 }}
                 transaction={editingTransaction}
+            />
+
+            <ConfirmDeleteModal
+                show={showDeleteModal}
+                onClose={() => setShowDeleteModal(false)}
+                onConfirm={confirmDelete}
             />
         </div>
     );
