@@ -7,7 +7,7 @@ export async function getUserProfile(): Promise<User> {
 }
 
 export async function updateAuthenticatedUserName(name: string): Promise<User> {
-    const response = await api.patch('/profile', { name });
+    const response = await api.patch('/users/profile', { name });
     return response.data;
 }
 
