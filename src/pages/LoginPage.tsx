@@ -66,7 +66,7 @@ export default function LoginPage() {
                 <h1 className={s.title}>Bem-vindo(a) ao InvestCalc</h1>
                 <p className={s.subtitle}>Acesse sua conta para continuar</p>
 
-                <form onSubmit={onSubmit}>
+                <form noValidate onSubmit={onSubmit}>
                     {error && (<div data-testid="login-error"  className={s.error}>{error}</div>)}
 
                     <div className={s.field}>
