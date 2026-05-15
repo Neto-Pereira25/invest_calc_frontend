@@ -4,6 +4,8 @@ import s from '../styles/forms.module.css';
 import { api } from '../lib/api';
 import { useUIStore } from '../store/uiStore';
 import { RegisterSchema } from '../lib/schemas/authSchema';
+import { successToast, errorToast } from '../components/ui/toast';
+import { AxiosError } from 'axios';
 
 type RegisterForm = {
     name: string;
@@ -33,6 +35,7 @@ export default function RegisterPage() {
 
         if (!result.success) {
             setError(result.error.issues[0]?.message ?? 'Dados inválidos.');
+            errorToast('Dados inválidos! Tente novamente.');
             return;
         }
 
@@ -45,10 +48,17 @@ export default function RegisterPage() {
                 password: form.password,
             });
 
-            // UX melhor: voltar para login
-            nav('/');
-        } catch {
+            successToast('Conta criada com sucesso! Faça login para continuar.');
+            nav('/login');
+        } catch (ex) {
             setError('Erro ao criar conta. Tente novamente.');
+
+            if (ex instanceof AxiosError) {
+                errorToast(ex.response?.data?.message ?? 'Erro ao criar conta. Tente novamente.');
+                return;
+            }
+
+            errorToast('Erro ao criar conta. Tente novamente.');
         } finally {
             setLoading(false);
         }
@@ -133,7 +143,7 @@ export default function RegisterPage() {
                 </form>
 
                 <div className={s.alt}>
-                    Já tem conta? <Link to='/'>Entrar</Link>
+                    Já tem conta? <Link to='/login'>Entrar</Link>
                 </div>
             </div>
         </div>

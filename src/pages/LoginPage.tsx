@@ -5,6 +5,9 @@ import { api } from '../lib/api';
 import { useAuthStore } from '../store/authStore';
 import { useUIStore } from '../store/uiStore';
 import { LoginSchema } from '../lib/schemas/authSchema';
+import { successToast, errorToast } from '../components/ui/toast';
+import { AxiosError } from 'axios';
+
 
 type LoginResponse = {
     data: {
@@ -32,6 +35,7 @@ export default function LoginPage() {
 
         if (!result.success) {
             setError(result.error.issues[0]?.message ?? 'Dados inválidos.');
+            errorToast('Dados inválidos! Tente novamente.');
             return;
         }
 
@@ -47,9 +51,18 @@ export default function LoginPage() {
 
             setAuth(token, refreshToken);
 
+            successToast('Login realizado com sucesso!');
+
             nav('/dashboard');
-        } catch {
+        } catch (ex) {
             setError('E-mail ou senha inválidos');
+
+            if (ex instanceof AxiosError) {
+                errorToast(ex.response?.data?.message ?? 'Erro ao fazer login. Tente novamente.');
+                return;
+            }
+
+            errorToast('Erro ao fazer login. Tente novamente.');
         } finally {
             setLoading(false);
         }
@@ -67,7 +80,7 @@ export default function LoginPage() {
                 <p className={s.subtitle}>Acesse sua conta para continuar</p>
 
                 <form noValidate onSubmit={onSubmit}>
-                    {error && (<div data-testid="login-error"  className={s.error}>{error}</div>)}
+                    {error && (<div data-testid="login-error" className={s.error}>{error}</div>)}
 
                     <div className={s.field}>
                         <label className={s.label}>E-mail</label>
