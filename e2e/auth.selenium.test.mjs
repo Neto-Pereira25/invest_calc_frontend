@@ -215,3 +215,155 @@ test("deve exibir erro ao tentar cadastrar com senhas diferentes", async () => {
     await driver.quit();
   }
 });
+
+test("deve exibir erro ao tentar cadastrar com nome muito curto", async () => {
+  const driver = await createDriver();
+
+  try {
+    await driver.get(`${FRONTEND_URL}/register`);
+    await clearStorage(driver);
+
+    await typeByTestId(driver, "register-name", "AB");
+    await typeByTestId(driver, "register-email", uniqueEmail());
+    await typeByTestId(driver, "register-password", "12345678");
+    await typeByTestId(driver, "register-confirm-password", "12345678");
+
+    await clickByTestId(driver, "register-submit");
+
+    const error = await findByTestId(driver, "register-error");
+    await scrollToElement(driver, error);
+    const errorText = await error.getText();
+
+    assert.equal(errorText, "Nome deve ter pelo menos 3 caracteres");
+
+    const path = await getCurrentPath(driver);
+    assert.equal(path, "/register");
+  } finally {
+    await driver.quit();
+  }
+});
+
+test("deve exibir erro ao tentar cadastrar com e-mail inválido", async () => {
+  const driver = await createDriver();
+
+  try {
+    await driver.get(`${FRONTEND_URL}/register`);
+    await clearStorage(driver);
+
+    await typeByTestId(driver, "register-name", "Teste Selenium");
+    await typeByTestId(driver, "register-email", "email-invalido");
+    await typeByTestId(driver, "register-password", "12345678");
+    await typeByTestId(driver, "register-confirm-password", "12345678");
+
+    await clickByTestId(driver, "register-submit");
+
+    const error = await findByTestId(driver, "register-error");
+    await scrollToElement(driver, error);
+    const errorText = await error.getText();
+
+    assert.equal(errorText, "E-mail inválido");
+
+    const path = await getCurrentPath(driver);
+    assert.equal(path, "/register");
+  } finally {
+    await driver.quit();
+  }
+});
+
+test("deve exibir erro ao tentar cadastrar com senha menor que 8 caracteres", async () => {
+  const driver = await createDriver();
+
+  try {
+    await driver.get(`${FRONTEND_URL}/register`);
+    await clearStorage(driver);
+
+    await typeByTestId(driver, "register-name", "Teste Selenium");
+    await typeByTestId(driver, "register-email", uniqueEmail());
+    await typeByTestId(driver, "register-password", "1234567");
+    await typeByTestId(driver, "register-confirm-password", "1234567");
+
+    await clickByTestId(driver, "register-submit");
+
+    const error = await findByTestId(driver, "register-error");
+    await scrollToElement(driver, error);
+    const errorText = await error.getText();
+
+    assert.equal(errorText, "Senha deve ter no mínimo 8 caracteres");
+
+    const path = await getCurrentPath(driver);
+    assert.equal(path, "/register");
+  } finally {
+    await driver.quit();
+  }
+});
+
+test("deve exibir erro ao tentar login com e-mail inválido", async () => {
+  const driver = await createDriver();
+
+  try {
+    await driver.get(FRONTEND_URL);
+    await clearStorage(driver);
+
+    await typeByTestId(driver, "login-email", "email-invalido");
+    await typeByTestId(driver, "login-password", "12345678");
+
+    await clickByTestId(driver, "login-submit");
+
+    const error = await findByTestId(driver, "login-error");
+    const errorText = await error.getText();
+
+    assert.equal(errorText, "E-mail inválido");
+
+    const path = await getCurrentPath(driver);
+    assert.equal(path, "/");
+  } finally {
+    await driver.quit();
+  }
+});
+
+test("deve exibir erro ao tentar login com senha vazia", async () => {
+  const driver = await createDriver();
+
+  try {
+    await driver.get(FRONTEND_URL);
+    await clearStorage(driver);
+
+    await typeByTestId(driver, "login-email", uniqueEmail());
+
+    await clickByTestId(driver, "login-submit");
+
+    const error = await findByTestId(driver, "login-error");
+    const errorText = await error.getText();
+
+    assert.equal(errorText, "Senha obrigatória");
+
+    const path = await getCurrentPath(driver);
+    assert.equal(path, "/");
+  } finally {
+    await driver.quit();
+  }
+});
+
+test("deve exibir erro ao tentar login com e-mail não cadastrado", async () => {
+  const driver = await createDriver();
+
+  try {
+    await driver.get(FRONTEND_URL);
+    await clearStorage(driver);
+
+    await typeByTestId(driver, "login-email", uniqueEmail());
+    await typeByTestId(driver, "login-password", "12345678");
+
+    await clickByTestId(driver, "login-submit");
+
+    const error = await findByTestId(driver, "login-error");
+    const errorText = await error.getText();
+
+    assert.equal(errorText, "E-mail ou senha inválidos");
+
+    const path = await getCurrentPath(driver);
+    assert.equal(path, "/");
+  } finally {
+    await driver.quit();
+  }
+});
