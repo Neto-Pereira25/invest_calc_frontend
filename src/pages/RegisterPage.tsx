@@ -1,64 +1,66 @@
-import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import s from '../styles/forms.module.css';
+import { AxiosError } from 'axios';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { api } from '../lib/api';
 import { useUIStore } from '../store/uiStore';
-import { RegisterSchema } from '../lib/schemas/authSchema';
+import {
+    registerSchema,
+    type RegisterFormData,
+} from '../schemas/authSchema';
 import { successToast, errorToast } from '../components/ui/toast';
-import { AxiosError } from 'axios';
-
-type RegisterForm = {
-    name: string;
-    email: string;
-    password: string;
-    confirmPassword: string;
-};
+import s from '../styles/forms.module.css';
 
 export default function RegisterPage() {
     const nav = useNavigate();
     const setLoading = useUIStore((state) => state.setLoading);
 
-    const [form, setForm] = useState<RegisterForm>({
-        name: '',
-        email: '',
-        password: '',
-        confirmPassword: '',
+    const {
+        register,
+        handleSubmit,
+        formState: {
+            errors,
+            isSubmitting,
+        },
+    } = useForm<RegisterFormData>({
+        resolver: zodResolver(registerSchema),
+
+        defaultValues: {
+            name: '',
+            email: '',
+            password: '',
+            confirmPassword: '',
+        },
     });
 
-    const [error, setError] = useState('');
-
-    const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        setError('');
-
-        const result = RegisterSchema.safeParse(form);
-
-        if (!result.success) {
-            setError(result.error.issues[0]?.message ?? 'Dados inválidos.');
-            errorToast('Dados inválidos! Tente novamente.');
-            return;
-        }
-
+    const onSubmit = async (data: RegisterFormData) => {
         setLoading(true);
 
         try {
             await api.post('/auth/register', {
-                name: form.name,
-                email: form.email,
-                password: form.password,
+                name: data.name,
+                email: data.email,
+                password: data.password,
             });
 
-            successToast('Conta criada com sucesso! Faça login para continuar.');
+            successToast(
+                'Conta criada com sucesso!'
+            );
+
             nav('/login');
         } catch (ex) {
-            setError('Erro ao criar conta. Tente novamente.');
-
             if (ex instanceof AxiosError) {
-                errorToast(ex.response?.data?.message ?? 'Erro ao criar conta. Tente novamente.');
+                errorToast(
+                    ex.response?.data?.message ??
+                    'Erro ao criar conta.'
+                );
+
                 return;
             }
 
-            errorToast('Erro ao criar conta. Tente novamente.');
+            errorToast(
+                'Erro ao criar conta.'
+            );
         } finally {
             setLoading(false);
         }
@@ -77,68 +79,119 @@ export default function RegisterPage() {
                     Comece a organizar suas finanças hoje
                 </p>
 
-                <form noValidate onSubmit={onSubmit}>
-                    {error && (<div data-testid="register-error" className={s.error}>{error}</div>)}
-
+                <form
+                    noValidate
+                    onSubmit={handleSubmit(onSubmit)}
+                >
+                    {/* NOME */}
                     <div className={s.field}>
-                        <label className={s.label}>Nome</label>
+                        <label className={s.label}>
+                            Nome
+                        </label>
+
                         <input
                             data-testid="register-name"
-                            className={s.input}
-                            value={form.name}
-                            onChange={(e) =>
-                                setForm({ ...form, name: e.target.value })
-                            }
-                            placeholder='Seu nome'
+                            className={`${s.input} ${errors.name
+                                ? s.inputError
+                                : ''
+                                }`}
+                            placeholder="Seu nome"
+                            {...register('name')}
                         />
+
+                        {errors.name && (
+                            <div className={s.error}>
+                                {errors.name.message}
+                            </div>
+                        )}
                     </div>
 
+                    {/* EMAIL */}
                     <div className={s.field}>
-                        <label className={s.label}>E-mail</label>
+                        <label className={s.label}>
+                            E-mail
+                        </label>
+
                         <input
                             data-testid="register-email"
-                            className={s.input}
-                            type='email'
-                            value={form.email}
-                            onChange={(e) =>
-                                setForm({ ...form, email: e.target.value })
-                            }
-                            placeholder='voce@email.com'
+                            className={`${s.input} ${errors.email
+                                ? s.inputError
+                                : ''
+                                }`}
+                            type="email"
+                            placeholder="voce@email.com"
+                            {...register('email')}
                         />
+
+                        {errors.email && (
+                            <div className={s.error}>
+                                {errors.email.message}
+                            </div>
+                        )}
                     </div>
 
+                    {/* SENHA */}
                     <div className={s.field}>
-                        <label className={s.label}>Senha</label>
+                        <label className={s.label}>
+                            Senha
+                        </label>
+
                         <input
                             data-testid="register-password"
-                            className={s.input}
-                            type='password'
-                            value={form.password}
-                            onChange={(e) =>
-                                setForm({ ...form, password: e.target.value })
-                            }
-                            placeholder='Mínimo 6 caracteres'
+                            className={`${s.input} ${errors.password
+                                ? s.inputError
+                                : ''
+                                }`}
+                            type="password"
+                            placeholder="Mínimo 8 caracteres"
+                            {...register('password')}
                         />
+
+                        {errors.password && (
+                            <div className={s.error}>
+                                {errors.password.message}
+                            </div>
+                        )}
                     </div>
 
+                    {/* CONFIRMAR SENHA */}
                     <div className={s.field}>
-                        <label className={s.label}>Confirmar senha</label>
+                        <label className={s.label}>
+                            Confirmar senha
+                        </label>
+
                         <input
                             data-testid="register-confirm-password"
-                            className={s.input}
-                            type='password'
-                            value={form.confirmPassword}
-                            onChange={(e) =>
-                                setForm({
-                                    ...form,
-                                    confirmPassword: e.target.value,
-                                })
-                            }
-                            placeholder='Repita a senha'
+                            className={`${s.input} ${errors.confirmPassword
+                                ? s.inputError
+                                : ''
+                                }`}
+                            type="password"
+                            placeholder="Repita a senha"
+                            {...register(
+                                'confirmPassword'
+                            )}
                         />
+
+                        {errors.confirmPassword && (
+                            <div className={s.error}>
+                                {
+                                    errors.confirmPassword
+                                        .message
+                                }
+                            </div>
+                        )}
                     </div>
-                    <button data-testid="register-submit" className={s.btn} type='submit'>
-                        Criar conta
+
+                    <button
+                        data-testid="register-submit"
+                        className={s.btn}
+                        type="submit"
+                        disabled={isSubmitting}
+                    >
+                        {isSubmitting
+                            ? 'Criando conta...'
+                            : 'Criar conta'}
                     </button>
                 </form>
 

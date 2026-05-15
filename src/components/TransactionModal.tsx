@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import { useTransactionsStore, TransactionError } from '../store/transactionsStore';
 import { getCategories } from '../lib/categoryService';
-import { CreateTransactionSchema } from '../lib/schemas/transactionSchema';
+import { CreateTransactionSchema } from '../schemas/transactionSchema';
 import type { Category } from '../types/category';
 import { FaPiggyBank } from 'react-icons/fa';
 import { MdAttachMoney } from 'react-icons/md';
