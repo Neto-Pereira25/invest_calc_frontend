@@ -67,7 +67,7 @@ export default function RegisterPage() {
                     Comece a organizar suas finanças hoje
                 </p>
 
-                <form onSubmit={onSubmit}>
+                <form noValidate onSubmit={onSubmit}>
                     {error && (<div data-testid="register-error" className={s.error}>{error}</div>)}
 
                     <div className={s.field}>
