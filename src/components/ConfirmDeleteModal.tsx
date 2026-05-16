@@ -26,11 +26,17 @@ export default function ConfirmDeleteModal({
             </Modal.Body>
 
             <Modal.Footer>
-                <Button variant="secondary" onClick={onClose}>
+                <Button
+                    data-testid="secundary"
+                    variant="secondary"
+                    onClick={onClose}>
                     Cancelar
                 </Button>
 
-                <Button variant="danger" onClick={onConfirm}>
+                <Button
+                    data-testid="confirm-delete-confirm"
+                    variant="danger"
+                    onClick={onConfirm}>
                     Excluir
                 </Button>
             </Modal.Footer>
