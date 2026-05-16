@@ -126,7 +126,7 @@ async function registerUserByUi(driver, { name, email, password }) {
   await typeByTestId(driver, "register-confirm-password", password);
 
   await clickByTestId(driver, "register-submit");
-  await waitForPath(driver, "/");
+  await waitForPath(driver, "/login");
   await sleep(driver);
 }
 
@@ -161,7 +161,7 @@ async function waitForOptions(driver, testId) {
 
   await driver.wait(async () => {
     const count = await driver.executeScript(
-      "return arguments[0].querySelectorAll('option[value]:not([value=\"\"])').length;",
+      "return Array.from(arguments[0].querySelectorAll('option[value]')).filter((item) => !['', '0'].includes(item.value)).length;",
       select,
     );
 
@@ -174,7 +174,7 @@ async function waitForOptions(driver, testId) {
 async function selectFirstRealOption(driver, testId) {
   const select = await waitForOptions(driver, testId);
   const firstValue = await driver.executeScript(
-    "return Array.from(arguments[0].options).find((item) => item.value)?.value;",
+    "return Array.from(arguments[0].options).find((item) => !['', '0'].includes(item.value))?.value;",
     select,
   );
 
@@ -318,7 +318,7 @@ test("deve gerenciar transacoes em um unico login", async () => {
 
     assert.match(incomeText, /\+\s*R\$/);
     assert.match(incomeText, /980,75/);
- 
+
     await clickByTestId(driver, "transaction-new");
     await typeByTestId(
       driver,
@@ -335,7 +335,7 @@ test("deve gerenciar transacoes em um unico login", async () => {
     );
     const modalText = await modal.getText();
 
-    assert.match(modalText, /Selecione uma subcategoria/);
+    assert.match(modalText, /Subcategoria é obrigatória|Selecione uma subcategoria/);
     await closeOpenModal(driver);
 
     const editedExpenseDescription = uniqueTransactionDescription("Conta de energia ajustada maio 2026");
@@ -359,10 +359,7 @@ test("deve gerenciar transacoes em um unico login", async () => {
     const deleteButton = await deleteRow.findElement(By.css('[data-testid="transaction-delete"]'));
     await deleteButton.click();
 
-    const alert = await driver.wait(until.alertIsPresent(), 10000);
-    await sleep(driver);
-    await alert.accept();
-    await sleep(driver);
+    await clickByTestId(driver, "confirm-delete-confirm");
 
     await waitForTransactionToDisappear(driver, incomeDescription);
   } finally {

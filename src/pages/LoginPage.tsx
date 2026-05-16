@@ -1,10 +1,16 @@
-import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import s from '../styles/forms.module.css';
+import { AxiosError } from 'axios';
 import { api } from '../lib/api';
 import { useAuthStore } from '../store/authStore';
 import { useUIStore } from '../store/uiStore';
-import { LoginSchema } from '../lib/schemas/authSchema';
+import {
+    loginSchema,
+    type LoginFormData,
+} from '../schemas/authSchema';
+import { successToast, errorToast } from '../components/ui/toast';
+import s from '../styles/forms.module.css';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
 
 type LoginResponse = {
     data: {
@@ -20,36 +26,45 @@ export default function LoginPage() {
 
     const nav = useNavigate();
 
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
+    const {
+        register,
+        handleSubmit,
+        formState: { errors, isSubmitting },
+    } = useForm<LoginFormData>({
+        resolver: zodResolver(loginSchema),
+        defaultValues: {
+            email: '',
+            password: '',
+        },
+    });
 
-    async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
-        e.preventDefault();
-        setError('');
-
-        const result = LoginSchema.safeParse({ email, password });
-
-        if (!result.success) {
-            setError(result.error.issues[0]?.message ?? 'Dados inválidos.');
-            return;
-        }
-
+    async function onSubmit(data: LoginFormData) {
         setLoading(true);
 
         try {
-            const response = await api.post<LoginResponse>('/auth/login', {
-                email,
-                password,
-            });
+            const response = await api.post<LoginResponse>(
+                '/auth/login',
+                data
+            );
 
             const { token, refreshToken } = response.data.data;
 
             setAuth(token, refreshToken);
 
+            successToast('Login realizado com sucesso!');
+
             nav('/dashboard');
-        } catch {
-            setError('E-mail ou senha inválidos');
+        } catch (ex) {
+            if (ex instanceof AxiosError) {
+                errorToast(
+                    ex.response?.data?.message ??
+                    'Erro ao fazer login.'
+                );
+
+                return;
+            }
+
+            errorToast('Erro ao fazer login.');
         } finally {
             setLoading(false);
         }
@@ -63,38 +78,64 @@ export default function LoginPage() {
                     <div className={s.brandName}>InvestCalc</div>
                 </div>
 
-                <h1 className={s.title}>Bem-vindo(a) ao InvestCalc</h1>
-                <p className={s.subtitle}>Acesse sua conta para continuar</p>
+                <h1 className={s.title}>
+                    Bem-vindo(a) ao InvestCalc
+                </h1>
+                <p className={s.subtitle}>
+                    Acesse sua conta para continuar
+                </p>
 
-                <form noValidate onSubmit={onSubmit}>
-                    {error && (<div data-testid="login-error"  className={s.error}>{error}</div>)}
-
+                <form
+                    noValidate
+                    onSubmit={handleSubmit(onSubmit)}>
+                    {/* EMAIL */}
                     <div className={s.field}>
-                        <label className={s.label}>E-mail</label>
+                        <label className={s.label}>
+                            E-mail
+                        </label>
+
                         <input
                             data-testid="login-email"
-                            className={s.input}
-                            type='email'
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            placeholder='seuemail@email.com'
+                            className={`${s.input} ${errors.email ? s.inputError : ''}`}
+                            type="email"
+                            placeholder="seuemail@email.com"
+                            {...register('email')}
                         />
+
+                        {errors.email && (
+                            <div className={s.error}>
+                                {errors.email.message}
+                            </div>
+                        )}
                     </div>
 
+                    {/* SENHA */}
                     <div className={s.field}>
-                        <label className={s.label}>Senha</label>
+                        <label className={s.label}>
+                            Senha
+                        </label>
+
                         <input
                             data-testid="login-password"
-                            className={s.input}
-                            type='password'
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            placeholder='••••••••'
+                            className={`${s.input} ${errors.password ? s.inputError : ''}`}
+                            type="password"
+                            placeholder="********"
+                            {...register('password')}
                         />
+
+                        {errors.password && (
+                            <div className={s.error}>
+                                {errors.password.message}
+                            </div>
+                        )}
                     </div>
 
-                    <button data-testid="login-submit" className={s.btn} type='submit'>
-                        Entrar
+                    <button
+                        data-testid="login-submit"
+                        className={s.btn}
+                        type='submit'
+                        disabled={isSubmitting}>
+                        {isSubmitting ? 'Entrando...' : 'Entrar'}
                     </button>
                 </form>
 
