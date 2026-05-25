@@ -93,6 +93,10 @@ export default function LoginPage() {
                         />
                     </div>
 
+                    <div className={s.alt}>
+                        <Link to='/forgot-password'>Esqueci minha senha</Link>
+                    </div>
+
                     <button data-testid="login-submit" className={s.btn} type='submit'>
                         Entrar
                     </button>
