@@ -18,6 +18,7 @@ export default function AppRoutes() {
             <Routes>
                 <Route element={<AuthAwareLayout />}>
                     <Route path="/" element={<LoginPage />} />
+                    <Route path="/login" element={<LoginPage />} />
                     <Route path="/register" element={<RegisterPage />} />
                     <Route path="/forgot-password" element={<ForgotPasswordPage />} />
                     <Route path="/reset-password" element={<ResetPasswordPage />} />

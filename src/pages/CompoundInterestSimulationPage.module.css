@@ -79,6 +79,15 @@
     box-shadow: 0 0 0 3px rgba(76, 201, 255, 0.15);
 }
 
+/* Garante que o feedback de erro do Bootstrap fique visível mesmo com CSS customizado */
+.simForm :global(.invalid-feedback) {
+    display: block !important;
+    color: #ff8ca0 !important;
+    font-size: 0.97rem;
+    margin-top: 4px;
+    margin-bottom: 0;
+}
+
 .actions {
     margin-top: 24px;
     display: flex;

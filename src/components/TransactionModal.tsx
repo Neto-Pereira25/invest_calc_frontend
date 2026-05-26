@@ -1,15 +1,17 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
-import { useTransactionsStore, TransactionError } from '../store/transactionsStore';
-import { getCategories } from '../lib/categoryService';
-import { CreateTransactionSchema } from '../lib/schemas/transactionSchema';
-import type { Category } from '../types/category';
 import { FaPiggyBank } from 'react-icons/fa';
 import { MdAttachMoney } from 'react-icons/md';
-import { toast } from 'react-toastify';
-import '../styles/modal.css';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useTransactionsStore, TransactionError } from '../store/transactionsStore';
+import { getCategories } from '../lib/categoryService';
+import { transactionSchema, type TransactionFormData } from '../schemas/transactionSchema';
+import { errorToast, successToast } from './ui/toast';
+import type { Category } from '../types/category';
 import type { Transaction } from '../types/transaction';
 import s from './TransactionModal.module.css';
+import '../styles/modal.css';
 
 interface Props {
     show: boolean;
@@ -23,19 +25,27 @@ export default function TransactionModal({ show, onClose, transaction }: Props) 
 
     const isEdit = !!transaction;
 
-    const [description, setDescription] = useState('');
-    const [amount, setAmount] = useState('');
-    const [date, setDate] = useState('');
-
     const [categories, setCategories] = useState<Category[]>([]);
     const [type, setType] = useState<'INCOME' | 'EXPENSE'>('EXPENSE');
 
     const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
-    const [subcategoryId, setSubcategoryId] = useState<number | null>(null);
 
-    const [errors, setErrors] = useState<Record<string, string>>({});
+    const {
+        register,
+        handleSubmit,
+        reset,
+        setValue,
+        formState: { errors },
+    } = useForm<TransactionFormData>({
+        resolver: zodResolver(transactionSchema),
+        defaultValues: {
+            description: '',
+            amount: undefined,
+            date: '',
+            subcategoryId: 0,
+        },
+    });
 
-    // ✅ carregar categorias (único useEffect necessário)
     useEffect(() => {
         async function load() {
             const data = await getCategories();
@@ -44,86 +54,59 @@ export default function TransactionModal({ show, onClose, transaction }: Props) 
         load();
     }, []);
 
-    // ✅ filtrar categorias por tipo
     const filteredCategories = useMemo(() => {
         return categories.filter((c) => c.type === type);
     }, [categories, type]);
 
-    // ✅ categoria selecionada (ou primeira)
     const selectedCategory =
         filteredCategories.find((c) => c.id === selectedCategoryId) ||
         filteredCategories[0] ||
         null;
 
-    // 🔥 RESET FORM (sem useEffect problemático)
     const resetForm = () => {
         if (transaction) {
-            setDescription(transaction.description);
-            setAmount(String(transaction.amount));
-            setDate(transaction.date);
+            reset({
+                description: transaction.description,
+                amount: transaction.amount,
+                date: transaction.date,
+                subcategoryId: 0,
+            });
 
-            // tenta inferir tipo (opcional)
             setType(transaction.type);
-
         } else {
-            setDescription('');
-            setAmount('');
-            setDate('');
+            reset({
+                description: '',
+                amount: undefined,
+                date: '',
+                subcategoryId: 0,
+            });
+
             setType('EXPENSE');
         }
 
         setSelectedCategoryId(null);
-        setSubcategoryId(null);
     };
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        setErrors({});
-
-        if (!subcategoryId) {
-            setErrors(prev => ({ ...prev, subcategoryId: 'Selecione uma subcategoria' }));
-            return;
-        }
-
-        const payload = {
-            description,
-            amount: Number(amount),
-            date,
-            subcategoryId,
-        };
-
-        // Validar com Zod
-        const result = CreateTransactionSchema.safeParse(payload);
-
-        if (!result.success) {
-            const fieldErrors: Record<string, string> = {};
-            result.error.issues.forEach((issue) => {
-                const field = issue.path[0] as string;
-                fieldErrors[field] = issue.message;
-            });
-            setErrors(fieldErrors);
-            return;
-        }
-
+    const onSubmit = async (data: TransactionFormData) => {
         try {
             if (isEdit && transaction) {
-                await editTransaction(transaction.id, payload);
-                toast.success('Transação editada com sucesso!');
+                await editTransaction(transaction.id, data);
+                successToast('Lançamento financeiro editado com sucesso!');
             } else {
-                await addTransaction(payload);
-                toast.success('Transação criada com sucesso!');
+                await addTransaction(data);
+                successToast('Lançamento financeiro criado com sucesso!');
             }
 
             onClose();
-        } catch (error) {
-            if (error instanceof TransactionError) {
-                if (error.errors.length > 0) {
-                    error.errors.forEach((msg) => toast.error(msg));
+        } catch (ex) {
+            if (ex instanceof TransactionError) {
+                if (ex.errors.length > 0) {
+                    ex.errors.forEach((msg) => errorToast(msg));
                 } else {
-                    toast.error(error.message);
+                    errorToast(ex.message);
                 }
             } else {
-                toast.error('Erro ao processar transação');
+                errorToast('Erro ao processar lançamento financeiro');
             }
         }
     };
@@ -137,15 +120,13 @@ export default function TransactionModal({ show, onClose, transaction }: Props) 
             size='lg'>
             <Modal.Header closeButton>
                 <Modal.Title className={`${s.title} ${type === 'INCOME' ? s.incomeTitle : s.expenseTitle}`}>
-                    {
-                        type === 'INCOME' ? <FaPiggyBank size={30} /> : <MdAttachMoney size={30} />
-                    }
+                    {type === 'INCOME' ? <FaPiggyBank size={30} /> : <MdAttachMoney size={30} />}
                     {isEdit ? 'Editar Transação' : 'Nova Transação'}
                 </Modal.Title>
             </Modal.Header>
 
             <Modal.Body>
-                <Form onSubmit={handleSubmit}>
+                <Form onSubmit={handleSubmit(onSubmit)}>
                     <div className={s.typeSwitch}>
                         <Button
                             data-testid="transaction-type-income"
@@ -154,7 +135,7 @@ export default function TransactionModal({ show, onClose, transaction }: Props) 
                             onClick={() => {
                                 setType('INCOME');
                                 setSelectedCategoryId(null);
-                                setSubcategoryId(null);
+                                setValue('subcategoryId', 0);
                             }}
                         >
                             ↑ Receita
@@ -167,7 +148,7 @@ export default function TransactionModal({ show, onClose, transaction }: Props) 
                             onClick={() => {
                                 setType('EXPENSE');
                                 setSelectedCategoryId(null);
-                                setSubcategoryId(null);
+                                setValue('subcategoryId', 0);
                             }}
                         >
                             ↓ Despesa
@@ -180,12 +161,11 @@ export default function TransactionModal({ show, onClose, transaction }: Props) 
                         <Form.Control
                             data-testid="transaction-description"
                             size="lg"
-                            value={description}
-                            onChange={(e) => setDescription(e.target.value)}
+                            {...register('description')}
                             isInvalid={!!errors.description}
                         />
                         <Form.Control.Feedback type="invalid">
-                            {errors.description}
+                            {errors.description?.message}
                         </Form.Control.Feedback>
                     </Form.Group>
 
@@ -198,7 +178,7 @@ export default function TransactionModal({ show, onClose, transaction }: Props) 
                             value={selectedCategory?.id || ''}
                             onChange={(e) => {
                                 setSelectedCategoryId(Number(e.target.value));
-                                setSubcategoryId(null);
+                                setValue('subcategoryId', 0);
                             }}
                         >
                             <option value="">Selecione</option>
@@ -216,11 +196,10 @@ export default function TransactionModal({ show, onClose, transaction }: Props) 
                         <Form.Select
                             data-testid="transaction-subcategory"
                             size="lg"
-                            value={subcategoryId || ''}
-                            onChange={(e) => setSubcategoryId(Number(e.target.value))}
+                            {...register('subcategoryId', { valueAsNumber: true })}
                             isInvalid={!!errors.subcategoryId}
                         >
-                            <option value="">Selecione</option>
+                            <option value={0}>Selecione</option>
                             {selectedCategory?.subcategories.map((sub) => (
                                 <option key={sub.id} value={sub.id}>
                                     {sub.name}
@@ -228,7 +207,7 @@ export default function TransactionModal({ show, onClose, transaction }: Props) 
                             ))}
                         </Form.Select>
                         <Form.Control.Feedback type="invalid">
-                            {errors.subcategoryId}
+                            {errors.subcategoryId?.message}
                         </Form.Control.Feedback>
                     </Form.Group>
 
@@ -239,14 +218,13 @@ export default function TransactionModal({ show, onClose, transaction }: Props) 
                             data-testid="transaction-amount"
                             size="lg"
                             type="number"
-                            value={amount}
-                            onChange={(e) => setAmount(e.target.value)}
                             step="0.01"
                             min="0"
+                            {...register('amount', { valueAsNumber: true })}
                             isInvalid={!!errors.amount}
                         />
                         <Form.Control.Feedback type="invalid">
-                            {errors.amount}
+                            {errors.amount?.message}
                         </Form.Control.Feedback>
                     </Form.Group>
 
@@ -257,12 +235,11 @@ export default function TransactionModal({ show, onClose, transaction }: Props) 
                             data-testid="transaction-date"
                             size="lg"
                             type="date"
-                            value={date}
-                            onChange={(e) => setDate(e.target.value)}
+                            {...register('date')}
                             isInvalid={!!errors.date}
                         />
                         <Form.Control.Feedback type="invalid">
-                            {errors.date}
+                            {errors.date?.message}
                         </Form.Control.Feedback>
                     </Form.Group>
 
