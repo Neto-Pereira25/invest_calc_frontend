@@ -82,6 +82,11 @@ export default function Layout() {
                         <span>Lancamentos</span>
                     </NavLink>
 
+                    <NavLink to="/goals" className={({ isActive }) => `${s.navItem} ${isActive ? s.active : ''}`}>
+                        <FaChartLine />
+                        <span>Metas</span>
+                    </NavLink>
+
                     <NavLink
                         to="/compound-interest-simulator"
                         className={({ isActive }) => `${s.navItem} ${isActive ? s.active : ''}`}

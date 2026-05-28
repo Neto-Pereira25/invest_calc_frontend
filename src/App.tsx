@@ -12,15 +12,6 @@ export default function App() {
             {isLoading && <Loading />}
             <AppRoutes />
             <ToastContainer
-            // position="top-right"
-            // autoClose={3000}
-            // hideProgressBar={false}
-            // newestOnTop={true}
-            // closeOnClick
-            // rtl={false}
-            // pauseOnFocusLoss
-            // draggable
-            // pauseOnHover
             />
         </>
     );

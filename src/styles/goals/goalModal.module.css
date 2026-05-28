@@ -1,0 +1,5 @@
+.custom-placeholder::placeholder {
+    color: #ffffff;
+    opacity: 1;
+    /* importante em alguns navegadores */
+}

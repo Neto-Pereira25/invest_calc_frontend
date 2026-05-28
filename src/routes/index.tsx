@@ -9,6 +9,7 @@ import ProfilePage from '../pages/ProfilePage';
 import RegisterPage from '../pages/RegisterPage';
 import TransactionsPage from '../pages/TransactionsPage';
 import ProtectedRoute from './ProtectedRoute';
+import { GoalsPage } from '../pages/goals/GoalsPage';
 
 export default function AppRoutes() {
     return (
@@ -29,6 +30,7 @@ export default function AppRoutes() {
                 >
                     <Route path="/dashboard" element={<DashboardPage />} />
                     <Route path="/transactions" element={<TransactionsPage />} />
+                    <Route path="/goals" element={<GoalsPage />} />
                     <Route path="/profile" element={<ProfilePage />} />
                 </Route>
                 <Route path="*" element={<NotFound />} />
