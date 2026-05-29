@@ -14,3 +14,7 @@ export interface CreateGoalDTO {
     targetAmount: number;
     deadline: string;
 }
+
+export interface UpdateGoalProgressDTO {
+    currentAmount: number;
+}

@@ -1,9 +1,15 @@
-import { Card, ProgressBar, Badge, Dropdown } from 'react-bootstrap';
+import {
+    Card,
+    ProgressBar,
+    Badge,
+    Dropdown
+} from 'react-bootstrap';
 
 import {
     MoreVertical,
     Pencil,
-    Trash2
+    Trash2,
+    TrendingUp
 } from 'lucide-react';
 
 import type { Goal } from '../../types/goal';
@@ -14,8 +20,11 @@ interface GoalCardProps {
     onEdit: (goal: Goal) => void;
 
     onDelete: (goal: Goal) => void;
-}
 
+    onUpdateProgress: (
+        goal: Goal
+    ) => void;
+}
 
 function translateStatus(status: string) {
     switch (status) {
@@ -49,7 +58,24 @@ function getBadgeVariant(status: string) {
     }
 }
 
-function formatCurrency(value: number) {
+function getProgressVariant(
+    status: string
+) {
+    switch (status) {
+        case 'COMPLETED':
+            return 'success';
+
+        case 'OVERDUE':
+            return 'danger';
+
+        default:
+            return 'primary';
+    }
+}
+
+function formatCurrency(
+    value: number
+) {
     return new Intl.NumberFormat(
         'pt-BR',
         {
@@ -62,12 +88,17 @@ function formatCurrency(value: number) {
 export function GoalCard({
     goal,
     onEdit,
-    onDelete
+    onDelete,
+    onUpdateProgress
 }: GoalCardProps) {
     const progress = Math.min(
         goal.progressPercentage || 0,
         100
     );
+
+    const remaining =
+        goal.targetAmount -
+        goal.currentAmount;
 
     return (
         <Card className="shadow-sm border-0 h-100">
@@ -111,6 +142,19 @@ export function GoalCard({
                             <Dropdown.Menu>
                                 <Dropdown.Item
                                     onClick={() =>
+                                        onUpdateProgress(
+                                            goal
+                                        )
+                                    }
+                                    className="d-flex align-items-center gap-2"
+                                >
+                                    <TrendingUp size={16} />
+
+                                    Atualizar Progresso
+                                </Dropdown.Item>
+
+                                <Dropdown.Item
+                                    onClick={() =>
                                         onEdit(goal)
                                     }
                                     className="d-flex align-items-center gap-2"
@@ -119,6 +163,8 @@ export function GoalCard({
 
                                     Editar
                                 </Dropdown.Item>
+
+                                <Dropdown.Divider />
 
                                 <Dropdown.Item
                                     onClick={() =>
@@ -150,10 +196,30 @@ export function GoalCard({
                     </span>
                 </div>
 
+                <div className="d-flex justify-content-between align-items-center mb-2">
+                    <small className="text-muted">
+                        Faltam{' '}
+                        <strong>
+                            {formatCurrency(
+                                Math.max(
+                                    remaining,
+                                    0
+                                )
+                            )}
+                        </strong>
+                    </small>
+
+                    <small className="fw-semibold">
+                        {progress.toFixed(0)}%
+                    </small>
+                </div>
+
                 <ProgressBar
                     now={progress}
-                    label={`${progress}%`}
-                    className="mt-3"
+                    variant={getProgressVariant(
+                        goal.status
+                    )}
+                    className="mt-2"
                 />
             </Card.Body>
         </Card>

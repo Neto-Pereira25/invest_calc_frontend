@@ -10,19 +10,27 @@ import {
 
 import { Plus } from 'lucide-react';
 
-import { GoalCard } from '../../components/goals/GoalCard';
-import { GoalModal } from '../../components/goals/GoalModal';
-
-import { useGoalsStore } from '../../store/goalsStore';
-import { DeleteGoalModal } from '../../components/goals/DeleteGoalModal';
 import type { Goal } from '../../types/goal';
 
+import { GoalCard } from '../../components/goals/GoalCard';
+import { GoalModal } from '../../components/goals/GoalModal';
+import { DeleteGoalModal } from '../../components/goals/DeleteGoalModal';
+import { UpdateProgressModal } from '../../components/goals/UpdateProgressModal';
+
+import { useGoalsStore } from '../../store/goalsStore';
+
 export function GoalsPage() {
-    const [showGoalModal, setShowGoalModal] = useState(false);
+    const [showGoalModal, setShowGoalModal] =
+        useState(false);
 
     const [
         showDeleteModal,
         setShowDeleteModal
+    ] = useState(false);
+
+    const [
+        showProgressModal,
+        setShowProgressModal
     ] = useState(false);
 
     const [modalMode, setModalMode] =
@@ -77,6 +85,14 @@ export function GoalsPage() {
         setShowDeleteModal(true);
     }
 
+    function handleOpenProgressModal(
+        goal: Goal
+    ) {
+        setSelectedGoal(goal);
+
+        setShowProgressModal(true);
+    }
+
     function handleCloseGoalModal() {
         setShowGoalModal(false);
 
@@ -85,6 +101,12 @@ export function GoalsPage() {
 
     function handleCloseDeleteModal() {
         setShowDeleteModal(false);
+
+        setSelectedGoal(null);
+    }
+
+    function handleCloseProgressModal() {
+        setShowProgressModal(false);
 
         setSelectedGoal(null);
     }
@@ -150,6 +172,9 @@ export function GoalsPage() {
                                 onDelete={
                                     handleOpenDeleteModal
                                 }
+                                onUpdateProgress={
+                                    handleOpenProgressModal
+                                }
                             />
                         </Col>
                     ))}
@@ -169,6 +194,14 @@ export function GoalsPage() {
                 show={showDeleteModal}
                 handleClose={
                     handleCloseDeleteModal
+                }
+                goal={selectedGoal}
+            />
+
+            <UpdateProgressModal
+                show={showProgressModal}
+                handleClose={
+                    handleCloseProgressModal
                 }
                 goal={selectedGoal}
             />

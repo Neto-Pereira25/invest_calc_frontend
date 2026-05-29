@@ -1,5 +1,5 @@
 import { api } from './api';
-import type { CreateGoalDTO, Goal } from '../types/goal';
+import type { CreateGoalDTO, UpdateGoalProgressDTO, Goal } from '../types/goal';
 
 interface ApiResponse<T> {
     data: T;
@@ -34,4 +34,16 @@ export async function updateGoal(id: number, payload: CreateGoalDTO): Promise<Go
 
 export async function deleteGoal(id: number): Promise<void> {
     await api.delete(`/goals/${id}`);
+}
+
+export async function updateGoalProgress(
+    id: number,
+    payload: UpdateGoalProgressDTO
+): Promise<Goal> {
+    const response = await api.patch<ApiResponse<Goal>>(
+        `/goals/${id}/progress`,
+        payload
+    );
+
+    return response.data.data;
 }

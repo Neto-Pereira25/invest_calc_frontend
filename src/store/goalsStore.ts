@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { toast } from 'react-toastify';
 import * as goalService from '../lib/goalService';
 import type { CreateGoalDTO, Goal } from '../types/goal';
 
@@ -19,6 +20,11 @@ interface GoalsStore {
 
     deleteGoal: (
         id: number
+    ) => Promise<void>;
+
+    updateGoalProgress: (
+        id: number,
+        currentAmount: number
     ) => Promise<void>;
 }
 
@@ -48,11 +54,19 @@ export const useGoalsStore = create<GoalsStore>((set, get) => ({
         try {
             await goalService.createGoal(payload);
 
+            toast.success(
+                'Meta criada com sucesso!'
+            );
+
             await get().fetchGoals();
         } catch (error) {
             console.error(
                 'Erro ao criar meta:',
                 error
+            );
+
+            toast.error(
+                'Erro ao criar meta.'
             );
 
             throw error;
@@ -66,11 +80,19 @@ export const useGoalsStore = create<GoalsStore>((set, get) => ({
                 payload
             );
 
+            toast.success(
+                'Meta atualizada com sucesso!'
+            );
+
             await get().fetchGoals();
         } catch (error) {
             console.error(
                 'Erro ao atualizar meta:',
                 error
+            );
+
+            toast.error(
+                'Erro ao atualizar meta.'
             );
 
             throw error;
@@ -81,6 +103,10 @@ export const useGoalsStore = create<GoalsStore>((set, get) => ({
         try {
             await goalService.deleteGoal(id);
 
+            toast.success(
+                'Meta removida com sucesso!'
+            );
+
             await get().fetchGoals();
         } catch (error) {
             console.error(
@@ -88,8 +114,48 @@ export const useGoalsStore = create<GoalsStore>((set, get) => ({
                 error
             );
 
+            toast.error(
+                'Erro ao excluir meta.'
+            );
+
             throw error;
         }
-    }
+    },
+
+    updateGoalProgress: async (
+        id,
+        currentAmount
+    ) => {
+        try {
+            if (currentAmount < 0) {
+                toast.error(
+                    'O valor atual não pode ser negativo.'
+                );
+                return;
+            }
+
+            await goalService.updateGoalProgress(
+                id,
+                { currentAmount }
+            );
+
+            toast.success(
+                'Progresso atualizado!'
+            );
+
+            await get().fetchGoals();
+        } catch (error) {
+            console.error(
+                'Erro ao atualizar progresso:',
+                error
+            );
+
+            toast.error(
+                'Erro ao atualizar progresso.'
+            );
+
+            throw error;
+        }
+    },
 })
 );
