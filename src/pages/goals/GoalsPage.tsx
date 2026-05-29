@@ -14,11 +14,30 @@ import { GoalCard } from '../../components/goals/GoalCard';
 import { GoalModal } from '../../components/goals/GoalModal';
 
 import { useGoalsStore } from '../../store/goalsStore';
+import { DeleteGoalModal } from '../../components/goals/DeleteGoalModal';
+import type { Goal } from '../../types/goal';
 
 export function GoalsPage() {
-    const [showModal, setShowModal] = useState(false);
+    const [showGoalModal, setShowGoalModal] = useState(false);
 
-    const goals = useGoalsStore((state) => state.goals);
+    const [
+        showDeleteModal,
+        setShowDeleteModal
+    ] = useState(false);
+
+    const [modalMode, setModalMode] =
+        useState<'create' | 'edit'>(
+            'create'
+        );
+
+    const [
+        selectedGoal,
+        setSelectedGoal
+    ] = useState<Goal | null>(null);
+
+    const goals = useGoalsStore(
+        (state) => state.goals
+    );
 
     const loading = useGoalsStore(
         (state) => state.loading
@@ -32,8 +51,49 @@ export function GoalsPage() {
         fetchGoals();
     }, [fetchGoals]);
 
+    function handleOpenCreateModal() {
+        setModalMode('create');
+
+        setSelectedGoal(null);
+
+        setShowGoalModal(true);
+    }
+
+    function handleOpenEditModal(
+        goal: Goal
+    ) {
+        setModalMode('edit');
+
+        setSelectedGoal(goal);
+
+        setShowGoalModal(true);
+    }
+
+    function handleOpenDeleteModal(
+        goal: Goal
+    ) {
+        setSelectedGoal(goal);
+
+        setShowDeleteModal(true);
+    }
+
+    function handleCloseGoalModal() {
+        setShowGoalModal(false);
+
+        setSelectedGoal(null);
+    }
+
+    function handleCloseDeleteModal() {
+        setShowDeleteModal(false);
+
+        setSelectedGoal(null);
+    }
+
     return (
-        <Container fluid className="py-4 px-4">
+        <Container
+            fluid
+            className="py-4 px-4"
+        >
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <div>
                     <h2 className="fw-bold mb-1">
@@ -46,7 +106,9 @@ export function GoalsPage() {
                 </div>
 
                 <Button
-                    onClick={() => setShowModal(true)}
+                    onClick={
+                        handleOpenCreateModal
+                    }
                     className="d-flex align-items-center gap-2"
                 >
                     <Plus size={18} />
@@ -66,7 +128,9 @@ export function GoalsPage() {
                     </h5>
 
                     <p className="text-muted">
-                        Clique em “Nova Meta” para criar sua primeira meta financeira.
+                        Clique em “Nova Meta”
+                        para criar sua primeira
+                        meta financeira.
                     </p>
                 </div>
             ) : (
@@ -78,15 +142,35 @@ export function GoalsPage() {
                             md={6}
                             xl={4}
                         >
-                            <GoalCard goal={goal} />
+                            <GoalCard
+                                goal={goal}
+                                onEdit={
+                                    handleOpenEditModal
+                                }
+                                onDelete={
+                                    handleOpenDeleteModal
+                                }
+                            />
                         </Col>
                     ))}
                 </Row>
             )}
 
             <GoalModal
-                show={showModal}
-                handleClose={() => setShowModal(false)}
+                show={showGoalModal}
+                handleClose={
+                    handleCloseGoalModal
+                }
+                mode={modalMode}
+                goal={selectedGoal}
+            />
+
+            <DeleteGoalModal
+                show={showDeleteModal}
+                handleClose={
+                    handleCloseDeleteModal
+                }
+                goal={selectedGoal}
             />
         </Container>
     );

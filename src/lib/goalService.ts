@@ -7,13 +7,31 @@ interface ApiResponse<T> {
 }
 
 export async function getGoals(): Promise<Goal[]> {
-    const response = await api.get<ApiResponse<Goal[]>>('/goals');
+    const response = await api.get<ApiResponse<Goal[]>>(
+        '/goals'
+    );
 
     return response.data.data;
 }
 
 export async function createGoal(payload: CreateGoalDTO): Promise<Goal> {
-    const response = await api.post<ApiResponse<Goal>>('/goals', payload);
+    const response = await api.post<ApiResponse<Goal>>(
+        '/goals',
+        payload
+    );
 
     return response.data.data;
+}
+
+export async function updateGoal(id: number, payload: CreateGoalDTO): Promise<Goal> {
+    const response = await api.put<ApiResponse<Goal>>(
+        `/goals/${id}`,
+        payload
+    );
+
+    return response.data.data;
+}
+
+export async function deleteGoal(id: number): Promise<void> {
+    await api.delete(`/goals/${id}`);
 }

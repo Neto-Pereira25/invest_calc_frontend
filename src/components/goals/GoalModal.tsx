@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Modal, Button, Form, Spinner } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -6,35 +7,77 @@ import {
     type GoalFormData
 } from '../../schemas/goalSchema';
 import { useGoalsStore } from '../../store/goalsStore';
-import styles from '../../styles/goals/goalModal.module.css';
+// import styles from '../../styles/goals/goalModal.module.css';
+import type { Goal } from '../../types/goal';
 
 interface GoalModalProps {
     show: boolean;
     handleClose: () => void;
+
+    mode: 'create' | 'edit';
+
+    goal?: Goal | null;
 }
 
 export function GoalModal({
     show,
-    handleClose
+    handleClose,
+    mode,
+    goal
 }: GoalModalProps) {
     const createGoal = useGoalsStore(
         (state) => state.createGoal
+    );
+
+    const updateGoal = useGoalsStore(
+        (state) => state.updateGoal
     );
 
     const {
         register,
         handleSubmit,
         reset,
-        formState: { errors, isSubmitting }
+        formState: {
+            errors,
+            isSubmitting
+        }
     } = useForm<GoalFormData>({
         resolver: zodResolver(goalSchema)
     });
 
-    async function onSubmit(data: GoalFormData) {
-        try {
-            await createGoal(data);
+    useEffect(() => {
+        if (mode === 'edit' && goal) {
+            reset({
+                name: goal.name,
+                targetAmount: goal.targetAmount,
+                deadline: goal.deadline.split('T')[0]
+            });
+        }
 
-            reset();
+        if (mode === 'create') {
+            reset({
+                name: '',
+                targetAmount: 0,
+                deadline: ''
+            });
+        }
+    }, [goal, mode, reset]);
+
+    async function onSubmit(
+        data: GoalFormData
+    ) {
+        try {
+            if (
+                mode === 'edit' &&
+                goal
+            ) {
+                await updateGoal(
+                    goal.id,
+                    data
+                );
+            } else {
+                await createGoal(data);
+            }
 
             handleClose();
         } catch (error) {
@@ -50,11 +93,15 @@ export function GoalModal({
         >
             <Modal.Header closeButton>
                 <Modal.Title>
-                    Nova Meta Financeira
+                    {mode === 'create'
+                        ? 'Nova Meta'
+                        : 'Editar Meta'}
                 </Modal.Title>
             </Modal.Header>
 
-            <Form onSubmit={handleSubmit(onSubmit)}>
+            <Form
+                onSubmit={handleSubmit(onSubmit)}
+            >
                 <Modal.Body>
                     <Form.Group className="mb-3">
                         <Form.Label>
@@ -63,10 +110,8 @@ export function GoalModal({
 
                         <Form.Control
                             type="text"
-                            placeholder="Ex: Reserva de Emergência"
                             {...register('name')}
                             isInvalid={!!errors.name}
-                            className={styles['custom-placeholder']}
                         />
 
                         <Form.Control.Feedback type="invalid">
@@ -82,16 +127,22 @@ export function GoalModal({
                         <Form.Control
                             type="number"
                             step="0.01"
-                            placeholder="Ex.: 0.01"
-                            {...register('targetAmount', {
-                                valueAsNumber: true
-                            })}
-                            isInvalid={!!errors.targetAmount}
-                            className={styles['custom-placeholder']}
+                            {...register(
+                                'targetAmount',
+                                {
+                                    valueAsNumber: true
+                                }
+                            )}
+                            isInvalid={
+                                !!errors.targetAmount
+                            }
                         />
 
                         <Form.Control.Feedback type="invalid">
-                            {errors.targetAmount?.message}
+                            {
+                                errors.targetAmount
+                                    ?.message
+                            }
                         </Form.Control.Feedback>
                     </Form.Group>
 
@@ -103,8 +154,9 @@ export function GoalModal({
                         <Form.Control
                             type="date"
                             {...register('deadline')}
-                            isInvalid={!!errors.deadline}
-                            className={styles['custom-placeholder']}
+                            isInvalid={
+                                !!errors.deadline
+                            }
                         />
 
                         <Form.Control.Feedback type="invalid">
@@ -132,11 +184,12 @@ export function GoalModal({
                                     size="sm"
                                     className="me-2"
                                 />
-
                                 Salvando...
                             </>
-                        ) : (
+                        ) : mode === 'create' ? (
                             'Criar Meta'
+                        ) : (
+                            'Salvar Alterações'
                         )}
                     </Button>
                 </Modal.Footer>

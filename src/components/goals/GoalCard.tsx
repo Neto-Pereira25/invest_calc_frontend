@@ -1,10 +1,21 @@
-import { Card, ProgressBar, Badge } from 'react-bootstrap';
+import { Card, ProgressBar, Badge, Dropdown } from 'react-bootstrap';
+
+import {
+    MoreVertical,
+    Pencil,
+    Trash2
+} from 'lucide-react';
 
 import type { Goal } from '../../types/goal';
 
 interface GoalCardProps {
     goal: Goal;
+
+    onEdit: (goal: Goal) => void;
+
+    onDelete: (goal: Goal) => void;
 }
+
 
 function translateStatus(status: string) {
     switch (status) {
@@ -38,9 +49,26 @@ function getBadgeVariant(status: string) {
     }
 }
 
+function formatCurrency(value: number) {
+    return new Intl.NumberFormat(
+        'pt-BR',
+        {
+            style: 'currency',
+            currency: 'BRL'
+        }
+    ).format(value);
+}
+
 export function GoalCard({
-    goal
+    goal,
+    onEdit,
+    onDelete
 }: GoalCardProps) {
+    const progress = Math.min(
+        goal.progressPercentage || 0,
+        100
+    );
+
     return (
         <Card className="shadow-sm border-0 h-100">
             <Card.Body>
@@ -52,31 +80,79 @@ export function GoalCard({
 
                         <small className="text-muted">
                             Prazo:{' '}
-                            {new Date(goal.deadline).toLocaleDateString(
+                            {new Date(
+                                goal.deadline
+                            ).toLocaleDateString(
                                 'pt-BR'
                             )}
                         </small>
                     </div>
 
-                    <Badge bg={getBadgeVariant(goal.status)}>
-                        {translateStatus(goal.status)}
-                    </Badge>
+                    <div className="d-flex align-items-center gap-2">
+                        <Badge
+                            bg={getBadgeVariant(
+                                goal.status
+                            )}
+                        >
+                            {translateStatus(
+                                goal.status
+                            )}
+                        </Badge>
+
+                        <Dropdown align="end">
+                            <Dropdown.Toggle
+                                variant="light"
+                                size="sm"
+                                className="border-0 shadow-none"
+                            >
+                                <MoreVertical size={18} />
+                            </Dropdown.Toggle>
+
+                            <Dropdown.Menu>
+                                <Dropdown.Item
+                                    onClick={() =>
+                                        onEdit(goal)
+                                    }
+                                    className="d-flex align-items-center gap-2"
+                                >
+                                    <Pencil size={16} />
+
+                                    Editar
+                                </Dropdown.Item>
+
+                                <Dropdown.Item
+                                    onClick={() =>
+                                        onDelete(goal)
+                                    }
+                                    className="d-flex align-items-center gap-2 text-danger"
+                                >
+                                    <Trash2 size={16} />
+
+                                    Excluir
+                                </Dropdown.Item>
+                            </Dropdown.Menu>
+                        </Dropdown>
+                    </div>
                 </div>
 
                 <div className="mb-2">
                     <span className="fw-bold fs-5">
-                        R$ {goal.currentAmount.toFixed(2)}
+                        {formatCurrency(
+                            goal.currentAmount
+                        )}
                     </span>
 
                     <span className="text-muted">
-                        {' '}
-                        de R$ {goal.targetAmount.toFixed(2)}
+                        {' '}de{' '}
+                        {formatCurrency(
+                            goal.targetAmount
+                        )}
                     </span>
                 </div>
 
                 <ProgressBar
-                    now={goal.progressPercentage}
-                    label={`${goal.progressPercentage}%`}
+                    now={progress}
+                    label={`${progress}%`}
                     className="mt-3"
                 />
             </Card.Body>
