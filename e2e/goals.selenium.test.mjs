@@ -421,4 +421,25 @@ describe("metas financeiras", () => {
     const bodyText = await getBodyText(driver);
     assert.ok(!bodyText.includes(goalName));
   });
+
+  test("deve concluir meta ao atingir cem por cento do valor alvo", async () => {
+    await openGoalsPage(driver);
+
+    const goalName = uniqueGoalName("Bicicleta nova");
+
+    await createGoal(driver, {
+      name: goalName,
+      targetAmount: "1000",
+      deadline: "2026-07-15",
+    });
+
+    await updateGoalProgress(driver, goalName, "1000");
+
+    const card = await findGoalCard(driver, goalName);
+    const cardText = await card.getText();
+
+    assert.match(cardText, /R\$\s*1\.000,00/);
+    assert.match(cardText, /100%/);
+    assert.match(cardText, /Concluída|Concluida/);
+  });
 });
