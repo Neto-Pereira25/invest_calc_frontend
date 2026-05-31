@@ -1,4 +1,4 @@
-import test from "node:test";
+import { after, before, describe, test } from "node:test";
 import assert from "node:assert/strict";
 import selenium from "selenium-webdriver";
 import chrome from "selenium-webdriver/chrome.js";
@@ -7,6 +7,8 @@ const { Builder, By, until } = selenium;
 
 const FRONTEND_URL = process.env.FRONTEND_URL ?? "http://127.0.0.1:5173";
 const TEST_PAUSE_MS = Number(process.env.SELENIUM_TEST_PAUSE_MS ?? 900);
+
+let driver;
 
 async function createDriver() {
   const options = new chrome.Options();
@@ -108,7 +110,7 @@ async function clickByTestId(driver, testId) {
 }
 
 function uniqueShortSuffix() {
-  return Date.now().toString().slice(-5);
+  return `${Date.now().toString().slice(-4)}${Math.random().toString(36).slice(2, 4)}`;
 }
 
 function uniqueEmail(name) {
@@ -118,6 +120,10 @@ function uniqueEmail(name) {
 
 function uniqueGoalName(name) {
   return `${name} ${uniqueShortSuffix()}`;
+}
+
+function formatGoalDeadline(deadline) {
+  return new Date(deadline).toLocaleDateString("pt-BR");
 }
 
 async function registerUserByUi(driver, { name, email, password }) {
@@ -220,11 +226,34 @@ async function updateGoalProgress(driver, goalName, currentAmount) {
   await sleep(driver);
 }
 
-test("deve criar meta financeira e atualizar progresso", async () => {
-  const driver = await createDriver();
+async function editGoal(driver, currentName, { name, targetAmount, deadline }) {
+  const card = await findGoalCard(driver, currentName);
+  const actionsButton = await card.findElement(By.css('[data-testid="goal-actions"]'));
 
-  try {
+  await actionsButton.click();
+  await sleep(driver);
+
+  await clickByTestId(driver, "goal-edit");
+  await typeByTestId(driver, "goal-name", name);
+  await typeByTestId(driver, "goal-target-amount", targetAmount);
+  await setValueByTestId(driver, "goal-deadline", deadline);
+  await clickByTestId(driver, "goal-submit");
+  await waitForGoal(driver, name);
+}
+
+describe("metas financeiras", () => {
+  before(async () => {
+    driver = await createDriver();
     await loginAsNewUser(driver);
+  });
+
+  after(async () => {
+    if (driver) {
+      await driver.quit();
+    }
+  });
+
+  test("deve criar meta financeira e atualizar progresso", async () => {
     await openGoalsPage(driver);
 
     const goalName = uniqueGoalName("Viagem para Recife");
@@ -250,7 +279,33 @@ test("deve criar meta financeira e atualizar progresso", async () => {
     assert.match(cardText, /R\$\s*2\.125,00/);
     assert.match(cardText, /R\$\s*8\.500,00/);
     assert.match(cardText, /25%/);
-  } finally {
-    await driver.quit();
-  }
+  });
+
+  test("deve editar meta financeira e validar novos dados no card", async () => {
+    await openGoalsPage(driver);
+
+    const originalName = uniqueGoalName("Curso de Ingles em Olinda");
+    const editedName = uniqueGoalName("Intercambio em Lisboa");
+    const editedDeadline = "2027-03-15";
+
+    await createGoal(driver, {
+      name: originalName,
+      targetAmount: "6000",
+      deadline: "2026-09-10",
+    });
+
+    await editGoal(driver, originalName, {
+      name: editedName,
+      targetAmount: "12000",
+      deadline: editedDeadline,
+    });
+
+    const card = await findGoalCard(driver, editedName);
+    const cardText = await card.getText();
+
+    assert.match(cardText, new RegExp(editedName));
+    assert.match(cardText, /R\$\s*12\.000,00/);
+    assert.match(cardText, new RegExp(`Prazo:\\s*${formatGoalDeadline(editedDeadline)}`));
+    assert.ok(!cardText.includes(originalName));
+  });
 });
