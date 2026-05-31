@@ -442,4 +442,28 @@ describe("metas financeiras", () => {
     assert.match(cardText, /100%/);
     assert.match(cardText, /Concluída|Concluida/);
   });
+
+  test("deve limitar progresso visual a cem por cento quando valor atual ultrapassa a meta", async () => {
+    await openGoalsPage(driver);
+
+    const goalName = uniqueGoalName("Moveis da sala");
+
+    await createGoal(driver, {
+      name: goalName,
+      targetAmount: "2000",
+      deadline: "2026-12-05",
+    });
+
+    await updateGoalProgress(driver, goalName, "2500");
+
+    const card = await findGoalCard(driver, goalName);
+    const cardText = await card.getText();
+    const progressBar = await card.findElement(By.css('[role="progressbar"]'));
+    const progressValue = await progressBar.getAttribute("aria-valuenow");
+
+    assert.match(cardText, /R\$\s*2\.500,00/);
+    assert.match(cardText, /R\$\s*2\.000,00/);
+    assert.match(cardText, /100%/);
+    assert.equal(progressValue, "100");
+  });
 });
