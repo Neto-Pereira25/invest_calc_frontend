@@ -266,6 +266,16 @@ async function waitForOpenModalToClose(driver) {
   }, 10000);
 }
 
+async function closeOpenModalByX(driver) {
+  const closeButton = await driver.wait(
+    until.elementLocated(By.css(".modal.show .btn-close")),
+    10000,
+  );
+
+  await clickElement(driver, closeButton);
+  await waitForOpenModalToClose(driver);
+}
+
 async function createGoal(driver, { name, targetAmount, deadline }) {
   await clickByTestId(driver, "goal-new");
   await typeByTestId(driver, "goal-name", name);
@@ -279,8 +289,7 @@ async function updateGoalProgress(driver, goalName, currentAmount) {
   const card = await findGoalCard(driver, goalName);
   const actionsButton = await card.findElement(By.css('[data-testid="goal-actions"]'));
 
-  await actionsButton.click();
-  await sleep(driver);
+  await clickElement(driver, actionsButton);
 
   await clickCardAction(driver, card, "goal-update-progress");
   await typeByTestId(driver, "goal-current-amount", currentAmount);
@@ -292,8 +301,7 @@ async function tryUpdateGoalProgress(driver, goalName, currentAmount) {
   const card = await findGoalCard(driver, goalName);
   const actionsButton = await card.findElement(By.css('[data-testid="goal-actions"]'));
 
-  await actionsButton.click();
-  await sleep(driver);
+  await clickElement(driver, actionsButton);
 
   await clickCardAction(driver, card, "goal-update-progress");
   await typeByTestId(driver, "goal-current-amount", currentAmount);
@@ -301,12 +309,20 @@ async function tryUpdateGoalProgress(driver, goalName, currentAmount) {
   await sleep(driver);
 }
 
+async function openEditGoalModal(driver, goalName) {
+  const card = await findGoalCard(driver, goalName);
+  const actionsButton = await card.findElement(By.css('[data-testid="goal-actions"]'));
+
+  await clickElement(driver, actionsButton);
+
+  await clickCardAction(driver, card, "goal-edit");
+}
+
 async function editGoal(driver, currentName, { name, targetAmount, deadline }) {
   const card = await findGoalCard(driver, currentName);
   const actionsButton = await card.findElement(By.css('[data-testid="goal-actions"]'));
 
-  await actionsButton.click();
-  await sleep(driver);
+  await clickElement(driver, actionsButton);
 
   await clickCardAction(driver, card, "goal-edit");
   await typeByTestId(driver, "goal-name", name);
@@ -320,8 +336,7 @@ async function deleteGoal(driver, goalName) {
   const card = await findGoalCard(driver, goalName);
   const actionsButton = await card.findElement(By.css('[data-testid="goal-actions"]'));
 
-  await actionsButton.click();
-  await sleep(driver);
+  await clickElement(driver, actionsButton);
 
   await clickCardAction(driver, card, "goal-delete");
   await clickByTestId(driver, "goal-delete-confirm");
@@ -520,5 +535,40 @@ describe("metas financeiras", () => {
 
     assert.match(cardText, /R\$\s*0,00/);
     assert.match(cardText, /0%/);
+  });
+
+  test("deve fechar modais de criacao e edicao pelo botao x", async () => {
+    await openGoalsPage(driver);
+
+    const draftGoalName = uniqueGoalName("Tablet para trabalho");
+    const existingGoalName = uniqueGoalName("Passagem para Natal");
+
+    await clickByTestId(driver, "goal-new");
+    await typeByTestId(driver, "goal-name", draftGoalName);
+    await typeByTestId(driver, "goal-target-amount", "2800");
+    await setValueByTestId(driver, "goal-deadline", "2026-12-18");
+    await closeOpenModalByX(driver);
+    await waitForGoalToDisappear(driver, draftGoalName);
+
+    let bodyText = await getBodyText(driver);
+    assert.ok(!bodyText.includes(draftGoalName));
+
+    await createGoal(driver, {
+      name: existingGoalName,
+      targetAmount: "1400",
+      deadline: "2026-10-12",
+    });
+
+    await openEditGoalModal(driver, existingGoalName);
+    await typeByTestId(driver, "goal-name", "Nome que nao deve salvar");
+    await closeOpenModalByX(driver);
+
+    const card = await findGoalCard(driver, existingGoalName);
+    const cardText = await card.getText();
+
+    bodyText = await getBodyText(driver);
+    assert.match(cardText, /R\$\s*1\.400,00/);
+    assert.ok(bodyText.includes(existingGoalName));
+    assert.ok(!bodyText.includes("Nome que nao deve salvar"));
   });
 });
