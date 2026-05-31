@@ -204,6 +204,21 @@ async function findGoalCard(driver, goalName) {
   throw new Error(`Meta "${goalName}" nao encontrada`);
 }
 
+async function waitForGoalToDisappear(driver, goalName) {
+  await driver.wait(async () => {
+    const cards = await driver.findElements(By.css('[data-testid="goal-card"]'));
+
+    for (const card of cards) {
+      const text = await card.getText();
+      if (text.includes(goalName)) {
+        return false;
+      }
+    }
+
+    return true;
+  }, 10000);
+}
+
 async function createGoal(driver, { name, targetAmount, deadline }) {
   await clickByTestId(driver, "goal-new");
   await typeByTestId(driver, "goal-name", name);
@@ -239,6 +254,18 @@ async function editGoal(driver, currentName, { name, targetAmount, deadline }) {
   await setValueByTestId(driver, "goal-deadline", deadline);
   await clickByTestId(driver, "goal-submit");
   await waitForGoal(driver, name);
+}
+
+async function deleteGoal(driver, goalName) {
+  const card = await findGoalCard(driver, goalName);
+  const actionsButton = await card.findElement(By.css('[data-testid="goal-actions"]'));
+
+  await actionsButton.click();
+  await sleep(driver);
+
+  await clickByTestId(driver, "goal-delete");
+  await clickByTestId(driver, "goal-delete-confirm");
+  await waitForGoalToDisappear(driver, goalName);
 }
 
 describe("metas financeiras", () => {
@@ -307,5 +334,22 @@ describe("metas financeiras", () => {
     assert.match(cardText, /R\$\s*12\.000,00/);
     assert.match(cardText, new RegExp(`Prazo:\\s*${formatGoalDeadline(editedDeadline)}`));
     assert.ok(!cardText.includes(originalName));
+  });
+
+  test("deve excluir meta financeira e remover o card da tela", async () => {
+    await openGoalsPage(driver);
+
+    const goalName = uniqueGoalName("Reforma da cozinha");
+
+    await createGoal(driver, {
+      name: goalName,
+      targetAmount: "4500",
+      deadline: "2026-10-25",
+    });
+
+    await deleteGoal(driver, goalName);
+
+    const bodyText = await driver.executeScript("return document.body?.innerText ?? '';");
+    assert.ok(!bodyText.includes(goalName));
   });
 });
