@@ -88,6 +88,10 @@ async function setValueByTestId(driver, testId, value) {
 async function clickByTestId(driver, testId) {
   const element = await findByTestId(driver, testId);
 
+  await clickElement(driver, element);
+}
+
+async function clickElement(driver, element) {
   await driver.executeScript(
     'arguments[0].scrollIntoView({ block: "center", inline: "center" });',
     element,
@@ -107,6 +111,22 @@ async function clickByTestId(driver, testId) {
   }
 
   await sleep(driver);
+}
+
+async function clickCardAction(driver, card, testId) {
+  const action = await driver.wait(async () => {
+    const elements = await card.findElements(By.css(`[data-testid="${testId}"]`));
+
+    for (const element of elements) {
+      if (await element.isDisplayed()) {
+        return element;
+      }
+    }
+
+    return null;
+  }, 10000);
+
+  await clickElement(driver, action);
 }
 
 function normalizeText(value) {
@@ -262,7 +282,20 @@ async function updateGoalProgress(driver, goalName, currentAmount) {
   await actionsButton.click();
   await sleep(driver);
 
-  await clickByTestId(driver, "goal-update-progress");
+  await clickCardAction(driver, card, "goal-update-progress");
+  await typeByTestId(driver, "goal-current-amount", currentAmount);
+  await clickByTestId(driver, "goal-progress-submit");
+  await sleep(driver);
+}
+
+async function tryUpdateGoalProgress(driver, goalName, currentAmount) {
+  const card = await findGoalCard(driver, goalName);
+  const actionsButton = await card.findElement(By.css('[data-testid="goal-actions"]'));
+
+  await actionsButton.click();
+  await sleep(driver);
+
+  await clickCardAction(driver, card, "goal-update-progress");
   await typeByTestId(driver, "goal-current-amount", currentAmount);
   await clickByTestId(driver, "goal-progress-submit");
   await sleep(driver);
@@ -275,7 +308,7 @@ async function editGoal(driver, currentName, { name, targetAmount, deadline }) {
   await actionsButton.click();
   await sleep(driver);
 
-  await clickByTestId(driver, "goal-edit");
+  await clickCardAction(driver, card, "goal-edit");
   await typeByTestId(driver, "goal-name", name);
   await typeByTestId(driver, "goal-target-amount", targetAmount);
   await setValueByTestId(driver, "goal-deadline", deadline);
@@ -290,7 +323,7 @@ async function deleteGoal(driver, goalName) {
   await actionsButton.click();
   await sleep(driver);
 
-  await clickByTestId(driver, "goal-delete");
+  await clickCardAction(driver, card, "goal-delete");
   await clickByTestId(driver, "goal-delete-confirm");
   await waitForGoalToDisappear(driver, goalName);
 }
@@ -465,5 +498,27 @@ describe("metas financeiras", () => {
     assert.match(cardText, /R\$\s*2\.000,00/);
     assert.match(cardText, /100%/);
     assert.equal(progressValue, "100");
+  });
+
+  test("deve impedir progresso negativo e exibir mensagem de erro", async () => {
+    await openGoalsPage(driver);
+
+    const goalName = uniqueGoalName("Reserva para consulta medica");
+
+    await createGoal(driver, {
+      name: goalName,
+      targetAmount: "900",
+      deadline: "2026-09-18",
+    });
+
+    await tryUpdateGoalProgress(driver, goalName, "-50");
+
+    await waitForNormalizedText(driver, "O valor atual não pode ser negativo");
+
+    const card = await findGoalCard(driver, goalName);
+    const cardText = await card.getText();
+
+    assert.match(cardText, /R\$\s*0,00/);
+    assert.match(cardText, /0%/);
   });
 });
