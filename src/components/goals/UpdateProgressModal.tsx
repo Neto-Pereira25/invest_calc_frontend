@@ -106,6 +106,7 @@ export function UpdateProgressModal({
                         <Form.Control
                             type="number"
                             step="0.01"
+                            data-testid="goal-current-amount"
                             {...register(
                                 'currentAmount',
                                 {
@@ -126,6 +127,7 @@ export function UpdateProgressModal({
 
                     <Button
                         type="submit"
+                        data-testid="goal-progress-submit"
                         disabled={isSubmitting}
                     >
                         {isSubmitting ? (

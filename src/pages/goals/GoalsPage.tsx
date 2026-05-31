@@ -131,6 +131,7 @@ export function GoalsPage() {
                     onClick={
                         handleOpenCreateModal
                     }
+                    data-testid="goal-new"
                     className="d-flex align-items-center gap-2"
                 >
                     <Plus size={18} />

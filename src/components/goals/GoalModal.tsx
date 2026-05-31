@@ -110,6 +110,7 @@ export function GoalModal({
 
                         <Form.Control
                             type="text"
+                            data-testid="goal-name"
                             {...register('name')}
                             isInvalid={!!errors.name}
                         />
@@ -127,6 +128,7 @@ export function GoalModal({
                         <Form.Control
                             type="number"
                             step="0.01"
+                            data-testid="goal-target-amount"
                             {...register(
                                 'targetAmount',
                                 {
@@ -153,6 +155,7 @@ export function GoalModal({
 
                         <Form.Control
                             type="date"
+                            data-testid="goal-deadline"
                             {...register('deadline')}
                             isInvalid={
                                 !!errors.deadline
@@ -175,6 +178,7 @@ export function GoalModal({
 
                     <Button
                         type="submit"
+                        data-testid="goal-submit"
                         disabled={isSubmitting}
                     >
                         {isSubmitting ? (
