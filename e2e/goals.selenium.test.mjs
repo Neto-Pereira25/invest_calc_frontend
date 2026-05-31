@@ -109,6 +109,13 @@ async function clickByTestId(driver, testId) {
   await sleep(driver);
 }
 
+function normalizeText(value) {
+  return (value ?? "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase();
+}
+
 function uniqueShortSuffix() {
   return `${Date.now().toString().slice(-4)}${Math.random().toString(36).slice(2, 4)}`;
 }
@@ -124,6 +131,19 @@ function uniqueGoalName(name) {
 
 function formatGoalDeadline(deadline) {
   return new Date(deadline).toLocaleDateString("pt-BR");
+}
+
+async function getBodyText(driver) {
+  return driver.executeScript("return document.body?.innerText ?? '';");
+}
+
+async function waitForNormalizedText(driver, expectedText, timeout = 10000) {
+  const normalizedExpected = normalizeText(expectedText);
+
+  await driver.wait(async () => {
+    const bodyText = await getBodyText(driver);
+    return normalizeText(bodyText).includes(normalizedExpected);
+  }, timeout, `Texto nao encontrado: ${expectedText}`);
 }
 
 async function registerUserByUi(driver, { name, email, password }) {
@@ -216,6 +236,13 @@ async function waitForGoalToDisappear(driver, goalName) {
     }
 
     return true;
+  }, 10000);
+}
+
+async function waitForOpenModalToClose(driver) {
+  await driver.wait(async () => {
+    const modals = await driver.findElements(By.css(".modal.show"));
+    return modals.length === 0;
   }, 10000);
 }
 
@@ -350,6 +377,48 @@ describe("metas financeiras", () => {
     await deleteGoal(driver, goalName);
 
     const bodyText = await driver.executeScript("return document.body?.innerText ?? '';");
+    assert.ok(!bodyText.includes(goalName));
+  });
+
+  test("deve validar campos obrigatorios, valores invalidos e cancelar criacao", async () => {
+    await openGoalsPage(driver);
+
+    const goalName = uniqueGoalName("Notebook para estudos");
+
+    await clickByTestId(driver, "goal-new");
+
+    await setValueByTestId(driver, "goal-target-amount", "");
+    await clickByTestId(driver, "goal-submit");
+
+    await waitForNormalizedText(driver, "O nome deve ter no mínimo 3 caracteres");
+    await waitForNormalizedText(driver, "Informe um valor válido");
+    await waitForNormalizedText(driver, "A data limite é obrigatória");
+
+    await typeByTestId(driver, "goal-name", "Vi");
+    await setValueByTestId(driver, "goal-target-amount", "abc");
+    await clickByTestId(driver, "goal-submit");
+
+    await waitForNormalizedText(driver, "O nome deve ter no mínimo 3 caracteres");
+    await waitForNormalizedText(driver, "Informe um valor válido");
+
+    await typeByTestId(driver, "goal-name", goalName);
+    await typeByTestId(driver, "goal-target-amount", "0");
+    await clickByTestId(driver, "goal-submit");
+
+    await waitForNormalizedText(driver, "O valor deve ser maior que zero");
+
+    await typeByTestId(driver, "goal-target-amount", "-150");
+    await clickByTestId(driver, "goal-submit");
+
+    await waitForNormalizedText(driver, "O valor deve ser maior que zero");
+
+    await typeByTestId(driver, "goal-target-amount", "3200");
+    await setValueByTestId(driver, "goal-deadline", "2026-08-30");
+    await clickByTestId(driver, "goal-cancel");
+    await waitForOpenModalToClose(driver);
+    await waitForGoalToDisappear(driver, goalName);
+
+    const bodyText = await getBodyText(driver);
     assert.ok(!bodyText.includes(goalName));
   });
 });

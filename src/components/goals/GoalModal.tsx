@@ -172,6 +172,7 @@ export function GoalModal({
                     <Button
                         variant="secondary"
                         onClick={handleClose}
+                        data-testid="goal-cancel"
                     >
                         Cancelar
                     </Button>
