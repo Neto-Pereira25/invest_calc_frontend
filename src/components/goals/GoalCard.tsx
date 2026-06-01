@@ -101,7 +101,10 @@ export function GoalCard({
         goal.currentAmount;
 
     return (
-        <Card className="shadow-sm border-0 h-100">
+        <Card
+            className="shadow-sm border-0 h-100"
+            data-testid="goal-card"
+        >
             <Card.Body>
                 <div className="d-flex justify-content-between align-items-start mb-3">
                     <div>
@@ -135,6 +138,7 @@ export function GoalCard({
                                 variant="light"
                                 size="sm"
                                 className="border-0 shadow-none"
+                                data-testid="goal-actions"
                             >
                                 <MoreVertical size={18} />
                             </Dropdown.Toggle>
@@ -146,6 +150,7 @@ export function GoalCard({
                                             goal
                                         )
                                     }
+                                    data-testid="goal-update-progress"
                                     className="d-flex align-items-center gap-2"
                                 >
                                     <TrendingUp size={16} />
@@ -157,6 +162,7 @@ export function GoalCard({
                                     onClick={() =>
                                         onEdit(goal)
                                     }
+                                    data-testid="goal-edit"
                                     className="d-flex align-items-center gap-2"
                                 >
                                     <Pencil size={16} />
@@ -170,6 +176,7 @@ export function GoalCard({
                                     onClick={() =>
                                         onDelete(goal)
                                     }
+                                    data-testid="goal-delete"
                                     className="d-flex align-items-center gap-2 text-danger"
                                 >
                                     <Trash2 size={16} />

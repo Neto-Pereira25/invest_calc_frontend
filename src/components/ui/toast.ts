@@ -7,7 +7,7 @@ const baseConfig = {
     closeOnClick: true,
     pauseOnHover: true,
     draggable: true,
-    theme: 'dark' as const,
+    theme: 'light' as const,
 };
 
 export function successToast(message: string) {

@@ -65,6 +65,7 @@ export function DeleteGoalModal({
                 <Button
                     variant="danger"
                     onClick={handleDelete}
+                    data-testid="goal-delete-confirm"
                 >
                     Excluir
                 </Button>

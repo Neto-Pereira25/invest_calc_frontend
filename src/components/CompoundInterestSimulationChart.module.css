@@ -1,8 +1,8 @@
 .wrapper {
     display: grid;
     gap: 10px;
-    background: rgba(8, 22, 44, 0.84);
-    border: 1px solid rgba(103, 140, 190, 0.42);
+    background: #ffffff;
+    border: 1px solid var(--border);
     border-radius: 14px;
     padding: 14px;
 }
@@ -17,9 +17,9 @@
 
 .empty {
     text-align: center;
-    color: #9ab3d2;
+    color: var(--text-dim);
     padding: 20px;
-    border: 1px dashed rgba(103, 140, 190, 0.42);
+    border: 1px dashed var(--border);
     border-radius: 8px;
-    background: rgba(8, 22, 44, 0.84);
+    background: #ffffff;
 }

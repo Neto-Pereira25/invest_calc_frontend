@@ -1,19 +1,17 @@
 .modal-backdrop.show {
-    background-color: rgba(2, 8, 20, 0.74);
+    background-color: rgba(33, 48, 68, 0.32);
 }
 
 .modal-content {
-    background:
-        linear-gradient(180deg, rgba(8, 21, 44, 0.97), rgba(5, 16, 36, 0.97)),
-        radial-gradient(100% 120% at 90% -30%, rgba(76, 201, 255, 0.08), transparent 65%);
-    border: 1px solid rgba(76, 201, 255, 0.24);
+    background: var(--surface-gradient);
+    border: 1px solid var(--border);
     border-radius: 18px;
-    color: #ecf8ff;
-    box-shadow: 0 24px 44px rgba(2, 6, 15, 0.38);
+    color: var(--text);
+    box-shadow: var(--shadow);
 }
 
 .modal-header {
-    border-bottom: 1px solid rgba(76, 201, 255, 0.18);
+    border-bottom: 1px solid var(--border);
 }
 
 .modal-title {
@@ -27,26 +25,26 @@
 
 .modal-content .form-control,
 .modal-content .form-select {
-    background: rgba(8, 22, 44, 0.84);
-    color: #ecf8ff;
-    border: 1px solid rgba(103, 140, 190, 0.42);
+    background: #ffffff;
+    color: var(--text);
+    border: 1px solid var(--border);
     font-size: 1rem;
     min-height: 48px;
 }
 
 .modal-content .form-control:focus,
 .modal-content .form-select:focus {
-    border-color: rgba(76, 201, 255, 0.66);
-    box-shadow: 0 0 0 3px rgba(76, 201, 255, 0.15);
+    border-color: rgba(79, 155, 200, 0.5);
+    box-shadow: 0 0 0 3px rgba(79, 155, 200, 0.14);
 }
 
 .btn-close {
-    filter: invert(1);
+    filter: none;
 }
 
 .modal-content .btn-success {
-    background: linear-gradient(145deg, #1db784, #12996f);
-    border: 1px solid rgba(46, 232, 169, 0.3);
+    background: linear-gradient(145deg, #4cae86, #2f9b72);
+    border: 1px solid rgba(47, 155, 114, 0.26);
 }
 
 .modal-content .btn-success:hover {
@@ -56,5 +54,5 @@
 .form-label {
     font-size: 0.96rem;
     font-weight: 600;
-    color: #9ab3d2;
+    color: var(--text-dim);
 }

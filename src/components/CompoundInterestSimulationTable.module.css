@@ -3,39 +3,39 @@
     overflow-y: auto;
     max-height: 500px;
     border-radius: 12px;
-    border: 1px solid rgba(103, 140, 190, 0.42);
+    border: 1px solid var(--border);
 }
 
 .table {
     margin-top: 6px;
-    border-color: rgba(103, 140, 190, 0.42);
-    background: rgba(8, 22, 44, 0.84);
+    border-color: var(--border);
+    background: #ffffff;
 }
 
 .table thead th {
     position: sticky;
     top: 0;
-    background: rgba(8, 22, 44, 0.98);
-    color: #cfe3fa;
+    background: #f3f7fb;
+    color: var(--text);
     text-align: center;
     font-size: 15px;
     font-weight: 700;
     white-space: nowrap;
-    border-color: rgba(103, 140, 190, 0.42);
+    border-color: var(--border);
     z-index: 10;
 }
 
 .table tbody td {
     text-align: center;
-    color: #9ab3d2;
+    color: var(--text-dim);
     font-size: 15px;
     padding: 16px 10px;
-    background: rgba(8, 22, 44, 0.78);
-    border-color: rgba(103, 140, 190, 0.42);
+    background: #ffffff;
+    border-color: var(--border);
 }
 
 .table tbody tr:nth-child(even) td {
-    background: rgba(7, 19, 37, 0.9);
+    background: #f8fbfd;
 }
 
 .interestColumn {
@@ -48,14 +48,14 @@
 
 .totalColumn {
     font-weight: 700;
-    color: #ecf8ff;
+    color: var(--text);
 }
 
 .empty {
     text-align: center;
-    color: #9ab3d2;
+    color: var(--text-dim);
     padding: 20px;
-    border: 1px dashed rgba(103, 140, 190, 0.42);
+    border: 1px dashed var(--border);
     border-radius: 8px;
-    background: rgba(8, 22, 44, 0.84);
+    background: #ffffff;
 }

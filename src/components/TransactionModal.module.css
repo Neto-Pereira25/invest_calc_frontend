@@ -7,11 +7,11 @@
 }
 
 .incomeTitle {
-    color: #1de29a;
+    color: var(--primary);
 }
 
 .expenseTitle {
-    color: #ff6d86;
+    color: var(--danger);
 }
 
 .typeSwitch {
@@ -23,29 +23,29 @@
 .typeButton {
     width: 100%;
     border-radius: 10px !important;
-    border: 1px solid rgba(103, 140, 190, 0.42) !important;
-    background: rgba(8, 22, 44, 0.84) !important;
-    color: #b8cde8 !important;
+    border: 1px solid var(--border) !important;
+    background: #ffffff !important;
+    color: var(--text-dim) !important;
     font-weight: 700 !important;
     font-size: 1rem !important;
     padding: 10px 12px !important;
 }
 
 .typeButton:hover {
-    border-color: rgba(76, 201, 255, 0.6) !important;
-    color: #e6f5ff !important;
+    border-color: rgba(79, 155, 200, 0.42) !important;
+    color: var(--text) !important;
 }
 
 .typeButtonActiveIncome {
-    border-color: rgba(46, 232, 169, 0.45) !important;
-    background: linear-gradient(145deg, rgba(16, 88, 68, 0.7), rgba(9, 58, 48, 0.76)) !important;
-    color: #d9fff0 !important;
+    border-color: rgba(47, 155, 114, 0.3) !important;
+    background: var(--primary-soft) !important;
+    color: var(--primary) !important;
 }
 
 .typeButtonActiveExpense {
-    border-color: rgba(255, 91, 116, 0.42) !important;
-    background: linear-gradient(145deg, rgba(89, 24, 43, 0.78), rgba(59, 16, 31, 0.82)) !important;
-    color: #ffe5ea !important;
+    border-color: rgba(215, 82, 97, 0.3) !important;
+    background: var(--danger-soft) !important;
+    color: var(--danger) !important;
 }
 
 .submit {

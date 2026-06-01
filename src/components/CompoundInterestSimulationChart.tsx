@@ -20,9 +20,9 @@ interface Props {
     totalInterest?: number;
 }
 
-const COLORS = ['#334155', '#4cc9ff'];
-const AXIS_COLOR = '#94a3b8';
-const GRID_COLOR = '#334155';
+const COLORS = ['#9fb3c8', '#4f9bc8'];
+const AXIS_COLOR = '#607187';
+const GRID_COLOR = '#dbe5ef';
 
 const axisCurrencyFormatter = (value: number) => {
     if (value >= 1000) {
@@ -62,12 +62,12 @@ export default function CompoundInterestSimulationChart({ data, totalInvested = 
                         <Tooltip
                             formatter={tooltipValueFormatter}
                             contentStyle={{
-                                backgroundColor: '#1e293b',
-                                border: '1px solid #334155',
-                                color: '#e2e8f0',
+                                backgroundColor: '#ffffff',
+                                border: '1px solid #dbe5ef',
+                                color: '#213044',
                             }}
-                            labelStyle={{ color: '#94a3b8' }}
-                            itemStyle={{ color: '#e2e8f0' }}
+                            labelStyle={{ color: '#607187' }}
+                            itemStyle={{ color: '#213044' }}
                         />
                         <Pie
                             data={pieData}
@@ -77,7 +77,7 @@ export default function CompoundInterestSimulationChart({ data, totalInvested = 
                             cy="52%"
                             outerRadius={110}
                             innerRadius={46}
-                            stroke="#1e293b"
+                            stroke="#ffffff"
                             strokeWidth={4}
                         >
                             {pieData.map((entry, index) => (
@@ -109,15 +109,15 @@ export default function CompoundInterestSimulationChart({ data, totalInvested = 
                         <Tooltip
                             formatter={tooltipValueFormatter}
                             contentStyle={{
-                                backgroundColor: '#1e293b',
-                                border: '1px solid #334155',
-                                color: '#e2e8f0',
+                                backgroundColor: '#ffffff',
+                                border: '1px solid #dbe5ef',
+                                color: '#213044',
                             }}
-                            labelStyle={{ color: '#94a3b8' }}
-                            itemStyle={{ color: '#e2e8f0' }}
+                            labelStyle={{ color: '#607187' }}
+                            itemStyle={{ color: '#213044' }}
                         />
-                        <Bar dataKey="invested" name="Total Investido" stackId="amount" fill="#334155" />
-                        <Bar dataKey="totalInterest" name="Total Juros" stackId="amount" fill="#4cc9ff" />
+                        <Bar dataKey="invested" name="Total Investido" stackId="amount" fill="#9fb3c8" />
+                        <Bar dataKey="totalInterest" name="Total Juros" stackId="amount" fill="#4f9bc8" />
                     </BarChart>
                 </ResponsiveContainer>
             </div>

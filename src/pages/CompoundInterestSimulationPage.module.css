@@ -3,20 +3,18 @@
 }
 
 .section {
-    border: 1px solid rgba(76, 201, 255, 0.22);
-    background:
-        linear-gradient(180deg, rgba(8, 21, 44, 0.96), rgba(5, 16, 36, 0.96)),
-        radial-gradient(100% 120% at 90% -30%, rgba(76, 201, 255, 0.08), transparent 65%);
+    border: 1px solid var(--border);
+    background: var(--surface-gradient);
     border-radius: 18px;
     overflow: hidden;
     margin-bottom: 20px;
-    box-shadow: 0 22px 42px rgba(2, 6, 15, 0.35);
+    box-shadow: var(--shadow);
 }
 
 .sectionHeader {
     display: flex;
     align-items: center;
-    border-bottom: 1px solid rgba(76, 201, 255, 0.16);
+    border-bottom: 1px solid var(--border);
 }
 
 .iconBlock {
@@ -24,8 +22,8 @@
     height: 58px;
     display: grid;
     place-items: center;
-    color: #42c8ff;
-    border-right: 1px solid rgba(76, 201, 255, 0.16);
+    color: var(--accent);
+    border-right: 1px solid var(--border);
 }
 
 .sectionTitle {
@@ -35,7 +33,7 @@
     letter-spacing: 0.07em;
     font-size: 1rem;
     font-weight: 700;
-    color: #6f8eb4;
+    color: var(--text-muted);
 }
 
 .sectionBody {
@@ -44,14 +42,14 @@
 
 .simForm :global(.form-label) {
     font-size: 0.95rem;
-    color: #9ab3d2;
+    color: var(--text-dim);
     margin-bottom: 8px;
 }
 
 .simForm :global(.input-group-text) {
-    background: rgba(8, 22, 44, 0.84);
-    border-color: rgba(103, 140, 190, 0.42);
-    color: #9ab3d2;
+    background: #f8fbfd;
+    border-color: var(--border);
+    color: var(--text-dim);
     font-size: 1rem;
     font-weight: 700;
     min-width: 48px;
@@ -60,29 +58,29 @@
 
 .simForm :global(.form-control),
 .simForm :global(.form-select) {
-    background: rgba(8, 22, 44, 0.84);
-    border-color: rgba(103, 140, 190, 0.42);
-    color: #ecf8ff;
+    background: #ffffff;
+    border-color: var(--border);
+    color: var(--text);
     min-height: 48px;
     font-size: 1rem;
 }
 
 .simForm :global(.form-control::placeholder) {
-    color: #6f8eb4;
+    color: var(--text-muted);
 }
 
 .simForm :global(.form-control:focus),
 .simForm :global(.form-select:focus) {
-    background: rgba(8, 22, 44, 0.94);
-    color: #f2fbff;
-    border-color: rgba(76, 201, 255, 0.66);
-    box-shadow: 0 0 0 3px rgba(76, 201, 255, 0.15);
+    background: #ffffff;
+    color: var(--text);
+    border-color: rgba(79, 155, 200, 0.5);
+    box-shadow: 0 0 0 3px rgba(79, 155, 200, 0.14);
 }
 
 /* Garante que o feedback de erro do Bootstrap fique visível mesmo com CSS customizado */
 .simForm :global(.invalid-feedback) {
     display: block !important;
-    color: #ff8ca0 !important;
+    color: var(--danger) !important;
     font-size: 0.97rem;
     margin-top: 4px;
     margin-bottom: 0;
@@ -105,32 +103,32 @@
 }
 
 .clearButton {
-    background: rgba(8, 22, 44, 0.84);
-    border: 1px solid rgba(103, 140, 190, 0.42);
-    color: #b8cde8;
+    background: #ffffff;
+    border: 1px solid var(--border);
+    color: var(--text-dim);
 }
 
 .clearButton:hover,
 .clearButton:focus {
-    border-color: rgba(76, 201, 255, 0.6);
-    color: #e6f5ff;
+    border-color: rgba(79, 155, 200, 0.42);
+    color: var(--text);
 }
 
 .calculateButton {
-    background: linear-gradient(145deg, #1db784, #12996f);
-    border: 1px solid rgba(46, 232, 169, 0.3);
-    color: #e8fff1;
+    background: linear-gradient(145deg, #4cae86, #2f9b72);
+    border: 1px solid rgba(47, 155, 114, 0.26);
+    color: #ffffff;
 }
 
 .calculateButton:hover,
 .calculateButton:focus {
     filter: brightness(1.04);
-    color: #f3fff9;
+    color: #ffffff;
 }
 
 .resultCard {
-    background: rgba(8, 22, 44, 0.84);
-    border: 1px solid rgba(103, 140, 190, 0.42);
+    background: #ffffff;
+    border: 1px solid var(--border);
     border-radius: 14px;
     min-height: 138px;
     display: flex;
@@ -143,13 +141,13 @@
 .resultLabel {
     margin: 0;
     font-size: 0.95rem;
-    color: #9ab3d2;
+    color: var(--text-dim);
 }
 
 .resultValue {
     margin: 0;
     font-size: clamp(1.35rem, 2.3vw, 2rem);
-    color: #ecf8ff;
+    color: var(--text);
     font-weight: 700;
     font-family: var(--font-mono);
 }
