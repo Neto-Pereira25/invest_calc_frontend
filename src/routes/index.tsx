@@ -10,6 +10,7 @@ import RegisterPage from '../pages/RegisterPage';
 import TransactionsPage from '../pages/TransactionsPage';
 import ProtectedRoute from './ProtectedRoute';
 import { GoalsPage } from '../pages/goals/GoalsPage';
+import { SpendingLimitPage } from '../pages/spendingLimit/SpendingLimitPage';
 
 export default function AppRoutes() {
     return (
@@ -20,6 +21,7 @@ export default function AppRoutes() {
                     <Route path="/login" element={<LoginPage />} />
                     <Route path="/register" element={<RegisterPage />} />
                     <Route path="/compound-interest-simulator" element={<CompoundInterestSimulationPage />} />
+                    <Route path="/spending-limit" element={<SpendingLimitPage />} />
                 </Route>
                 <Route
                     element={
