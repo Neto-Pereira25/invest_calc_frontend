@@ -13,6 +13,91 @@
     font-size: 1.05rem;
 }
 
+.limitAlert {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 14px;
+    align-items: start;
+    border: 1px solid;
+    border-radius: 16px;
+    padding: 16px 18px;
+    margin-bottom: 18px;
+    box-shadow: var(--shadow);
+}
+
+.limitAlertExceeded {
+    border-color: var(--danger);
+    background: var(--danger-soft);
+}
+
+.limitAlertNear {
+    border-color: var(--warning);
+    background: var(--warning-soft);
+}
+
+.limitAlertIcon {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-size: 1.1rem;
+}
+
+.limitAlertExceeded .limitAlertIcon {
+    color: var(--danger);
+    background: rgba(255, 255, 255, 0.7);
+}
+
+.limitAlertNear .limitAlertIcon {
+    color: var(--warning);
+    background: rgba(255, 255, 255, 0.75);
+}
+
+.limitAlertContent {
+    min-width: 0;
+}
+
+.limitAlertTitle {
+    font-size: 0.92rem;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+}
+
+.limitAlertMessage {
+    font-size: 1.04rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 6px;
+}
+
+.limitAlertStats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 14px;
+    color: var(--text-dim);
+    font-size: 0.95rem;
+}
+
+.limitAlertClose {
+    border: none;
+    background: transparent;
+    color: var(--text-dim);
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    display: grid;
+    place-items: center;
+    transition: background-color 0.2s ease;
+}
+
+.limitAlertClose:hover {
+    background: rgba(33, 48, 68, 0.08);
+}
+
 .grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -21,6 +106,15 @@
 }
 
 @media (max-width: 760px) {
+    .limitAlert {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .limitAlertClose {
+        justify-self: end;
+    }
+
     .grid {
         grid-template-columns: 1fr;
     }

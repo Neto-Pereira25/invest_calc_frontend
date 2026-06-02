@@ -5,6 +5,8 @@ import {
     getTransactions,
     updateTransaction
 } from '../lib/transactionService';
+import { useFinancialSummaryStore } from './financialSummaryStore';
+import { errorToast, warningToast } from '../components/ui/toast';
 import type { CreateTransactionPayload, Transaction } from '../types/transaction';
 
 interface TransactionsState {
@@ -51,6 +53,36 @@ export const useTransactionsStore = create<TransactionsState>((set) => ({
 
             const res = await getTransactions();
             set({ items: res.data });
+
+            await useFinancialSummaryStore.getState().fetchFinancialSummary();
+
+            const summary = useFinancialSummaryStore.getState().financialSummary;
+
+            if (!summary) {
+                return;
+            }
+
+            const exceededAmount = Math.max(
+                summary.monthlyExpenseTotal - summary.monthlyLimit,
+                0
+            );
+
+            if (summary.isExceeded) {
+                errorToast(
+                    `Limite mensal ultrapassado em ${exceededAmount.toLocaleString('pt-BR', {
+                        style: 'currency',
+                        currency: 'BRL',
+                    })}.`
+                );
+
+                return;
+            }
+
+            if (summary.isNearLimit) {
+                warningToast(
+                    `Atenção: ${summary.percentageUsed.toFixed(2)}% do limite mensal já foi utilizado.`
+                );
+            }
         } catch (error) {
             const response = (error as any)?.response?.data;
             const errorMessage = response?.message || 'Erro ao criar transação';
