@@ -1,23 +1,20 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { ForgotPasswordSchema } from '../lib/schemas/authSchema';
 import { requestPasswordRecovery } from '../lib/passwordRecoveryService';
 import { useUIStore } from '../store/uiStore';
 import s from '../styles/forms.module.css';
 
-const GENERIC_SUCCESS_MESSAGE = 'Se o e-mail existir, a solicitação foi registrada.';
-
 export default function ForgotPasswordPage() {
+    const nav = useNavigate();
     const setLoading = useUIStore((state) => state.setLoading);
 
     const [email, setEmail] = useState('');
     const [error, setError] = useState('');
-    const [successMessage, setSuccessMessage] = useState('');
 
     async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
         setError('');
-        setSuccessMessage('');
 
         const result = ForgotPasswordSchema.safeParse({ email });
 
@@ -30,9 +27,9 @@ export default function ForgotPasswordPage() {
 
         try {
             await requestPasswordRecovery({ email: result.data.email });
-            setSuccessMessage(GENERIC_SUCCESS_MESSAGE);
+            nav('/reset-password');
         } catch {
-            setSuccessMessage(GENERIC_SUCCESS_MESSAGE);
+            setError('Não foi possível solicitar a recuperação de senha. Tente novamente.');
         } finally {
             setLoading(false);
         }
@@ -51,11 +48,6 @@ export default function ForgotPasswordPage() {
 
                 <form noValidate onSubmit={onSubmit}>
                     {error && <div data-testid="forgot-password-error" className={s.error}>{error}</div>}
-                    {successMessage && (
-                        <div data-testid="forgot-password-success" className={s.alt}>
-                            {successMessage}
-                        </div>
-                    )}
 
                     <div className={s.field}>
                         <label className={s.label}>E-mail</label>
