@@ -341,4 +341,36 @@ describe("limite mensal de gastos", () => {
     assert.doesNotMatch(bodyText, /R\$\s*4\.100,00/);
     assert.doesNotMatch(normalizeText(bodyText), /limite atualizado com sucesso/);
   });
+
+  test("cenario 13: deve remover limite com confirmacao", async () => {
+    await openSpendingLimitPage(driver);
+
+    await findByTestId(driver, "spending-limit-card");
+    await clickByTestId(driver, "spending-limit-actions");
+    await clickByTestId(driver, "spending-limit-delete");
+
+    const modal = await findByTestId(driver, "spending-limit-delete-modal");
+    const modalText = await modal.getText();
+
+    assert.match(modalText, /Remover Limite Mensal/);
+    assert.match(modalText, /Deseja realmente remover o\s+limite mensal de gastos\?/);
+    assert.match(
+      modalText,
+      /Esta ação poderá ser refeita\s+posteriormente criando um novo\s+limite\./,
+    );
+
+    await clickByTestId(driver, "spending-limit-delete-confirm");
+    await waitForOpenModalToClose(driver);
+    await waitForNormalizedText(driver, "Limite removido com sucesso!");
+
+    const emptyCard = await findByTestId(driver, "spending-limit-empty");
+    const configuredCards = await driver.findElements(
+      By.css('[data-testid="spending-limit-card"]'),
+    );
+    const bodyText = await getBodyText(driver);
+
+    assert.match(await emptyCard.getText(), /Nenhum limite configurado/);
+    assert.equal(configuredCards.length, 0);
+    assert.doesNotMatch(bodyText, /R\$\s*3\.200,00/);
+  });
 });
