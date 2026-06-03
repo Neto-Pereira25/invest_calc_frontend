@@ -214,6 +214,27 @@ describe("limite mensal de gastos", () => {
     await findByTestId(driver, "spending-limit-empty");
   });
 
+  test("cenario 7: deve validar campo vazio ao criar limite", async () => {
+    await openSpendingLimitPage(driver);
+    await clickByTestId(driver, "spending-limit-create");
+
+    await typeByTestId(driver, "spending-limit-amount", "");
+    await clickByTestId(driver, "spending-limit-submit");
+    await waitForNormalizedText(driver, "Informe o limite mensal");
+
+    const modal = await findByTestId(driver, "spending-limit-modal");
+    const amountInput = await findByTestId(driver, "spending-limit-amount");
+    const modalText = await modal.getText();
+
+    assert.equal(await amountInput.getAttribute("value"), "");
+    assert.match(modalText, /Definir Limite Mensal/);
+    assert.match(modalText, /Informe o limite mensal/);
+
+    await clickByTestId(driver, "spending-limit-cancel");
+    await waitForOpenModalToClose(driver);
+    await findByTestId(driver, "spending-limit-empty");
+  });
+
   test("cenario 4: deve criar limite com sucesso", async () => {
     await openSpendingLimitPage(driver);
     await clickByTestId(driver, "spending-limit-create");
