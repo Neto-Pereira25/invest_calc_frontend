@@ -122,6 +122,7 @@ export function SpendingLimitModal({
             show={show}
             onHide={handleClose}
             centered
+            data-testid="spending-limit-modal"
         >
             <Modal.Header closeButton>
                 <Modal.Title>
@@ -146,6 +147,7 @@ export function SpendingLimitModal({
                         </Form.Label>
 
                         <Form.Control
+                            data-testid="spending-limit-amount"
                             type="number"
                             step="0.01"
                             placeholder="Ex: 2500"
@@ -179,6 +181,7 @@ export function SpendingLimitModal({
                 <Modal.Footer>
 
                     <Button
+                        data-testid="spending-limit-cancel"
                         variant="secondary"
                         onClick={
                             handleClose
@@ -188,6 +191,7 @@ export function SpendingLimitModal({
                     </Button>
 
                     <Button
+                        data-testid="spending-limit-submit"
                         type="submit"
                         disabled={
                             isSubmitting

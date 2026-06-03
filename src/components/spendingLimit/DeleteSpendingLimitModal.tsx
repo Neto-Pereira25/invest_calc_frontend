@@ -53,6 +53,7 @@ export function DeleteSpendingLimitModal({
             show={show}
             onHide={handleClose}
             centered
+            data-testid="spending-limit-delete-modal"
         >
             <Modal.Header closeButton>
                 <Modal.Title>
@@ -76,6 +77,7 @@ export function DeleteSpendingLimitModal({
             <Modal.Footer>
 
                 <Button
+                    data-testid="spending-limit-delete-cancel"
                     variant="secondary"
                     onClick={handleClose}
                     disabled={loading}
@@ -84,6 +86,7 @@ export function DeleteSpendingLimitModal({
                 </Button>
 
                 <Button
+                    data-testid="spending-limit-delete-confirm"
                     variant="danger"
                     onClick={handleDelete}
                     disabled={loading}
