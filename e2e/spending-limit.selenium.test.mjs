@@ -87,6 +87,11 @@ async function typeByTestId(driver, testId, value) {
 async function clickByTestId(driver, testId) {
   const element = await findByTestId(driver, testId);
 
+  await clickElement(driver, element);
+}
+
+async function clickElement(driver, element) {
+
   await driver.executeScript(
     'arguments[0].scrollIntoView({ block: "center", inline: "center" });',
     element,
@@ -270,5 +275,46 @@ describe("limite mensal de gastos", () => {
     assert.match(cardText, /Limite Mensal/);
     assert.match(cardText, /Limite mensal configurado/);
     assert.equal(await amount.getText(), "R$ 2.500,00");
+  });
+
+  test("cenario 9: deve exibir limite configurado", async () => {
+    await openSpendingLimitPage(driver);
+
+    const card = await findByTestId(driver, "spending-limit-card");
+    const amount = await findByTestId(driver, "spending-limit-value");
+    const cardText = await card.getText();
+
+    assert.match(cardText, /Limite Mensal/);
+    assert.match(cardText, /Última atualização:\s+\d{2}\/\d{2}\/\d{4}/);
+    assert.match(cardText, /Limite mensal configurado/);
+    assert.equal(await amount.getText(), "R$ 2.500,00");
+  });
+
+  test("cenario 11: deve editar limite e validar novo valor no card", async () => {
+    await openSpendingLimitPage(driver);
+
+    await clickByTestId(driver, "spending-limit-actions");
+    await clickByTestId(driver, "spending-limit-edit");
+
+    const modal = await findByTestId(driver, "spending-limit-modal");
+    const amountInput = await findByTestId(driver, "spending-limit-amount");
+    const submitButton = await findByTestId(driver, "spending-limit-submit");
+
+    assert.match(await modal.getText(), /Editar Limite Mensal/);
+    assert.equal(await amountInput.getAttribute("value"), "2500");
+    assert.equal(await submitButton.getText(), "Atualizar Limite");
+
+    await typeByTestId(driver, "spending-limit-amount", "3200");
+    await clickByTestId(driver, "spending-limit-submit");
+    await waitForOpenModalToClose(driver);
+    await waitForNormalizedText(driver, "Limite atualizado com sucesso!");
+
+    const card = await findByTestId(driver, "spending-limit-card");
+    const amount = await findByTestId(driver, "spending-limit-value");
+    const cardText = await card.getText();
+
+    assert.match(cardText, /Limite Mensal/);
+    assert.match(cardText, /Limite mensal configurado/);
+    assert.equal(await amount.getText(), "R$ 3.200,00");
   });
 });

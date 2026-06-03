@@ -104,6 +104,7 @@ export function SpendingLimitCard({
                     <Dropdown align="end">
 
                         <Dropdown.Toggle
+                            data-testid="spending-limit-actions"
                             variant="light"
                             size="sm"
                             className="border-0 shadow-none"
@@ -114,6 +115,7 @@ export function SpendingLimitCard({
                         <Dropdown.Menu>
 
                             <Dropdown.Item
+                                data-testid="spending-limit-edit"
                                 onClick={onEdit}
                                 className="d-flex align-items-center gap-2"
                             >
@@ -125,6 +127,7 @@ export function SpendingLimitCard({
                             <Dropdown.Divider />
 
                             <Dropdown.Item
+                                data-testid="spending-limit-delete"
                                 onClick={onDelete}
                                 className="d-flex align-items-center gap-2 text-danger"
                             >
