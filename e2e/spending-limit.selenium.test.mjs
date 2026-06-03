@@ -235,6 +235,25 @@ describe("limite mensal de gastos", () => {
     await findByTestId(driver, "spending-limit-empty");
   });
 
+  test("cenario 8: deve cancelar a criacao de limite", async () => {
+    await openSpendingLimitPage(driver);
+    await clickByTestId(driver, "spending-limit-create");
+
+    await typeByTestId(driver, "spending-limit-amount", "1800");
+    await clickByTestId(driver, "spending-limit-cancel");
+    await waitForOpenModalToClose(driver);
+
+    const emptyCard = await findByTestId(driver, "spending-limit-empty");
+    const configuredCards = await driver.findElements(
+      By.css('[data-testid="spending-limit-card"]'),
+    );
+    const bodyText = await getBodyText(driver);
+
+    assert.match(await emptyCard.getText(), /Nenhum limite configurado/);
+    assert.equal(configuredCards.length, 0);
+    assert.doesNotMatch(bodyText, /R\$\s*1\.800,00/);
+  });
+
   test("cenario 4: deve criar limite com sucesso", async () => {
     await openSpendingLimitPage(driver);
     await clickByTestId(driver, "spending-limit-create");
