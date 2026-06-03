@@ -44,7 +44,10 @@ export function SpendingLimitCard({
 
     if (!spendingLimit) {
         return (
-            <Card className="shadow-sm border-0">
+            <Card
+                className="shadow-sm border-0"
+                data-testid="spending-limit-empty"
+            >
                 <Card.Body className="text-center py-5">
 
                     <Wallet
@@ -62,6 +65,7 @@ export function SpendingLimitCard({
                     </p>
 
                     <Button
+                        data-testid="spending-limit-create"
                         onClick={onCreate}
                     >
                         Definir Limite
@@ -73,7 +77,10 @@ export function SpendingLimitCard({
     }
 
     return (
-        <Card className="shadow-sm border-0">
+        <Card
+            className="shadow-sm border-0"
+            data-testid="spending-limit-card"
+        >
             <Card.Body>
 
                 <div className="d-flex justify-content-between align-items-start mb-3">
@@ -133,7 +140,10 @@ export function SpendingLimitCard({
                 </div>
 
                 <div className="mt-4">
-                    <h2 className="fw-bold">
+                    <h2
+                        className="fw-bold"
+                        data-testid="spending-limit-value"
+                    >
                         {formatCurrency(
                             spendingLimit.amount
                         )}
