@@ -317,4 +317,28 @@ describe("limite mensal de gastos", () => {
     assert.match(cardText, /Limite mensal configurado/);
     assert.equal(await amount.getText(), "R$ 3.200,00");
   });
+
+  test("cenario 12: deve cancelar edicao e manter valor original", async () => {
+    await openSpendingLimitPage(driver);
+
+    await clickByTestId(driver, "spending-limit-actions");
+    await clickByTestId(driver, "spending-limit-edit");
+
+    const modal = await findByTestId(driver, "spending-limit-modal");
+    const amountInput = await findByTestId(driver, "spending-limit-amount");
+
+    assert.match(await modal.getText(), /Editar Limite Mensal/);
+    assert.equal(await amountInput.getAttribute("value"), "3200");
+
+    await typeByTestId(driver, "spending-limit-amount", "4100");
+    await clickByTestId(driver, "spending-limit-cancel");
+    await waitForOpenModalToClose(driver);
+
+    const amount = await findByTestId(driver, "spending-limit-value");
+    const bodyText = await getBodyText(driver);
+
+    assert.equal(await amount.getText(), "R$ 3.200,00");
+    assert.doesNotMatch(bodyText, /R\$\s*4\.100,00/);
+    assert.doesNotMatch(normalizeText(bodyText), /limite atualizado com sucesso/);
+  });
 });
