@@ -62,6 +62,7 @@ export function SpendingLimitPage() {
         <Container
             fluid
             className="py-4 px-4"
+            data-testid="spending-limit-page"
         >
             <div className="mb-4">
                 <h2 className="fw-bold mb-1">

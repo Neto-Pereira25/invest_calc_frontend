@@ -89,6 +89,7 @@ export default function DashboardPage() {
                     <button
                         type="button"
                         className={s.limitAlertClose}
+                        data-testid="financial-limit-alert-close"
                         aria-label="Fechar alerta de limite"
                         onClick={dismissAlert}
                     >
