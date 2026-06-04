@@ -44,7 +44,10 @@ export function SpendingLimitCard({
 
     if (!spendingLimit) {
         return (
-            <Card className="shadow-sm border-0" data-testid="spending-limit-card-empty">
+            <Card
+                className="shadow-sm border-0"
+                data-testid="spending-limit-empty"
+            >
                 <Card.Body className="text-center py-5">
 
                     <Wallet
@@ -74,7 +77,10 @@ export function SpendingLimitCard({
     }
 
     return (
-        <Card className="shadow-sm border-0" data-testid="spending-limit-card">
+        <Card
+            className="shadow-sm border-0"
+            data-testid="spending-limit-card"
+        >
             <Card.Body>
 
                 <div className="d-flex justify-content-between align-items-start mb-3">
