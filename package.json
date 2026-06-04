@@ -14,7 +14,7 @@
     "test:e2e:financial-summary": "start-server-and-test dev:e2e http://127.0.0.1:5173 \"node --test --test-concurrency=1 ./e2e/financial-summary.selenium.test.mjs\"",
     "test:e2e:goals": "start-server-and-test dev:e2e http://127.0.0.1:5173 \"node --test --test-concurrency=1 ./e2e/goals.selenium.test.mjs\"",
     "test:e2e:password-recovery": "start-server-and-test dev:e2e http://127.0.0.1:5173 \"node --test --test-concurrency=1 ./e2e/password-recovery.selenium.test.mjs\""
-  },  
+  },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
     "axios": "^1.15.2",
