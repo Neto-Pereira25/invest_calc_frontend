@@ -1,10 +1,25 @@
 import { useEffect } from 'react';
+import { FaExclamationTriangle, FaInfoCircle, FaTimes } from 'react-icons/fa';
+import { useFinancialSummaryStore } from '../store/financialSummaryStore';
 import { useTransactionsStore } from '../store/transactionsStore';
 import s from './Dashboard.module.css';
+
+const moneyFormatter = new Intl.NumberFormat('pt-BR', {
+    style: 'currency',
+    currency: 'BRL',
+});
+
+function formatMoney(value: number) {
+    return moneyFormatter.format(value);
+}
 
 export default function DashboardPage() {
     const transactions = useTransactionsStore((state) => state.items);
     const fetchTransactions = useTransactionsStore((state) => state.fetchTransactions);
+    const financialSummary = useFinancialSummaryStore((state) => state.financialSummary);
+    const fetchFinancialSummary = useFinancialSummaryStore((state) => state.fetchFinancialSummary);
+    const dismissAlert = useFinancialSummaryStore((state) => state.dismissAlert);
+    const isDismissed = useFinancialSummaryStore((state) => state.isDismissed);
 
 
     useEffect(() => {
@@ -12,6 +27,10 @@ export default function DashboardPage() {
             fetchTransactions();
         }
     }, [transactions.length, fetchTransactions]);
+
+    useEffect(() => {
+        fetchFinancialSummary();
+    }, [fetchFinancialSummary]);
 
     // 🔥 adapta para seu backend (INCOME / EXPENSE)
     const income = transactions
@@ -24,12 +43,59 @@ export default function DashboardPage() {
 
     const balance = income - expense;
 
+    const isExceeded = Boolean(financialSummary?.isExceeded);
+    const isNearLimit = Boolean(financialSummary?.isNearLimit);
+    const shouldShowAlert = Boolean(financialSummary) && (isNearLimit || isExceeded) && !isDismissed;
+
+    const exceededAmount = financialSummary
+        ? Math.max(financialSummary.monthlyExpenseTotal - financialSummary.monthlyLimit, 0)
+        : 0;
+
+    const availableAmount = financialSummary
+        ? Math.max(financialSummary.monthlyLimit - financialSummary.monthlyExpenseTotal, 0)
+        : 0;
+
+    const statusMessage = isExceeded
+        ? `Você ultrapassou o limite em ${formatMoney(exceededAmount)}`
+        : `Você tem ${formatMoney(availableAmount)} disponível`;
+
     return (
         <div>
             <header className={s.header}>
                 <h1 className={s.greet}>Dashboard</h1>
                 <p className={s.sub}>Resumo das suas finanças</p>
             </header>
+
+            {shouldShowAlert && financialSummary && (
+                <section
+                    className={`${s.limitAlert} ${isExceeded ? s.limitAlertExceeded : s.limitAlertNear}`}
+                    data-testid="financial-limit-alert"
+                >
+                    <div className={s.limitAlertIcon}>
+                        {isExceeded ? <FaExclamationTriangle /> : <FaInfoCircle />}
+                    </div>
+
+                    <div className={s.limitAlertContent}>
+                        <div className={s.limitAlertTitle}>Status do limite mensal</div>
+                        <div className={s.limitAlertMessage}>{statusMessage}</div>
+
+                        <div className={s.limitAlertStats}>
+                            <span>Limite mensal: {formatMoney(financialSummary.monthlyLimit)}</span>
+                            <span>Total gasto no mês: {formatMoney(financialSummary.monthlyExpenseTotal)}</span>
+                            <span>Percentual utilizado: {financialSummary.percentageUsed.toFixed(2)}%</span>
+                        </div>
+                    </div>
+
+                    <button
+                        type="button"
+                        className={s.limitAlertClose}
+                        aria-label="Fechar alerta de limite"
+                        onClick={dismissAlert}
+                    >
+                        <FaTimes />
+                    </button>
+                </section>
+            )}
 
             {/* 📊 CARDS */}
             <div className={s.grid}>
