@@ -62,7 +62,19 @@
 }
 
 @media (max-width: 768px) {
+
     .techContainer {
         grid-template-columns: 1fr;
     }
+
+    .missionGrid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+.missionGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
 }

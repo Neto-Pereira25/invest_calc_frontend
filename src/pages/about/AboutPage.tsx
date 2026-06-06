@@ -55,6 +55,39 @@ const backendTechs = [
     'Maven'
 ];
 
+const securityItems = [
+    {
+        title: 'Autenticação JWT',
+        description:
+            'O sistema utiliza JSON Web Tokens para autenticação e autorização dos usuários.'
+    },
+    {
+        title: 'Senhas Protegidas',
+        description:
+            'As senhas são armazenadas utilizando criptografia BCrypt.'
+    },
+    {
+        title: 'Controle de Acesso',
+        description:
+            'Rotas protegidas através do Spring Security.'
+    },
+    {
+        title: 'Validação de Dados',
+        description:
+            'Validações realizadas no frontend e backend garantem integridade das informações.'
+    },
+    {
+        title: 'Privacidade',
+        description:
+            'Os dados financeiros são utilizados exclusivamente para gerenciamento pessoal.'
+    },
+    {
+        title: 'Arquitetura Segura',
+        description:
+            'Separação entre frontend e backend utilizando APIs protegidas.'
+    }
+];
+
 export default function AboutPage() {
     return (
         <div className={s.container}>
@@ -128,6 +161,84 @@ export default function AboutPage() {
                                 <li key={tech}>{tech}</li>
                             ))}
                         </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section className={s.section}>
+                <h2>Segurança e Privacidade</h2>
+
+                <div className={s.grid}>
+                    {securityItems.map((item) => (
+                        <div
+                            key={item.title}
+                            className={s.card}
+                        >
+                            <h3>{item.title}</h3>
+
+                            <p>{item.description}</p>
+                        </div>
+                    ))}
+                </div>
+            </section>
+
+            <section className={s.section}>
+                <h2>Missão e Visão</h2>
+
+                <div className={s.missionGrid}>
+                    <div className={s.card}>
+                        <h3>Missão</h3>
+
+                        <p>
+                            Auxiliar pessoas a desenvolver uma
+                            relação mais saudável com suas finanças
+                            através da tecnologia, organização e
+                            educação financeira.
+                        </p>
+                    </div>
+
+                    <div className={s.card}>
+                        <h3>Visão</h3>
+
+                        <p>
+                            Tornar o gerenciamento financeiro
+                            acessível, intuitivo e eficiente para
+                            qualquer usuário, contribuindo para
+                            decisões financeiras mais conscientes.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <section className={s.section}>
+                <h2>Informações do Projeto</h2>
+
+                <div className={s.grid}>
+                    <div className={s.card}>
+                        <h3>Versão</h3>
+                        <p>InvestCalc v1.0</p>
+                    </div>
+
+                    <div className={s.card}>
+                        <h3>Instituição</h3>
+                        <p>
+                            Projeto acadêmico desenvolvido para a
+                            disciplina de Projeto de Desenvolvimento
+                            de Software Corporativo.
+                        </p>
+                    </div>
+
+                    <div className={s.card}>
+                        <h3>Ano</h3>
+                        <p>2026</p>
+                    </div>
+
+                    <div className={s.card}>
+                        <h3>Finalidade</h3>
+                        <p>
+                            Apoiar a gestão de finanças
+                            pessoais através de recursos digitais.
+                        </p>
                     </div>
                 </div>
             </section>
