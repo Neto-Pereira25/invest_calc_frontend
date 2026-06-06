@@ -2,9 +2,10 @@ import { useState } from 'react';
 import { simulate } from '../lib/compoundInterestSimulationService';
 import type { SimulationResponse } from '../types/compoundInterestSimulation';
 import { Button, Card, Col, Form, InputGroup, Row } from 'react-bootstrap';
-import { FiBarChart2, FiDollarSign, FiList, FiTrash2 } from 'react-icons/fi';
+import { FiBarChart2, FiDollarSign, FiList, FiRefreshCw, FiTrash2 } from 'react-icons/fi';
 import CompoundInterestSimulationChart from '../components/CompoundInterestSimulationChart';
 import CompoundInterestSimulationTable from '../components/CompoundInterestSimulationTable';
+import InterestRateConverterModal from '../components/InterestRateConverterModal';
 import styles from './CompoundInterestSimulationPage.module.css';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
@@ -19,11 +20,13 @@ const currencyFormatter = new Intl.NumberFormat('pt-BR', {
 
 export default function CompoundInterestSimulationPage() {
     const [result, setResult] = useState<SimulationResponse | null>(null);
+    const [showRateConverter, setShowRateConverter] = useState(false);
 
     const {
         register,
         handleSubmit,
         reset,
+        setValue,
         formState: { errors, isSubmitting },
     } = useForm<SimulationFormData>({
         resolver: zodResolver(simulationSchema),
@@ -70,6 +73,16 @@ export default function CompoundInterestSimulationPage() {
 
     return (
         <div className={styles.page}>
+            <InterestRateConverterModal
+                show={showRateConverter}
+                onClose={() => setShowRateConverter(false)}
+                onApply={(rate, rateType) => {
+                    setValue('interestRate', String(rate).replace('.', ','));
+                    setValue('rateType', rateType === 'MONTHLY' ? 'MONTHLY' : 'YEARLY');
+                    setShowRateConverter(false);
+                }}
+            />
+
             <section className={styles.section}>
                 <header className={styles.sectionHeader}>
                     <span className={styles.iconBlock}>
@@ -98,7 +111,18 @@ export default function CompoundInterestSimulationPage() {
                             </Col>
 
                             <Col md={6}>
-                                <Form.Label>Taxa de Juros</Form.Label>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
+                                    <Form.Label className="mb-0">Taxa de Juros</Form.Label>
+                                    <Button
+                                        variant="link"
+                                        size="sm"
+                                        onClick={() => setShowRateConverter(true)}
+                                        style={{ padding: '0 0 2px', fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: 4, color: 'var(--accent)', textDecoration: 'none' }}
+                                    >
+                                        <FiRefreshCw size={12} />
+                                        Converter taxa
+                                    </Button>
+                                </div>
                                 <InputGroup>
                                     <InputGroup.Text>%</InputGroup.Text>
                                     <Form.Control

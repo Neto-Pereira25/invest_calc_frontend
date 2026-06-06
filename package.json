@@ -5,7 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "test:jest": "jest",
     "test": "npm run test:e2e",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
     "dev:e2e": "vite --mode e2e --host 127.0.0.1 --port 5173 --strictPort",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
@@ -34,6 +37,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@types/jest": "^30.0.0",
     "@types/node": "^24.12.2",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
@@ -42,8 +46,10 @@
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.2",
     "globals": "^17.5.0",
+    "jest": "^30.4.2",
     "selenium-webdriver": "^4.43.0",
     "start-server-and-test": "^3.0.2",
+    "ts-jest": "^29.4.11",
     "typescript": "~6.0.2",
     "typescript-eslint": "^8.58.2",
     "vite": "^8.0.10"
