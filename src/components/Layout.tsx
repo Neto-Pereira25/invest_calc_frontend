@@ -106,10 +106,10 @@ export default function Layout() {
                         <span>Perfil</span>
                     </NavLink>
 
-                    <div className={`${s.navItem} ${s.disabled}`}>
+                    <NavLink to="/about" className={({ isActive }) => `${s.navItem} ${isActive ? s.active : ''}`}>
                         <FaInfoCircle />
                         <span>Sobre</span>
-                    </div>
+                    </NavLink>
                 </nav>
 
                 <div className={s.sidebarFooter}>
