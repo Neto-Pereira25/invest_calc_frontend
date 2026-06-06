@@ -198,12 +198,12 @@ export const roadmap: RoadmapItem[] = [
     {
         title: 'Sprint 1',
         status: 'Concluído',
-        description: 'Autenticação, dashboard e transações.'
+        description: 'Autenticação, dashboard, transações e simulação de juros compostos.'
     },
     {
         title: 'Sprint 2',
         status: 'Concluído',
-        description: 'Metas financeiras e limite de gastos.'
+        description: 'Metas financeiras, limite de gastos, alertas, notificações e recuperação de senha.'
     },
     {
         title: 'Sprint 3',
