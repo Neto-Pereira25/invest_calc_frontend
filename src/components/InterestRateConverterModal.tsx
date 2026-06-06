@@ -18,6 +18,8 @@ export default function InterestRateConverterModal({ show, onClose, onApply }: R
     const [result, setResult] = useState<RateConversionResult | null>(null);
     const [copied, setCopied] = useState(false);
 
+    const roundToTwoDecimals = (value: number) => Number(value.toFixed(2));
+
     const {
         register,
         handleSubmit,
@@ -58,10 +60,9 @@ export default function InterestRateConverterModal({ show, onClose, onApply }: R
     const handleCopy = async () => {
         if (!result) return;
 
-        const decimals = getOptimalDecimalPlaces(result.convertedRate);
-        const formatted = formatRateForDisplay(result.convertedRate, decimals);
+        const formatted = roundToTwoDecimals(result.convertedRate).toFixed(2).replace('.', ',');
 
-        await navigator.clipboard.writeText(formatted.replace(',', '.'));
+        await navigator.clipboard.writeText(formatted);
         setCopied(true);
         successToast('Taxa copiada para a área de transferência!');
 
@@ -70,7 +71,7 @@ export default function InterestRateConverterModal({ show, onClose, onApply }: R
 
     const handleApply = () => {
         if (!result || !onApply) return;
-        onApply(result.convertedRate, result.convertedType);
+        onApply(roundToTwoDecimals(result.convertedRate), result.convertedType);
         onClose();
     };
 
