@@ -1,3 +1,8 @@
+import {
+    FaGithub,
+    FaLinkedin,
+    FaEnvelope
+} from 'react-icons/fa';
 import s from './AboutPage.module.css';
 
 const features = [
@@ -86,6 +91,98 @@ const securityItems = [
         description:
             'Separação entre frontend e backend utilizando APIs protegidas.'
     }
+];
+
+const teamMembers = [
+    {
+        name: 'Ana Letícia',
+        role: 'Analista de Testes',
+        image: 'assets/team/ana-test-analist.jpg',
+        github: 'https://github.com/analeticiarc',
+        linkedin: 'https://www.linkedin.com/in/ana-let%C3%ADcia-r-b1287a246/',
+        email: 'alrc1@discente.ifpe.edu.br'
+    },
+    {
+        name: 'David Esdras',
+        role: 'Desenvolvedor Fullstack',
+        image: 'assets/team/david-dev-fullstack.png',
+        github: 'https://github.com/DavidEsdrs',
+        linkedin: 'https://www.linkedin.com/in/davidesdras/',
+        email: 'defs3@discente.ifpe.edu.br'
+    },
+    {
+        name: 'Emilly Maria',
+        role: 'Product Owner',
+        image: 'assets/team/emilly-po.jpg',
+        github: 'https://github.com/EmillyMariaAraujo',
+        linkedin: 'https://www.linkedin.com/in/emilly-maria-araujo/',
+        email: 'emas7@discente.ifpe.edu.br'
+    },
+    {
+        name: 'José Neto',
+        role: 'Desenvolvedor Fullstack',
+        image: 'assets/team/neto-dev-fullstack.jpg',
+        github: 'https://github.com/Neto-Pereira25',
+        linkedin: 'https://www.linkedin.com/in/jose-neto-programador/',
+        email: 'jpsn3@discente.ifpe.edu.br'
+    },
+    {
+        name: 'Maria Helena',
+        role: 'Analista de Testes',
+        image: 'assets/team/maria-helena-test-analist.jpg',
+        github: 'https://github.com/HelenaSilva0',
+        linkedin: 'https://www.linkedin.com/in/maria-helena-5a037a26b/',
+        email: 'mh14s@discente.ifpe.edu.br'
+    }
+];
+
+const statistics = [
+    {
+        value: '10+',
+        label: 'Funcionalidades'
+    },
+    {
+        value: '5',
+        label: 'Integrantes'
+    },
+    {
+        value: '2',
+        label: 'Módulos Principais'
+    },
+    {
+        value: '100%',
+        label: 'Responsivo'
+    }
+];
+
+const roadmap = [
+    {
+        title: 'Sprint 1',
+        status: 'Concluído',
+        description:
+            'Autenticação, dashboard e transações.'
+    },
+    {
+        title: 'Sprint 2',
+        status: 'Concluído',
+        description:
+            'Metas financeiras e limite de gastos.'
+    },
+    {
+        title: 'Sprint 3',
+        status: 'Em desenvolvimento',
+        description:
+            'Relatórios e melhorias de usabilidade.'
+    }
+];
+
+const differentials = [
+    'Interface simples e intuitiva',
+    'Arquitetura moderna com React e Spring Boot',
+    'Controle financeiro centralizado',
+    'Planejamento financeiro através de metas',
+    'Simulação de investimentos',
+    'Autenticação segura com JWT'
 ];
 
 export default function AboutPage() {
@@ -240,6 +337,116 @@ export default function AboutPage() {
                             pessoais através de recursos digitais.
                         </p>
                     </div>
+                </div>
+            </section>
+
+            <section className={s.section}>
+                <h2>Equipe Desenvolvedora</h2>
+
+                <p className={s.teamDescription}>
+                    O InvestCalc foi desenvolvido por uma equipe
+                    multidisciplinar composta por estudantes
+                    responsáveis pelo planejamento, desenvolvimento,
+                    testes e evolução da aplicação.
+                </p>
+
+                <div className={s.teamGrid}>
+                    {teamMembers.map((member) => (
+                        <div
+                            key={member.email}
+                            className={s.teamCard}
+                        >
+                            <img
+                                src={member.image}
+                                alt={member.name}
+                                className={s.avatar}
+                            />
+
+                            <h3>{member.name}</h3>
+
+                            <span className={s.role}>
+                                {member.role}
+                            </span>
+
+                            <div className={s.links}>
+                                <a
+                                    href={member.github}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                >
+                                    <FaGithub />
+                                </a>
+
+                                <a
+                                    href={member.linkedin}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                >
+                                    <FaLinkedin />
+                                </a>
+
+                                <a
+                                    href={`mailto:${member.email}`}
+                                >
+                                    <FaEnvelope />
+                                </a>
+                            </div>
+
+                            <p className={s.email}>
+                                {member.email}
+                            </p>
+                        </div>
+                    ))}
+                </div>
+            </section>
+
+            <section className={s.section}>
+                <h2>Métricas do Projeto</h2>
+
+                <div className={s.statsGrid}>
+                    {statistics.map((stat) => (
+                        <div key={stat.label} className={s.statCard}>
+                            <span className={s.statValue}>
+                                {stat.value}
+                            </span>
+
+                            <span className={s.statLabel}>
+                                {stat.label}
+                            </span>
+                        </div>
+                    ))}
+                </div>
+            </section>
+
+            <section className={s.section}>
+                <h2>Evolução do Projeto</h2>
+
+                <div className={s.roadmap}>
+                    {roadmap.map((item) => (
+                        <div key={item.title} className={s.roadmapCard}>
+                            <h3>{item.title}</h3>
+
+                            <span className={s.badge}>
+                                {item.status}
+                            </span>
+
+                            <p>{item.description}</p>
+                        </div>
+                    ))}
+                </div>
+            </section>
+            <section className={s.section}>
+                <h2>Diferenciais</h2>
+
+                <div className={s.grid}>
+                    {differentials.map((item) => (
+                        <div
+                            key={item}
+                            className={s.card}
+                        >
+                            ✓ {item}
+                        </div>
+                    ))}
                 </div>
             </section>
         </div>

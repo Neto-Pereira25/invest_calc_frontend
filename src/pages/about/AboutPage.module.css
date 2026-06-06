@@ -78,3 +78,136 @@
     grid-template-columns: repeat(2, 1fr);
     gap: 20px;
 }
+
+.teamDescription {
+    color: #6b7280;
+    margin-bottom: 24px;
+    max-width: 800px;
+}
+
+.teamGrid {
+    display: grid;
+    grid-template-columns:
+        repeat(auto-fit, minmax(260px, 1fr));
+    gap: 24px;
+}
+
+.teamCard {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    padding: 24px;
+    text-align: center;
+    transition: all 0.25s ease;
+}
+
+.teamCard:hover {
+    transform: translateY(-4px);
+
+    box-shadow:
+        0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.avatar {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 16px;
+
+    border: 4px solid #f3f4f6;
+}
+
+.role {
+    display: block;
+    margin-top: 4px;
+    color: #22c55e;
+    font-weight: 600;
+}
+
+.links {
+    display: flex;
+    justify-content: center;
+    gap: 18px;
+    margin: 20px 0;
+}
+
+.links a {
+    color: #4b5563;
+    font-size: 1.25rem;
+    transition: all 0.2s ease;
+}
+
+.links a:hover {
+    color: #22c55e;
+}
+
+.email {
+    color: #6b7280;
+    font-size: 0.9rem;
+    word-break: break-word;
+}
+
+.statsGrid {
+    display: grid;
+    grid-template-columns:
+        repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.statCard {
+    text-align: center;
+    padding: 24px;
+    background: white;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+}
+
+.statValue {
+    display: block;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #22c55e;
+}
+
+.statLabel {
+    color: #6b7280;
+}
+
+.roadmap {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.roadmapCard {
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+    background: white;
+}
+
+.badge {
+    display: inline-block;
+    margin: 8px 0;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: #dcfce7;
+    color: #166534;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.ctaSection {
+    text-align: center;
+    padding: 60px 20px;
+    margin-top: 40px;
+}
+
+.ctaActions {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 24px;
+    flex-wrap: wrap;
+}
