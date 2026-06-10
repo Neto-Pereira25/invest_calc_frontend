@@ -1,0 +1,16 @@
+{
+    "extends": "./tsconfig.app.json",
+    "compilerOptions": {
+        "types": [
+            "jest",
+            "node"
+        ],
+        "module": "commonjs",
+        "verbatimModuleSyntax": false,
+        "esModuleInterop": true
+    },
+    "include": [
+        "src/**/__tests__/**/*.ts",
+        "src/**/__tests__/**/*.tsx"
+    ]
+}

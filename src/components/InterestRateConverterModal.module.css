@@ -1,0 +1,134 @@
+.title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--text);
+}
+
+.directionGroup {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 4px;
+}
+
+.directionButton {
+    flex: 1;
+    border-radius: 10px !important;
+    border: 1px solid var(--border) !important;
+    background: #ffffff !important;
+    color: var(--text-dim) !important;
+    font-weight: 600 !important;
+    font-size: 0.9rem !important;
+    padding: 10px 12px !important;
+    transition: all 0.15s ease;
+}
+
+.directionButton:hover {
+    border-color: rgba(79, 155, 200, 0.42) !important;
+    color: var(--text) !important;
+}
+
+.directionButtonActive {
+    border-color: rgba(79, 155, 200, 0.4) !important;
+    background: var(--accent-soft) !important;
+    color: var(--accent) !important;
+}
+
+.resultCard {
+    background: var(--bg-elev-2);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px 24px;
+    margin-top: 8px;
+}
+
+.resultLabel {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 6px;
+}
+
+.resultValue {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--primary);
+    font-family: var(--font-mono);
+    line-height: 1;
+    margin-bottom: 12px;
+}
+
+.resultFormula {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    background: rgba(79, 155, 200, 0.06);
+    border: 1px solid rgba(79, 155, 200, 0.14);
+    border-radius: 6px;
+    padding: 6px 10px;
+    word-break: break-all;
+}
+
+.copyButton {
+    width: 100%;
+    margin-top: 14px;
+    border-radius: 10px !important;
+    font-size: 0.95rem !important;
+    font-weight: 600 !important;
+    padding: 9px 12px !important;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border-color: rgba(79, 155, 200, 0.4) !important;
+    color: var(--accent) !important;
+    background: var(--accent-soft) !important;
+    transition: all 0.15s ease;
+}
+
+.copyButton:hover {
+    background: rgba(79, 155, 200, 0.2) !important;
+}
+
+.copyButtonSuccess {
+    border-color: rgba(47, 155, 114, 0.4) !important;
+    color: var(--primary) !important;
+    background: var(--primary-soft) !important;
+}
+
+.copyButtonSuccess:hover {
+    background: rgba(47, 155, 114, 0.2) !important;
+}
+
+.conversionArrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin: 10px 0 4px;
+}
+
+.conversionArrow span {
+    color: var(--accent);
+    font-size: 1.1rem;
+}
+
+.footer {
+    display: flex;
+    gap: 10px;
+}
+
+.closeButton {
+    flex: 1;
+    border-radius: 10px !important;
+    font-size: 0.95rem !important;
+    font-weight: 600 !important;
+    padding: 9px !important;
+}
