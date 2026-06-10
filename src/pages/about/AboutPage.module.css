@@ -1,0 +1,212 @@
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 32px;
+}
+
+.hero {
+    text-align: center;
+    margin-bottom: 48px;
+}
+
+.hero h1 {
+    font-size: 2.8rem;
+    margin-bottom: 16px;
+}
+
+.hero p {
+    font-size: 1.1rem;
+    color: var(--text-dim, #6b7280);
+}
+
+.section {
+    margin-bottom: 48px;
+}
+
+.section h2 {
+    margin-bottom: 24px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns:
+        repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.techContainer {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.card {
+    background: var(--bg-elev, #ffffff);
+    border-radius: 12px;
+    padding: 24px;
+    border: 1px solid var(--border, #e5e7eb);
+    box-shadow: 0 2px 10px rgba(33, 48, 68, 0.05);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(33, 48, 68, 0.1);
+}
+
+.card h3 {
+    margin-bottom: 12px;
+}
+
+.card ul {
+    padding-left: 20px;
+}
+
+.card li {
+    margin-bottom: 8px;
+}
+
+.missionGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+@media (max-width: 768px) {
+
+    .techContainer {
+        grid-template-columns: 1fr;
+    }
+
+    .missionGrid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+.teamDescription {
+    color: var(--text-dim, #6b7280);
+    margin-bottom: 24px;
+    max-width: 800px;
+}
+
+.teamGrid {
+    display: grid;
+    grid-template-columns:
+        repeat(auto-fit, minmax(260px, 1fr));
+    gap: 24px;
+}
+
+.teamCard {
+    background: var(--bg-elev, #ffffff);
+    border: 1px solid var(--border, #e5e7eb);
+    border-radius: 16px;
+    padding: 24px;
+    text-align: center;
+    transition: all 0.25s ease;
+}
+
+.teamCard:hover {
+    transform: translateY(-4px);
+
+    box-shadow: 0 8px 24px rgba(33, 48, 68, 0.08);
+}
+
+.avatarFrame {
+    width: 118px;
+    height: 118px;
+    border-radius: 50%;
+    margin: 0 auto 16px;
+    padding: 4px;
+    background: var(--bg-elev-2, #f3f4f6);
+    overflow: hidden;
+}
+
+.avatar {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.role {
+    display: block;
+    margin-top: 4px;
+    color: var(--primary, #22c55e);
+    font-weight: 600;
+}
+
+.links {
+    display: flex;
+    justify-content: center;
+    gap: 18px;
+    margin: 20px 0;
+}
+
+.links a {
+    color: var(--text-dim, #4b5563);
+    font-size: 1.25rem;
+    transition: all 0.2s ease;
+}
+
+.links a:hover {
+    color: var(--primary, #22c55e);
+}
+
+.email {
+    color: var(--text-dim, #6b7280);
+    font-size: 0.9rem;
+    word-break: break-word;
+}
+
+.statsGrid {
+    display: grid;
+    grid-template-columns:
+        repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.statCard {
+    text-align: center;
+    padding: 24px;
+    background: var(--bg-elev, #ffffff);
+    border-radius: 12px;
+    border: 1px solid var(--border, #e5e7eb);
+}
+
+.statValue {
+    display: block;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--primary, #22c55e);
+}
+
+.statLabel {
+    color: var(--text-dim, #6b7280);
+}
+
+.roadmap {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.roadmapCard {
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid var(--border, #e5e7eb);
+    background: var(--bg-elev, #ffffff);
+}
+
+.badge {
+    display: inline-block;
+    margin: 8px 0;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: var(--primary-soft, #dcfce7);
+    color: var(--primary, #166534);
+    font-size: 0.8rem;
+    font-weight: 600;
+}

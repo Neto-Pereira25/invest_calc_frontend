@@ -13,6 +13,7 @@ import TransactionsPage from '../pages/TransactionsPage';
 import ProtectedRoute from './ProtectedRoute';
 import { GoalsPage } from '../pages/goals/GoalsPage';
 import { SpendingLimitPage } from '../pages/spendingLimit/SpendingLimitPage';
+import AboutPage from '../pages/about/AboutPage';
 
 export default function AppRoutes() {
     return (
@@ -26,6 +27,7 @@ export default function AppRoutes() {
                     <Route path="/reset-password" element={<ResetPasswordPage />} />
                     <Route path="/compound-interest-simulator" element={<CompoundInterestSimulationPage />} />
                     <Route path="/spending-limit" element={<SpendingLimitPage />} />
+                    <Route path="/about" element={<AboutPage />} />
                 </Route>
                 <Route
                     element={
