@@ -4,6 +4,7 @@ import {
     FaBars,
     FaChartLine,
     FaChartPie,
+    FaClipboardList,
     FaInfoCircle,
     FaMoneyCheckAlt,
     FaSignOutAlt,
@@ -86,6 +87,14 @@ export default function Layout() {
                     <NavLink to="/goals" className={({ isActive }) => `${s.navItem} ${isActive ? s.active : ''}`}>
                         <FaChartLine />
                         <span>Metas</span>
+                    </NavLink>
+
+                    <NavLink
+                        to="/financial-profile"
+                        className={({ isActive }) => `${s.navItem} ${isActive ? s.active : ''}`}
+                    >
+                        <FaClipboardList />
+                        <span>Perfil Financeiro</span>
                     </NavLink>
 
                     <NavLink to="/spending-limit" className={({ isActive }) => `${s.navItem} ${isActive ? s.active : ''}`}>
