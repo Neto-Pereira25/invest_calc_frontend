@@ -53,13 +53,20 @@ export default function PublicLayout() {
                             >
                                 Simulador de Juros Compostos
                             </Nav.Link>
-                               <Nav.Link
-                                   as={Link}
-                                   to="/retirement-simulator"
-                                   style={{ color: 'var(--text-dim)' }}
-                               >
-                                   Simulador de Aposentadoria
-                               </Nav.Link>
+                            <Nav.Link
+                                as={Link}
+                                to="/retirement-simulator"
+                                style={{ color: 'var(--text-dim)' }}
+                            >
+                                Simulador de Aposentadoria
+                            </Nav.Link>
+                            <Nav.Link
+                                as={Link}
+                                to="/reverse-simulation"
+                                style={{ color: 'var(--text-dim)' }}
+                            >
+                                Simulação Reversa
+                            </Nav.Link>
                         </Nav>
                     </Navbar.Collapse>
                 </Container>
