@@ -15,6 +15,7 @@ import { GoalsPage } from '../pages/goals/GoalsPage';
 import { SpendingLimitPage } from '../pages/spendingLimit/SpendingLimitPage';
 import AboutPage from '../pages/about/AboutPage';
 import FinancialProfilePage from '../pages/financialProfile/FinancialProfilePage';
+import RetirementSimulationPage from '../pages/RetirementSimulationPage';
 
 export default function AppRoutes() {
     return (
@@ -27,6 +28,7 @@ export default function AppRoutes() {
                     <Route path="/forgot-password" element={<ForgotPasswordPage />} />
                     <Route path="/reset-password" element={<ResetPasswordPage />} />
                     <Route path="/compound-interest-simulator" element={<CompoundInterestSimulationPage />} />
+                       <Route path="/retirement-simulator" element={<RetirementSimulationPage />} />
                     <Route path="/spending-limit" element={<SpendingLimitPage />} />
                     <Route path="/about" element={<AboutPage />} />
                 </Route>

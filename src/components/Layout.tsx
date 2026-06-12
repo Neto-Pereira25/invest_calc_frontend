@@ -79,6 +79,13 @@ export default function Layout() {
                         <span>Dashboard</span>
                     </NavLink>
 
+                   <NavLink
+                       to="/retirement-simulator"
+                       className={({ isActive }) => `${s.navItem} ${isActive ? s.active : ''}`}
+                   >
+                       <FaChartLine />
+                       <span>Aposentadoria</span>
+                   </NavLink>
                     <NavLink to="/transactions" className={({ isActive }) => `${s.navItem} ${isActive ? s.active : ''}`}>
                         <FaWallet />
                         <span>Lancamentos</span>
