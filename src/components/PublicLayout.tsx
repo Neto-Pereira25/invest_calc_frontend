@@ -53,6 +53,7 @@ export default function PublicLayout() {
                             >
                                 Simulador de Juros Compostos
                             </Nav.Link>
+
                         </Nav>
                     </Navbar.Collapse>
                 </Container>
