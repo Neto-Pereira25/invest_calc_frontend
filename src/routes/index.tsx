@@ -29,8 +29,6 @@ export default function AppRoutes() {
                     <Route path="/forgot-password" element={<ForgotPasswordPage />} />
                     <Route path="/reset-password" element={<ResetPasswordPage />} />
                     <Route path="/compound-interest-simulator" element={<CompoundInterestSimulationPage />} />
-                    <Route path="/retirement-simulator" element={<RetirementSimulationPage />} />
-                    <Route path="/reverse-simulation" element={<ReverseSimulationPage />} />
                     <Route path="/spending-limit" element={<SpendingLimitPage />} />
                     <Route path="/about" element={<AboutPage />} />
                 </Route>
@@ -42,6 +40,8 @@ export default function AppRoutes() {
                     }
                 >
                     <Route path="/dashboard" element={<DashboardPage />} />
+                    <Route path="/retirement-simulator" element={<RetirementSimulationPage />} />
+                    <Route path="/reverse-simulation" element={<ReverseSimulationPage />} />
                     <Route path="/transactions" element={<TransactionsPage />} />
                     <Route path="/goals" element={<GoalsPage />} />
                     <Route path="/financial-profile" element={<FinancialProfilePage />} />
