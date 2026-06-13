@@ -130,6 +130,11 @@ export default function Layout() {
                         <span>Lancamentos</span>
                     </NavLink>
 
+                    <NavLink to="/repeated-expenses" className={({ isActive }) => `${s.navItem} ${isActive ? s.active : ''}`}>
+                        <FaWallet />
+                        <span>Gastos Recorrentes</span>
+                    </NavLink>
+
                     <NavLink to="/goals" className={({ isActive }) => `${s.navItem} ${isActive ? s.active : ''}`}>
                         <FaChartLine />
                         <span>Metas</span>

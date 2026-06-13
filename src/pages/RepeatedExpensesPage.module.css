@@ -1,0 +1,109 @@
+.page {
+    display: grid;
+    gap: 24px;
+    padding: 24px;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+}
+
+.header h1 {
+    font-size: 28px;
+    font-weight: 600;
+    color: #333;
+    margin: 0;
+}
+
+.infoButton {
+    border: 1px solid #d5dce5;
+    background: #f8fafc;
+    color: #1f3a5f;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.infoButton:hover {
+    background: #eef4fb;
+}
+
+.infoCard {
+    background: #f6fbff;
+    border: 1px solid #d6e8f7;
+    border-radius: 10px;
+    padding: 14px 16px;
+    color: #24405f;
+    display: grid;
+    gap: 8px;
+}
+
+.infoCard p {
+    margin: 0;
+    line-height: 1.4;
+}
+
+.loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 400px;
+    font-size: 16px;
+    color: #666;
+}
+
+.empty {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 400px;
+    background: white;
+    border-radius: 8px;
+    color: #999;
+    font-size: 16px;
+}
+
+.tableCard {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.table thead {
+    background-color: #f9f9f9;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.table th {
+    padding: 16px;
+    text-align: left;
+    font-weight: 600;
+    color: #333;
+}
+
+.table td {
+    padding: 16px;
+    border-bottom: 1px solid #f0f0f0;
+    color: #666;
+}
+
+.table tbody tr:hover {
+    background-color: #f9f9f9;
+}
+
+.amount {
+    font-weight: 500;
+    color: #2c3e50;
+}
