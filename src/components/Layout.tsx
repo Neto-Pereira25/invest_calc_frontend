@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, useRef } from 'react';
 import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import {
     FaBars,
@@ -11,6 +11,7 @@ import {
     FaTimes,
     FaUser,
     FaWallet,
+    FaChevronDown,
 } from 'react-icons/fa';
 import { useAuthStore } from '../store/authStore';
 import s from './Layout.module.css';
@@ -47,6 +48,15 @@ export default function Layout() {
     const navigate = useNavigate();
     const location = useLocation();
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const [isSimulacoesOpen, setIsSimulacoesOpen] = useState(
+        location.pathname === '/retirement-simulator' ||
+        location.pathname === '/reverse-simulation' ||
+        location.pathname === '/compound-interest-simulator'
+    );
+    const simulacoesActive =
+        location.pathname === '/retirement-simulator' ||
+        location.pathname === '/reverse-simulation' ||
+        location.pathname === '/compound-interest-simulator';
 
     const userProfile = useMemo(() => decodeToken(token), [token]);
     const displayName = userProfile?.name || userProfile?.username || 'Usuario';
@@ -79,6 +89,42 @@ export default function Layout() {
                         <span>Dashboard</span>
                     </NavLink>
 
+                    {/* GRUPO SIMULAÇÕES */}
+                    <div className={s.navGroup}>
+                        <button
+                            type="button"
+                            className={`${s.navItem} ${s.navGroupToggle} ${simulacoesActive ? s.active : ''}`}
+                            onClick={() => setIsSimulacoesOpen((v) => !v)}
+                        >
+                            <FaChartLine />
+                            <span style={{ flex: 1 }}>Simulações</span>
+                            <FaChevronDown
+                                className={`${s.chevron} ${isSimulacoesOpen ? s.chevronOpen : ''}`}
+                            />
+                        </button>
+                        {isSimulacoesOpen && (
+                            <div className={s.navSubItems}>
+                                <NavLink
+                                    to="/compound-interest-simulator"
+                                    className={({ isActive }) => `${s.navSubItem} ${isActive ? s.active : ''}`}
+                                >
+                                    <span>Juros Compostos</span>
+                                </NavLink>
+                                <NavLink
+                                    to="/retirement-simulator"
+                                    className={({ isActive }) => `${s.navSubItem} ${isActive ? s.active : ''}`}
+                                >
+                                    <span>Aposentadoria</span>
+                                </NavLink>
+                                <NavLink
+                                    to="/reverse-simulation"
+                                    className={({ isActive }) => `${s.navSubItem} ${isActive ? s.active : ''}`}
+                                >
+                                    <span>Reversa</span>
+                                </NavLink>
+                            </div>
+                        )}
+                    </div>
                     <NavLink to="/transactions" className={({ isActive }) => `${s.navItem} ${isActive ? s.active : ''}`}>
                         <FaWallet />
                         <span>Lancamentos</span>
@@ -100,14 +146,6 @@ export default function Layout() {
                     <NavLink to="/spending-limit" className={({ isActive }) => `${s.navItem} ${isActive ? s.active : ''}`}>
                         <FaMoneyCheckAlt />
                         <span>Limite de Gastos</span>
-                    </NavLink>
-
-                    <NavLink
-                        to="/compound-interest-simulator"
-                        className={({ isActive }) => `${s.navItem} ${isActive ? s.active : ''}`}
-                    >
-                        <FaChartLine />
-                        <span>Simulador</span>
                     </NavLink>
 
                     <NavLink to="/profile" className={({ isActive }) => `${s.navItem} ${isActive ? s.active : ''}`}>
