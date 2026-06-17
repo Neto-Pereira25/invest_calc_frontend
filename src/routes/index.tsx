@@ -17,6 +17,8 @@ import AboutPage from '../pages/about/AboutPage';
 import FinancialProfilePage from '../pages/financialProfile/FinancialProfilePage';
 import RetirementSimulationPage from '../pages/RetirementSimulationPage';
 import ReverseSimulationPage from '../pages/ReverseSimulationPage';
+import RepeatedExpensesPage from '../pages/RepeatedExpensesPage';
+import ScenarioComparisonPage from '../pages/ScenarioComparisonPage';
 
 export default function AppRoutes() {
     return (
@@ -42,7 +44,9 @@ export default function AppRoutes() {
                     <Route path="/dashboard" element={<DashboardPage />} />
                     <Route path="/retirement-simulator" element={<RetirementSimulationPage />} />
                     <Route path="/reverse-simulation" element={<ReverseSimulationPage />} />
+                    <Route path="/scenario-comparison" element={<ScenarioComparisonPage />} />
                     <Route path="/transactions" element={<TransactionsPage />} />
+                    <Route path="/repeated-expenses" element={<RepeatedExpensesPage />} />
                     <Route path="/goals" element={<GoalsPage />} />
                     <Route path="/financial-profile" element={<FinancialProfilePage />} />
                     <Route path="/profile" element={<ProfilePage />} />

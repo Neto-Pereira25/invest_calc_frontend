@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, useRef } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import {
     FaBars,
@@ -51,11 +51,13 @@ export default function Layout() {
     const [isSimulacoesOpen, setIsSimulacoesOpen] = useState(
         location.pathname === '/retirement-simulator' ||
         location.pathname === '/reverse-simulation' ||
+        location.pathname === '/scenario-comparison' ||
         location.pathname === '/compound-interest-simulator'
     );
     const simulacoesActive =
         location.pathname === '/retirement-simulator' ||
         location.pathname === '/reverse-simulation' ||
+        location.pathname === '/scenario-comparison' ||
         location.pathname === '/compound-interest-simulator';
 
     const userProfile = useMemo(() => decodeToken(token), [token]);
@@ -122,12 +124,23 @@ export default function Layout() {
                                 >
                                     <span>Reversa</span>
                                 </NavLink>
+                                <NavLink
+                                    to="/scenario-comparison"
+                                    className={({ isActive }) => `${s.navSubItem} ${isActive ? s.active : ''}`}
+                                >
+                                    <span>Comparação</span>
+                                </NavLink>
                             </div>
                         )}
                     </div>
                     <NavLink to="/transactions" className={({ isActive }) => `${s.navItem} ${isActive ? s.active : ''}`}>
                         <FaWallet />
                         <span>Lancamentos</span>
+                    </NavLink>
+
+                    <NavLink to="/repeated-expenses" className={({ isActive }) => `${s.navItem} ${isActive ? s.active : ''}`}>
+                        <FaWallet />
+                        <span>Gastos Recorrentes</span>
                     </NavLink>
 
                     <NavLink to="/goals" className={({ isActive }) => `${s.navItem} ${isActive ? s.active : ''}`}>

@@ -95,8 +95,6 @@ export default function ReverseSimulationPage() {
         },
     });
 
-    const currentForm = mode === ReverseSimulationMode.CALCULATE_CONTRIBUTION ? contributionForm : periodForm;
-
     const handleModeChange = (newMode: keyof typeof ReverseSimulationMode) => {
         setMode(newMode);
         setResult(null);
