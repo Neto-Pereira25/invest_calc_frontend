@@ -87,7 +87,7 @@ export default function InterestRateConverterModal({ show, onClose, onApply }: R
     const targetSuffix = direction === 'TO_MONTHLY' ? 'a.m.' : 'a.a.';
 
     return (
-        <Modal show={show} onHide={handleClose} centered>
+        <Modal show={show} onHide={handleClose} centered data-testid="rate-converter-modal">
             <Modal.Header closeButton>
                 <Modal.Title className={s.title}>
                     <FiRefreshCw size={20} />
@@ -102,6 +102,7 @@ export default function InterestRateConverterModal({ show, onClose, onApply }: R
                         <Form.Label>Converter</Form.Label>
                         <div className={s.directionGroup}>
                             <button
+                                data-testid="rate-converter-to-monthly"
                                 type="button"
                                 className={`btn ${s.directionButton} ${direction === 'TO_MONTHLY' ? s.directionButtonActive : ''}`}
                                 onClick={() => reset({ rate: rateValue, direction: 'TO_MONTHLY' })}
@@ -109,6 +110,7 @@ export default function InterestRateConverterModal({ show, onClose, onApply }: R
                                 Anual → Mensal
                             </button>
                             <button
+                                data-testid="rate-converter-to-yearly"
                                 type="button"
                                 className={`btn ${s.directionButton} ${direction === 'TO_YEARLY' ? s.directionButtonActive : ''}`}
                                 onClick={() => reset({ rate: rateValue, direction: 'TO_YEARLY' })}
@@ -122,6 +124,7 @@ export default function InterestRateConverterModal({ show, onClose, onApply }: R
                     <Form.Group className="mb-3">
                         <Form.Label>{originLabel}</Form.Label>
                         <Form.Control
+                            data-testid="rate-converter-input"
                             type="number"
                             step="any"
                             min="0"
@@ -138,7 +141,7 @@ export default function InterestRateConverterModal({ show, onClose, onApply }: R
 
                 {/* Resultado */}
                 {result && (
-                    <div className={s.resultCard}>
+                    <div className={s.resultCard} data-testid="rate-converter-result">
                         <div className={s.conversionArrow}>
                             <span>
                                 {direction === 'TO_MONTHLY' ? '% a.a.' : '% a.m.'}
@@ -160,9 +163,10 @@ export default function InterestRateConverterModal({ show, onClose, onApply }: R
                             </small>
                         </div>
 
-                        <div className={s.resultFormula}>{result.formula}</div>
+                        <div className={s.resultFormula} data-testid="rate-converter-formula">{result.formula}</div>
 
                         <Button
+                            data-testid="rate-converter-copy"
                             variant="outline-primary"
                             className={`${s.copyButton} ${copied ? s.copyButtonSuccess : ''}`}
                             onClick={handleCopy}
@@ -173,6 +177,7 @@ export default function InterestRateConverterModal({ show, onClose, onApply }: R
 
                         {onApply && (
                             <Button
+                                data-testid="rate-converter-apply"
                                 variant="success"
                                 className={`${s.copyButton} mt-2`}
                                 onClick={handleApply}
