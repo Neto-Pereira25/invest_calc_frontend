@@ -93,7 +93,7 @@ function QuestionCard({
     const fieldName = `q${question.number}` as keyof FinancialProfileFormData;
 
     return (
-        <fieldset className={s.questionCard}>
+        <fieldset className={s.questionCard} data-testid={`financial-profile-question-${question.number}`}>
             <legend className={s.questionLegend}>Pergunta {question.number}</legend>
             <p className={s.questionTitle}>{question.title}</p>
 
@@ -104,6 +104,7 @@ function QuestionCard({
                             className={s.optionInput}
                             type="radio"
                             value={option.value}
+                            data-testid={`financial-profile-q${question.number}-${option.value}`}
                             {...register(fieldName)}
                         />
 
@@ -117,7 +118,7 @@ function QuestionCard({
                 ))}
             </div>
 
-            {error && <p className={s.fieldError}>{error}</p>}
+            {error && <p className={s.fieldError} data-testid={`financial-profile-error-${question.number}`}>{error}</p>}
         </fieldset>
     );
 }
@@ -219,20 +220,21 @@ export default function FinancialProfilePage() {
     }
 
     return (
-        <div className={s.page}>
+        <div className={s.page} data-testid="financial-profile-page">
             <header className={s.header}>
                 <h1 className={s.title}>Perfil Financeiro</h1>
                 <p className={s.subtitle}>Veja seu resultado e refaça o questionário quando quiser.</p>
             </header>
 
-            {loadError && <div className={s.alertError}>{loadError}</div>}
+            {loadError && <div className={s.alertError} data-testid="financial-profile-load-error">{loadError}</div>}
 
-            <section className={s.resultCard}>
+            <section className={s.resultCard} data-testid="financial-profile-result-card">
                 <div className={s.resultTopBar}>
                     <h2 className={s.sectionTitle}>Resultado Atual</h2>
                     <button
                         className={s.primaryButton}
                         type="button"
+                        data-testid="financial-profile-open-questionnaire"
                         onClick={openQuestionnaireModal}
                         disabled={isInitialLoading}
                     >
@@ -241,23 +243,23 @@ export default function FinancialProfilePage() {
                 </div>
 
                 {!currentProfile ? (
-                    <p className={s.emptyState}>Você ainda não possui um perfil calculado. Clique em "Calcular perfil" para iniciar o questionário.</p>
+                    <p className={s.emptyState} data-testid="financial-profile-empty-result">Você ainda não possui um perfil calculado. Clique em "Calcular perfil" para iniciar o questionário.</p>
                 ) : (
-                    <>
+                    <div data-testid="financial-profile-current-result">
                         <div className={s.resultHeader}>
                             <div>
                                 <div className={s.resultLabel}>Perfil predominante</div>
-                                <div className={s.resultProfile}>{PROFILE_LABELS[currentProfile.profile]}</div>
+                                <div className={s.resultProfile} data-testid="financial-profile-current-profile">{PROFILE_LABELS[currentProfile.profile]}</div>
                             </div>
 
-                            <div className={s.resultDate}>Avaliação: {formatDateTime(currentProfile.assessedAt)}</div>
+                            <div className={s.resultDate} data-testid="financial-profile-assessed-at">Avaliação: {formatDateTime(currentProfile.assessedAt)}</div>
                         </div>
 
-                        <p className={s.resultDescription}>{currentProfile.description}</p>
+                        <p className={s.resultDescription} data-testid="financial-profile-description">{currentProfile.description}</p>
 
                         <div className={s.scoreGrid}>
                             {scoreRows.map((row) => (
-                                <div key={row.label} className={s.scoreItem}>
+                                <div key={row.label} className={s.scoreItem} data-testid="financial-profile-score-row">
                                     <div className={s.scoreLine}>
                                         <span>{row.label}</span>
                                         <span>
@@ -272,7 +274,7 @@ export default function FinancialProfilePage() {
                         </div>
 
                         <div className={s.detailsGrid}>
-                            <div className={s.detailBlock}>
+                            <div className={s.detailBlock} data-testid="financial-profile-strengths">
                                 <h3>Pontos fortes</h3>
                                 <ul>
                                     {currentProfile.strengths.map((item) => (
@@ -281,7 +283,7 @@ export default function FinancialProfilePage() {
                                 </ul>
                             </div>
 
-                            <div className={s.detailBlock}>
+                            <div className={s.detailBlock} data-testid="financial-profile-limitations">
                                 <h3>Limitações</h3>
                                 <ul>
                                     {currentProfile.limitations.map((item) => (
@@ -290,7 +292,7 @@ export default function FinancialProfilePage() {
                                 </ul>
                             </div>
 
-                            <div className={s.detailBlock}>
+                            <div className={s.detailBlock} data-testid="financial-profile-recommendations">
                                 <h3>Recomendações</h3>
                                 <ul>
                                     {currentProfile.recommendations.map((item) => (
@@ -299,7 +301,7 @@ export default function FinancialProfilePage() {
                                 </ul>
                             </div>
 
-                            <div className={s.detailBlock}>
+                            <div className={s.detailBlock} data-testid="financial-profile-suggested-goals">
                                 <h3>Metas sugeridas</h3>
                                 <ul>
                                     {currentProfile.suggestedGoals.map((item) => (
@@ -308,19 +310,19 @@ export default function FinancialProfilePage() {
                                 </ul>
                             </div>
                         </div>
-                    </>
+                    </div>
                 )}
             </section>
 
-            <section className={s.historyCard}>
+            <section className={s.historyCard} data-testid="financial-profile-history-card">
                 <h2 className={s.sectionTitle}>Histórico</h2>
 
                 {history.length === 0 ? (
-                    <p className={s.emptyState}>Sem avaliações anteriores.</p>
+                    <p className={s.emptyState} data-testid="financial-profile-empty-history">Sem avaliações anteriores.</p>
                 ) : (
-                    <ul className={s.historyList}>
+                    <ul className={s.historyList} data-testid="financial-profile-history-list">
                         {history.map((item) => (
-                            <li key={item.id} className={s.historyItem}>
+                            <li key={item.id} className={s.historyItem} data-testid="financial-profile-history-item">
                                 <span className={s.historyProfile}>{PROFILE_LABELS[item.profile]}</span>
                                 <span className={s.historyDate}>{formatDateTime(item.assessedAt)}</span>
                             </li>
@@ -345,7 +347,7 @@ export default function FinancialProfilePage() {
                         <p className={s.sectionDescription}>São 10 perguntas objetivas sobre seus hábitos financeiros.</p>
                     </div>
 
-                    <form className={s.form} onSubmit={handleSubmit(onSubmit)}>
+                    <form className={s.form} data-testid="financial-profile-form" onSubmit={handleSubmit(onSubmit)}>
                         {FINANCIAL_PROFILE_QUESTIONNAIRE.map((question) => {
                             const fieldName = `q${question.number}` as keyof FinancialProfileFormData;
                             return (
@@ -359,13 +361,14 @@ export default function FinancialProfilePage() {
                         })}
 
                         <div className={s.formActions}>
-                            <button className={s.primaryButton} type="submit" disabled={isSubmitting}>
+                            <button className={s.primaryButton} data-testid="financial-profile-submit" type="submit" disabled={isSubmitting}>
                                 {isSubmitting ? 'Calculando perfil...' : 'Calcular perfil financeiro'}
                             </button>
 
                             <button
                                 className={s.secondaryButton}
                                 type="button"
+                                data-testid="financial-profile-reset"
                                 onClick={() => reset()}
                                 disabled={isSubmitting}
                             >
