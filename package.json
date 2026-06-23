@@ -18,6 +18,8 @@
     "test:selenium:auth": "start-server-and-test dev:e2e http://127.0.0.1:5173 \"node --test --test-concurrency=1 ./e2e/auth.selenium.test.mjs\"",
     "test:selenium:compound-interest": "start-server-and-test dev:e2e http://127.0.0.1:5173 \"node --test --test-concurrency=1 ./e2e/compound-interest.selenium.test.mjs\"",
     "test:selenium:converter": "start-server-and-test dev:e2e http://127.0.0.1:5173 \"node --test --test-concurrency=1 ./e2e/interest-rate-converter.selenium.test.mjs\"",
+    "test:selenium:dashboard": "start-server-and-test dev:e2e http://127.0.0.1:5173 \"node --test --test-concurrency=1 ./e2e/dashboard.selenium.test.mjs\"",
+    "test:selenium:dashboard:compose": "cd ../invest_calc_backend && docker compose --profile e2e up -d --build app-e2e && cd ../invest_calc_frontend && npm run test:selenium:dashboard",
     "test:selenium:financial-summary": "start-server-and-test dev:e2e http://127.0.0.1:5173 \"node --test --test-concurrency=1 ./e2e/financial-summary.selenium.test.mjs\"",
     "test:selenium:goals": "start-server-and-test dev:e2e http://127.0.0.1:5173 \"node --test --test-concurrency=1 ./e2e/goals.selenium.test.mjs\"",
     "test:selenium:password-recovery": "start-server-and-test dev:e2e http://127.0.0.1:5173 \"node --test --test-concurrency=1 ./e2e/password-recovery.selenium.test.mjs\"",

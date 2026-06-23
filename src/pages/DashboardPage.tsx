@@ -60,7 +60,7 @@ export default function DashboardPage() {
         : `Você tem ${formatMoney(availableAmount)} disponível`;
 
     return (
-        <div>
+        <div data-testid="dashboard-page">
             <header className={s.header}>
                 <h1 className={s.greet}>Dashboard</h1>
                 <p className={s.sub}>Resumo das suas finanças</p>
@@ -100,7 +100,7 @@ export default function DashboardPage() {
 
             {/* 📊 CARDS */}
             <div className={s.grid}>
-                <div className={s.stat}>
+                <div className={s.stat} data-testid="dashboard-income-card">
                     <div className={s.statLabel}>Receitas</div>
                     <div className={`${s.statValue} ${s.pos}`}>
                         R$ {income.toFixed(2)}
@@ -110,7 +110,7 @@ export default function DashboardPage() {
                     </div>
                 </div>
 
-                <div className={s.stat}>
+                <div className={s.stat} data-testid="dashboard-expense-card">
                     <div className={s.statLabel}>Despesas</div>
                     <div className={`${s.statValue} ${s.neg}`}>
                         R$ {expense.toFixed(2)}
@@ -120,7 +120,7 @@ export default function DashboardPage() {
                     </div>
                 </div>
 
-                <div className={s.stat}>
+                <div className={s.stat} data-testid="dashboard-balance-card">
                     <div className={s.statLabel}>Saldo</div>
                     <div
                         className={`${s.statValue} ${balance >= 0 ? s.pos : s.neg}`}
@@ -134,18 +134,18 @@ export default function DashboardPage() {
             </div>
 
             {/* 📋 LISTA */}
-            <section className={s.section}>
+            <section className={s.section} data-testid="dashboard-recent-transactions">
                 <div className={s.sectionTitle}>
                     <span>Lançamentos recentes</span>
                 </div>
 
                 {transactions.length === 0 ? (
-                    <div className={s.empty}>
+                    <div className={s.empty} data-testid="dashboard-empty">
                         Nenhum lançamento ainda.
                     </div>
                 ) : (
                     transactions.slice(0, 6).map((t) => (
-                        <div key={t.id} className={s.row}>
+                        <div key={t.id} className={s.row} data-testid="dashboard-transaction-row">
                             <div
                                 className={`${s.rowIcon} ${t.type === 'INCOME' ? s.income : s.expense
                                     }`}
