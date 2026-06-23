@@ -114,6 +114,7 @@ export default function CompoundInterestSimulationPage() {
                                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
                                     <Form.Label className="mb-0">Taxa de Juros</Form.Label>
                                     <Button
+                                        data-testid="open-rate-converter"
                                         variant="link"
                                         size="sm"
                                         onClick={() => setShowRateConverter(true)}
