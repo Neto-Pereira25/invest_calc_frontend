@@ -162,7 +162,7 @@ export default function ReverseSimulationPage() {
     const periodErrors = periodForm.formState.errors;
 
     return (
-        <div className={styles.container}>
+        <div className={styles.container} data-testid="reverse-simulation-page">
             <InterestRateConverterModal
                 show={showRateConverter}
                 onClose={() => setShowRateConverter(false)}
@@ -188,6 +188,7 @@ export default function ReverseSimulationPage() {
                         <div className={styles.modeToggle}>
                             <button
                                 type="button"
+                                data-testid="reverse-mode-contribution"
                                 className={`${styles.modeButton} ${isContribution ? styles.modeButtonActive : ''}`}
                                 onClick={() => handleModeChange(ReverseSimulationMode.CALCULATE_CONTRIBUTION)}
                             >
@@ -196,6 +197,7 @@ export default function ReverseSimulationPage() {
                             </button>
                             <button
                                 type="button"
+                                data-testid="reverse-mode-period"
                                 className={`${styles.modeButton} ${!isContribution ? styles.modeButtonActive : ''}`}
                                 onClick={() => handleModeChange(ReverseSimulationMode.CALCULATE_PERIOD)}
                             >
@@ -214,6 +216,7 @@ export default function ReverseSimulationPage() {
                                             <InputGroup.Text>R$</InputGroup.Text>
                                             <Form.Control
                                                 placeholder="100.000,00"
+                                                data-testid="reverse-contribution-target-amount"
                                                 {...contributionForm.register('targetAmount')}
                                                 isInvalid={!!contribErrors.targetAmount}
                                             />
@@ -233,10 +236,12 @@ export default function ReverseSimulationPage() {
                                                 <InputGroup.Text>%</InputGroup.Text>
                                                 <Form.Control
                                                     placeholder="12,00"
+                                                    data-testid="reverse-contribution-interest-rate"
                                                     {...contributionForm.register('interestRate')}
                                                     isInvalid={!!contribErrors.interestRate}
                                                 />
                                                 <Form.Select
+                                                    data-testid="reverse-contribution-rate-type"
                                                     {...contributionForm.register('rateType')}
                                                     style={{ maxWidth: '140px' }}
                                                 >
@@ -247,6 +252,7 @@ export default function ReverseSimulationPage() {
                                             <Button
                                                 variant="outline-primary"
                                                 size="sm"
+                                                data-testid="reverse-contribution-rate-converter"
                                                 onClick={() => setShowRateConverter(true)}
                                                 style={{ whiteSpace: 'nowrap' }}
                                             >
@@ -268,10 +274,12 @@ export default function ReverseSimulationPage() {
                                             <Form.Control
                                                 type="number"
                                                 placeholder="10"
+                                                data-testid="reverse-contribution-period"
                                                 {...contributionForm.register('period')}
                                                 isInvalid={!!contribErrors.period}
                                             />
                                             <Form.Select
+                                                data-testid="reverse-contribution-period-type"
                                                 {...contributionForm.register('periodType')}
                                                 style={{ maxWidth: '140px' }}
                                             >
@@ -292,6 +300,7 @@ export default function ReverseSimulationPage() {
                                     <Button
                                         variant="primary"
                                         type="submit"
+                                        data-testid="reverse-contribution-submit"
                                         disabled={loading}
                                         style={{ fontSize: '1rem' }}
                                     >
@@ -307,7 +316,7 @@ export default function ReverseSimulationPage() {
                                             </>
                                         )}
                                     </Button>
-                                    <Button variant="secondary" onClick={handleClear} disabled={loading} style={{ fontSize: '1rem' }}>
+                                    <Button variant="secondary" data-testid="reverse-contribution-clear" onClick={handleClear} disabled={loading} style={{ fontSize: '1rem' }}>
                                         <FiTrash2 size={18} style={{ marginRight: '8px' }} />
                                         Limpar
                                     </Button>
@@ -325,6 +334,7 @@ export default function ReverseSimulationPage() {
                                             <InputGroup.Text>R$</InputGroup.Text>
                                             <Form.Control
                                                 placeholder="100.000,00"
+                                                data-testid="reverse-period-target-amount"
                                                 {...periodForm.register('targetAmount')}
                                                 isInvalid={!!periodErrors.targetAmount}
                                             />
@@ -344,10 +354,12 @@ export default function ReverseSimulationPage() {
                                                 <InputGroup.Text>%</InputGroup.Text>
                                                 <Form.Control
                                                     placeholder="12,00"
+                                                    data-testid="reverse-period-interest-rate"
                                                     {...periodForm.register('interestRate')}
                                                     isInvalid={!!periodErrors.interestRate}
                                                 />
                                                 <Form.Select
+                                                    data-testid="reverse-period-rate-type"
                                                     {...periodForm.register('rateType')}
                                                     style={{ maxWidth: '140px' }}
                                                 >
@@ -358,6 +370,7 @@ export default function ReverseSimulationPage() {
                                             <Button
                                                 variant="outline-primary"
                                                 size="sm"
+                                                data-testid="reverse-period-rate-converter"
                                                 onClick={() => setShowRateConverter(true)}
                                                 style={{ whiteSpace: 'nowrap' }}
                                             >
@@ -379,6 +392,7 @@ export default function ReverseSimulationPage() {
                                             <InputGroup.Text>R$</InputGroup.Text>
                                             <Form.Control
                                                 placeholder="500,00"
+                                                data-testid="reverse-period-monthly-contribution"
                                                 {...periodForm.register('monthlyContribution')}
                                                 isInvalid={!!periodErrors.monthlyContribution}
                                             />
@@ -396,6 +410,7 @@ export default function ReverseSimulationPage() {
                                     <Button
                                         variant="primary"
                                         type="submit"
+                                        data-testid="reverse-period-submit"
                                         disabled={loading}
                                         style={{ fontSize: '1rem' }}
                                     >
@@ -411,7 +426,7 @@ export default function ReverseSimulationPage() {
                                             </>
                                         )}
                                     </Button>
-                                    <Button variant="secondary" onClick={handleClear} disabled={loading} style={{ fontSize: '1rem' }}>
+                                    <Button variant="secondary" data-testid="reverse-period-clear" onClick={handleClear} disabled={loading} style={{ fontSize: '1rem' }}>
                                         <FiTrash2 size={18} style={{ marginRight: '8px' }} />
                                         Limpar
                                     </Button>
@@ -422,22 +437,22 @@ export default function ReverseSimulationPage() {
                 </Card>
 
                 {/* RESULTADOS */}
-                <Card className={styles.resultsCard}>
+                <Card className={styles.resultsCard} data-testid="reverse-results-card">
                     <Card.Header className="bg-light border-bottom" style={{ padding: '16px' }}>
                         <h5 style={{ margin: 0 }}>Resultados da Simulação</h5>
                     </Card.Header>
                     <Card.Body>
                         {loading ? (
-                            <div className={styles.loadingSpinner}>
+                            <div className={styles.loadingSpinner} data-testid="reverse-loading">
                                 <Spinner animation="border" role="status">
                                     <span className="visually-hidden">Carregando...</span>
                                 </Spinner>
                             </div>
                         ) : result ? (
-                            <div>
+                            <div data-testid="reverse-results">
                                 {/* RESULTADO PRINCIPAL EM DESTAQUE */}
                                 {result.mode === ReverseSimulationMode.CALCULATE_CONTRIBUTION && result.requiredMonthlyContribution !== null && (
-                                    <div className={styles.highlightResult}>
+                                    <div className={styles.highlightResult} data-testid="reverse-result-highlight-contribution">
                                         <div className={styles.highlightLabel}>Aporte Mensal Necessário</div>
                                         <div className={styles.highlightValue}>
                                             {currencyFormatter.format(result.requiredMonthlyContribution)}
@@ -446,7 +461,7 @@ export default function ReverseSimulationPage() {
                                 )}
 
                                 {result.mode === ReverseSimulationMode.CALCULATE_PERIOD && result.requiredPeriodMonths !== null && (
-                                    <div className={styles.highlightResult}>
+                                    <div className={styles.highlightResult} data-testid="reverse-result-highlight-period">
                                         <div className={styles.highlightLabel}>Prazo Necessário</div>
                                         <div className={styles.highlightValue}>
                                             {result.requiredPeriodYears !== null
@@ -462,7 +477,7 @@ export default function ReverseSimulationPage() {
                                 )}
 
                                 {/* DETALHES */}
-                                <div className={styles.resultItem}>
+                                <div className={styles.resultItem} data-testid="reverse-result-target-amount">
                                     <span className={styles.resultLabel}>Valor Objetivo</span>
                                     <span className={`${styles.resultValue} ${styles.currencyValue}`}>
                                         {currencyFormatter.format(result.targetAmount)}
@@ -470,7 +485,7 @@ export default function ReverseSimulationPage() {
                                 </div>
 
                                 {result.mode === ReverseSimulationMode.CALCULATE_CONTRIBUTION && (
-                                    <div className={styles.resultItem}>
+                                    <div className={styles.resultItem} data-testid="reverse-result-informed-period">
                                         <span className={styles.resultLabel}>Período Informado</span>
                                         <span className={`${styles.resultValue} ${styles.timeValue}`}>
                                             {result.informedPeriod}{' '}
@@ -480,7 +495,7 @@ export default function ReverseSimulationPage() {
                                 )}
 
                                 {result.mode === ReverseSimulationMode.CALCULATE_PERIOD && result.informedMonthlyContribution !== null && (
-                                    <div className={styles.resultItem}>
+                                    <div className={styles.resultItem} data-testid="reverse-result-informed-contribution">
                                         <span className={styles.resultLabel}>Aporte Mensal Informado</span>
                                         <span className={`${styles.resultValue} ${styles.currencyValue}`}>
                                             {currencyFormatter.format(result.informedMonthlyContribution)}
@@ -490,7 +505,7 @@ export default function ReverseSimulationPage() {
 
                                 <div className={styles.summarySection}>
                                     <div className={styles.summaryTitle}>Configurações Utilizadas</div>
-                                    <div className={styles.resultItem} style={{ paddingTop: 0 }}>
+                                    <div className={styles.resultItem} data-testid="reverse-result-monthly-rate" style={{ paddingTop: 0 }}>
                                         <span className={styles.resultLabel}>Taxa Mensal Equivalente</span>
                                         <span className={styles.resultValue}>
                                             {numberFormatter.format(result.usedMonthlyRatePercent)}%
@@ -499,7 +514,7 @@ export default function ReverseSimulationPage() {
                                 </div>
                             </div>
                         ) : (
-                            <div className={styles.emptyState}>
+                            <div className={styles.emptyState} data-testid="reverse-empty">
                                 <div className={styles.emptyStateIcon}>🎯</div>
                                 <div className={styles.emptyStateText}>
                                     {isContribution
