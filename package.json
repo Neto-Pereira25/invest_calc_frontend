@@ -14,6 +14,7 @@
     "test:jest:coverage": "jest --coverage",
     "test:selenium": "npm run test:selenium:all",
     "test:selenium:all": "start-server-and-test dev:e2e http://127.0.0.1:5173 \"node --test --test-concurrency=1 ./e2e/*.selenium.test.mjs\"",
+    "test:selenium:about": "start-server-and-test dev:e2e http://127.0.0.1:5173 \"node --test --test-concurrency=1 ./e2e/about.selenium.test.mjs\"",
     "test:selenium:auth": "start-server-and-test dev:e2e http://127.0.0.1:5173 \"node --test --test-concurrency=1 ./e2e/auth.selenium.test.mjs\"",
     "test:selenium:compound-interest": "start-server-and-test dev:e2e http://127.0.0.1:5173 \"node --test --test-concurrency=1 ./e2e/compound-interest.selenium.test.mjs\"",
     "test:selenium:converter": "start-server-and-test dev:e2e http://127.0.0.1:5173 \"node --test --test-concurrency=1 ./e2e/interest-rate-converter.selenium.test.mjs\"",
