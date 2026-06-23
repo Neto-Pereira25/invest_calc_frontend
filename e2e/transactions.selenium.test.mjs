@@ -1,185 +1,28 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import selenium from "selenium-webdriver";
-import chrome from "selenium-webdriver/chrome.js";
-import select from "selenium-webdriver/lib/select.js";
-
-const { Builder, By, until } = selenium;
-const { Select } = select;
-
-const FRONTEND_URL = process.env.FRONTEND_URL ?? "http://127.0.0.1:5173";
-const TEST_PAUSE_MS = Number(process.env.SELENIUM_TEST_PAUSE_MS ?? 900);
-
-async function createDriver() {
-  const options = new chrome.Options();
-
-  // options.addArguments("--headless=new");
-  options.addArguments("--window-size=1366,1000");
-  options.addArguments("--no-sandbox");
-  options.addArguments("--disable-dev-shm-usage");
-
-  return new Builder().forBrowser("chrome").setChromeOptions(options).build();
-}
-
-async function clearStorage(driver) {
-  await driver.executeScript(`
-    window.localStorage.clear();
-    window.sessionStorage.clear();
-  `);
-}
-
-async function getCurrentPath(driver) {
-  const currentUrl = await driver.getCurrentUrl();
-  return new URL(currentUrl).pathname;
-}
-
-async function waitForPath(driver, expectedPath) {
-  await driver.wait(async () => {
-    const path = await getCurrentPath(driver);
-    return path === expectedPath;
-  }, 10000);
-}
-
-async function sleep(driver, ms = TEST_PAUSE_MS) {
-  await driver.sleep(ms);
-}
-
-async function findByTestId(driver, testId) {
-  const selector = `[data-testid="${testId}"]`;
-  const element = await driver.wait(
-    until.elementLocated(By.css(selector)),
-    10000,
-  );
-
-  await driver.wait(until.elementIsVisible(element), 10000);
-  await driver.wait(until.elementIsEnabled(element), 10000);
-
-  return element;
-}
-
-async function typeByTestId(driver, testId, value) {
-  const element = await findByTestId(driver, testId);
-  await element.clear();
-  await element.sendKeys(value);
-  await sleep(driver);
-}
-
-async function setValueByTestId(driver, testId, value) {
-  const element = await findByTestId(driver, testId);
-
-  await driver.executeScript(
-    `
-      const setter = Object.getOwnPropertyDescriptor(
-        HTMLInputElement.prototype,
-        'value',
-      ).set;
-
-      setter.call(arguments[0], arguments[1]);
-      arguments[0].dispatchEvent(new Event('input', { bubbles: true }));
-      arguments[0].dispatchEvent(new Event('change', { bubbles: true }));
-    `,
-    element,
-    value,
-  );
-  await sleep(driver);
-}
-
-async function clickByTestId(driver, testId) {
-  const element = await findByTestId(driver, testId);
-
-  await driver.executeScript(
-    'arguments[0].scrollIntoView({ block: "center", inline: "center" });',
-    element,
-  );
-
-  await driver.wait(until.elementIsVisible(element), 10000);
-  await driver.wait(until.elementIsEnabled(element), 10000);
-
-  try {
-    await element.click();
-  } catch (error) {
-    if (error.name !== "ElementClickInterceptedError") {
-      throw error;
-    }
-
-    await driver.executeScript("arguments[0].click();", element);
-  }
-
-  await sleep(driver);
-}
-
-function uniqueEmail() {
-  return `marina.costa.${Date.now()}.${Math.random().toString(36).slice(2)}@email.com`;
-}
+import { createDriver } from "./support/driver.mjs";
+import { FRONTEND_URL } from "./support/config.mjs";
+import { loginOnce } from "./support/auth.mjs";
+import {
+  By,
+  until,
+  clickByTestId,
+  findByTestId,
+  selectFirstRealOption,
+  setValueByTestId,
+  sleep,
+  typeByTestId,
+  waitForPath,
+} from "./support/ui.mjs";
 
 function uniqueTransactionDescription(description) {
   const suffix = Math.random().toString(36).slice(2, 6);
   return `${description} ${suffix}`;
 }
 
-async function registerUserByUi(driver, { name, email, password }) {
-  await driver.get(`${FRONTEND_URL}/register`);
-
-  await typeByTestId(driver, "register-name", name);
-  await typeByTestId(driver, "register-email", email);
-  await typeByTestId(driver, "register-password", password);
-  await typeByTestId(driver, "register-confirm-password", password);
-
-  await clickByTestId(driver, "register-submit");
-  await waitForPath(driver, "/login");
-  await sleep(driver);
-}
-
-async function loginAsNewUser(driver) {
-  await driver.get(FRONTEND_URL);
-  await clearStorage(driver);
-
-  const email = uniqueEmail();
-  const password = "12345678";
-
-  await registerUserByUi(driver, {
-    name: "Marina Costa",
-    email,
-    password,
-  });
-
-  await typeByTestId(driver, "login-email", email);
-  await typeByTestId(driver, "login-password", password);
-  await clickByTestId(driver, "login-submit");
-  await waitForPath(driver, "/dashboard");
-  await sleep(driver);
-}
-
 async function openTransactionsPage(driver) {
   await driver.get(`${FRONTEND_URL}/transactions`);
   await waitForPath(driver, "/transactions");
-  await sleep(driver);
-}
-
-async function waitForOptions(driver, testId) {
-  const select = await findByTestId(driver, testId);
-
-  await driver.wait(async () => {
-    const count = await driver.executeScript(
-      "return Array.from(arguments[0].querySelectorAll('option[value]')).filter((item) => !['', '0'].includes(item.value)).length;",
-      select,
-    );
-
-    return count > 0;
-  }, 10000);
-
-  return select;
-}
-
-async function selectFirstRealOption(driver, testId) {
-  const select = await waitForOptions(driver, testId);
-  const firstValue = await driver.executeScript(
-    "return Array.from(arguments[0].options).find((item) => !['', '0'].includes(item.value))?.value;",
-    select,
-  );
-
-  const selectObject = new Select(select);
-  await selectObject.selectByValue(firstValue);
   await sleep(driver);
 }
 
@@ -284,11 +127,11 @@ async function waitForTransactionToDisappear(driver, description) {
   }, 10000);
 }
 
-test("deve gerenciar transacoes em um unico login", async () => {
+test("deve gerenciar transacoes em um unico login com dados persistidos no MySQL", async () => {
   const driver = await createDriver();
 
   try {
-    await loginAsNewUser(driver);
+    await loginOnce(driver);
     await openTransactionsPage(driver);
 
     const expenseDescription = uniqueTransactionDescription("Conta de energia maio 2026");
@@ -338,7 +181,9 @@ test("deve gerenciar transacoes em um unico login", async () => {
     assert.match(modalText, /Subcategoria é obrigatória|Selecione uma subcategoria/);
     await closeOpenModal(driver);
 
-    const editedExpenseDescription = uniqueTransactionDescription("Conta de energia ajustada maio 2026");
+    const editedExpenseDescription = uniqueTransactionDescription(
+      "Conta de energia ajustada maio 2026",
+    );
 
     const row = await findTransactionRow(driver, expenseDescription);
     const editButton = await row.findElement(By.css('[data-testid="transaction-edit"]'));
