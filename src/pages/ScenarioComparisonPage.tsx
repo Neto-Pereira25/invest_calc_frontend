@@ -99,7 +99,7 @@ export default function ScenarioComparisonPage() {
             : null;
 
     return (
-        <div className={styles.page}>
+        <div className={styles.page} data-testid="scenario-comparison-page">
             <section className={styles.section}>
                 <header className={styles.sectionHeader}>
                     <span className={styles.iconBlock}>
@@ -115,7 +115,12 @@ export default function ScenarioComparisonPage() {
                                 Adicione quantos cenários desejar. A comparação considera todos os
                                 cenários informados.
                             </p>
-                            <Button className={styles.addButton} type="button" onClick={handleAddScenario}>
+                            <Button
+                                className={styles.addButton}
+                                data-testid="scenario-add"
+                                type="button"
+                                onClick={handleAddScenario}
+                            >
                                 <FiPlus className="me-2" />
                                 Adicionar cenário
                             </Button>
@@ -128,12 +133,13 @@ export default function ScenarioComparisonPage() {
                         <Row className="g-4">
                             {fields.map((field, index) => (
                                 <Col lg={6} key={field.id}>
-                                    <Card className={styles.scenarioCard}>
+                                    <Card className={styles.scenarioCard} data-testid="scenario-card">
                                         <Card.Body>
                                             <div className={styles.scenarioHeader}>
                                                 <h3 className={styles.scenarioTitle}>Cenário {index + 1}</h3>
                                                 <Button
                                                     className={styles.removeButton}
+                                                    data-testid={`scenario-remove-${index}`}
                                                     type="button"
                                                     onClick={() => remove(index)}
                                                     disabled={fields.length <= 2}
@@ -146,6 +152,7 @@ export default function ScenarioComparisonPage() {
                                                 <Col md={12}>
                                                     <Form.Label>Nome</Form.Label>
                                                     <Form.Control
+                                                        data-testid={`scenario-name-${index}`}
                                                         {...register(`scenarios.${index}.name` as const)}
                                                         isInvalid={!!errors.scenarios?.[index]?.name}
                                                     />
@@ -158,6 +165,7 @@ export default function ScenarioComparisonPage() {
                                                     <InputGroup>
                                                         <InputGroup.Text>R$</InputGroup.Text>
                                                         <Form.Control
+                                                            data-testid={`scenario-initial-capital-${index}`}
                                                             {...register(`scenarios.${index}.initialCapital` as const)}
                                                             isInvalid={!!errors.scenarios?.[index]?.initialCapital}
                                                         />
@@ -171,6 +179,7 @@ export default function ScenarioComparisonPage() {
                                                     <InputGroup>
                                                         <InputGroup.Text>R$</InputGroup.Text>
                                                         <Form.Control
+                                                            data-testid={`scenario-monthly-contribution-${index}`}
                                                             {...register(`scenarios.${index}.monthlyContribution` as const)}
                                                             isInvalid={!!errors.scenarios?.[index]?.monthlyContribution}
                                                         />
@@ -184,6 +193,7 @@ export default function ScenarioComparisonPage() {
                                                     <InputGroup>
                                                         <InputGroup.Text>%</InputGroup.Text>
                                                         <Form.Control
+                                                            data-testid={`scenario-interest-rate-${index}`}
                                                             {...register(`scenarios.${index}.interestRate` as const)}
                                                             isInvalid={!!errors.scenarios?.[index]?.interestRate}
                                                         />
@@ -195,6 +205,7 @@ export default function ScenarioComparisonPage() {
                                                 <Col md={6}>
                                                     <Form.Label>Meses</Form.Label>
                                                     <Form.Control
+                                                        data-testid={`scenario-months-${index}`}
                                                         {...register(`scenarios.${index}.months` as const)}
                                                         isInvalid={!!errors.scenarios?.[index]?.months}
                                                     />
@@ -210,10 +221,10 @@ export default function ScenarioComparisonPage() {
                         </Row>
 
                         <div className={styles.actions}>
-                            <Button className={styles.clearButton} type="button" onClick={handleClear} disabled={isSubmitting}>
+                            <Button className={styles.clearButton} data-testid="scenario-clear" type="button" onClick={handleClear} disabled={isSubmitting}>
                                 Limpar <FiRefreshCw className="ms-2" />
                             </Button>
-                            <Button className={styles.calculateButton} type="submit" disabled={isSubmitting}>
+                            <Button className={styles.calculateButton} data-testid="scenario-submit" type="submit" disabled={isSubmitting}>
                                 Comparar
                             </Button>
                         </div>
@@ -232,12 +243,12 @@ export default function ScenarioComparisonPage() {
 
                     <div className={styles.sectionBody}>
                         {bestScenarioName && (
-                            <div className={styles.bestInfo}>
+                            <div className={styles.bestInfo} data-testid="scenario-best-info">
                                 Melhor cenário: <strong>{bestScenarioName}</strong>
                             </div>
                         )}
 
-                        <div className={styles.tableWrap}>
+                        <div className={styles.tableWrap} data-testid="scenario-result-table">
                             <table className={styles.table}>
                                 <thead>
                                     <tr>
@@ -249,7 +260,11 @@ export default function ScenarioComparisonPage() {
                                 </thead>
                                 <tbody>
                                     {result.map((item, index) => (
-                                        <tr key={`${item.scenarioName}-${index}`} className={item.scenarioName === bestScenarioName ? styles.bestRow : ''}>
+                                        <tr
+                                            key={`${item.scenarioName}-${index}`}
+                                            className={item.scenarioName === bestScenarioName ? styles.bestRow : ''}
+                                            data-testid="scenario-result-row"
+                                        >
                                             <td>{item.scenarioName}</td>
                                             <td>{currencyFormatter.format(item.investedAmount)}</td>
                                             <td>{currencyFormatter.format(item.totalInterest)}</td>

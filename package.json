@@ -27,6 +27,8 @@
     "test:selenium:profile:compose": "cd ../invest_calc_backend && docker compose --profile e2e up -d --build app-e2e && cd ../invest_calc_frontend && npm run test:selenium:profile",
     "test:selenium:repeated-expenses": "start-server-and-test dev:e2e http://127.0.0.1:5173 \"node --test --test-concurrency=1 ./e2e/repeated-expenses.selenium.test.mjs\"",
     "test:selenium:repeated-expenses:compose": "cd ../invest_calc_backend && docker compose --profile e2e up -d --build app-e2e && cd ../invest_calc_frontend && npm run test:selenium:repeated-expenses",
+    "test:selenium:scenario-comparison": "start-server-and-test dev:e2e http://127.0.0.1:5173 \"node --test --test-concurrency=1 ./e2e/scenario-comparison.selenium.test.mjs\"",
+    "test:selenium:scenario-comparison:compose": "cd ../invest_calc_backend && docker compose --profile e2e up -d --build app-e2e && cd ../invest_calc_frontend && npm run test:selenium:scenario-comparison",
     "test:selenium:spending-limit": "start-server-and-test dev:e2e http://127.0.0.1:5173 \"node --test --test-concurrency=1 ./e2e/spending-limit.selenium.test.mjs\"",
     "test:selenium:transactions": "start-server-and-test dev:e2e http://127.0.0.1:5173 \"node --test --test-concurrency=1 ./e2e/transactions.selenium.test.mjs\"",
     "test": "npm run test:e2e",
