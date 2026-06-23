@@ -69,7 +69,7 @@ export default function ProfilePage() {
     }
 
     if (error && !user) {
-        return <div className={s.error}>{error}</div>;
+        return <div className={s.error} data-testid="profile-load-error">{error}</div>;
     }
 
     const displayName = name.trim() || user?.name || decodedToken?.name || decodedToken?.username || 'Usuario';
@@ -87,8 +87,10 @@ export default function ProfilePage() {
         try {
             setSaving(true);
             setError(null);
-            const updatedUser = await updateAuthenticatedUserName(name.trim());
-            setUser(updatedUser);
+            const updatedName = name.trim();
+            const updatedUser = await updateAuthenticatedUserName(updatedName);
+            setUser({ ...updatedUser, name: updatedName });
+            setName(updatedName);
             setSuccess('Nome do usuário atualizado com sucesso.');
             setIsEditing(false);
         } catch (err) {
@@ -108,7 +110,7 @@ export default function ProfilePage() {
     }
 
     return (
-        <div className={s.page}>
+        <div className={s.page} data-testid="profile-page">
             <header className={s.header}>
                 <h1 className={s.title}>Perfil</h1>
                 <p className={s.subtitle}>Visualize e atualize seus dados pessoais</p>
@@ -117,11 +119,11 @@ export default function ProfilePage() {
             <div className={s.container}>
                 {/* Profile Card */}
                 <div className={s.profileCard}>
-                    <div className={s.avatarLarge}>{avatarLetter}</div>
+                    <div className={s.avatarLarge} data-testid="profile-avatar">{avatarLetter}</div>
                     <div className={s.profileInfo}>
-                        <div className={s.userName}>{displayName}</div>
-                        <div className={s.userEmail}>{displayEmail}</div>
-                        <div className={s.userRole}>
+                        <div className={s.userName} data-testid="profile-card-name">{displayName}</div>
+                        <div className={s.userEmail} data-testid="profile-card-email">{displayEmail}</div>
+                        <div className={s.userRole} data-testid="profile-card-role">
                             {displayRole === 'ADMIN' ? 'Administrador' : 'Usuário'}
                         </div>
                     </div>
@@ -135,6 +137,7 @@ export default function ProfilePage() {
                             <span className={s.detailLabel}>Nome</span>
                             {isEditing ? (
                                 <input
+                                    data-testid="profile-name-input"
                                     className={s.input}
                                     type="text"
                                     value={name}
@@ -142,35 +145,36 @@ export default function ProfilePage() {
                                     placeholder="Digite seu nome"
                                 />
                             ) : (
-                                <span className={s.detailValue}>{displayName}</span>
+                                <span className={s.detailValue} data-testid="profile-detail-name">{displayName}</span>
                             )}
                         </div>
 
                         <div className={s.detailItem}>
                             <span className={s.detailLabel}>E-mail</span>
-                            <span className={s.detailValue}>{displayEmail}</span>
+                            <span className={s.detailValue} data-testid="profile-detail-email">{displayEmail}</span>
                         </div>
 
                         <div className={s.detailItem}>
                             <span className={s.detailLabel}>Tipo de Conta</span>
-                            <span className={s.detailValue}>
+                            <span className={s.detailValue} data-testid="profile-detail-role">
                                 {displayRole === 'ADMIN' ? '👑 Administrador' : '👤 Usuário'}
                             </span>
                         </div>
 
                         <div className={s.detailItem}>
                             <span className={s.detailLabel}>ID do Usuário</span>
-                            <span className={s.detailValue}>{user?.id || 'N/A'}</span>
+                            <span className={s.detailValue} data-testid="profile-detail-id">{user?.id || 'N/A'}</span>
                         </div>
                     </div>
 
-                    {success && <div className={s.messageSuccess}>{success}</div>}
-                    {error && user && <div className={s.messageError}>{error}</div>}
+                    {success && <div className={s.messageSuccess} data-testid="profile-success">{success}</div>}
+                    {error && user && <div className={s.messageError} data-testid="profile-error">{error}</div>}
 
                     <div className={s.actions}>
                         {isEditing ? (
                             <>
                                 <button
+                                    data-testid="profile-save"
                                     className={`${s.button} ${s.buttonPrimary}`}
                                     onClick={handleSave}
                                     disabled={saving}
@@ -179,6 +183,7 @@ export default function ProfilePage() {
                                     {saving ? 'Salvando...' : 'Salvar alterações'}
                                 </button>
                                 <button
+                                    data-testid="profile-cancel"
                                     className={s.button}
                                     onClick={handleCancel}
                                     type="button"
@@ -188,6 +193,7 @@ export default function ProfilePage() {
                             </>
                         ) : (
                             <button
+                                data-testid="profile-edit"
                                 className={`${s.button} ${s.buttonPrimary}`}
                                 onClick={() => {
                                     setIsEditing(true);

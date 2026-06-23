@@ -23,6 +23,8 @@
     "test:selenium:financial-summary": "start-server-and-test dev:e2e http://127.0.0.1:5173 \"node --test --test-concurrency=1 ./e2e/financial-summary.selenium.test.mjs\"",
     "test:selenium:goals": "start-server-and-test dev:e2e http://127.0.0.1:5173 \"node --test --test-concurrency=1 ./e2e/goals.selenium.test.mjs\"",
     "test:selenium:password-recovery": "start-server-and-test dev:e2e http://127.0.0.1:5173 \"node --test --test-concurrency=1 ./e2e/password-recovery.selenium.test.mjs\"",
+    "test:selenium:profile": "start-server-and-test dev:e2e http://127.0.0.1:5173 \"node --test --test-concurrency=1 ./e2e/profile.selenium.test.mjs\"",
+    "test:selenium:profile:compose": "cd ../invest_calc_backend && docker compose --profile e2e up -d --build app-e2e && cd ../invest_calc_frontend && npm run test:selenium:profile",
     "test:selenium:spending-limit": "start-server-and-test dev:e2e http://127.0.0.1:5173 \"node --test --test-concurrency=1 ./e2e/spending-limit.selenium.test.mjs\"",
     "test:selenium:transactions": "start-server-and-test dev:e2e http://127.0.0.1:5173 \"node --test --test-concurrency=1 ./e2e/transactions.selenium.test.mjs\"",
     "test": "npm run test:e2e",
