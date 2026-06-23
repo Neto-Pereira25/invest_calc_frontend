@@ -24,10 +24,11 @@ export default function RepeatedExpensesPage() {
     };
 
     return (
-        <div className={s.page}>
+        <div className={s.page} data-testid="repeated-expenses-page">
             <header className={s.header}>
                 <h1>Gastos Recorrentes</h1>
                 <button
+                    data-testid="repeated-expenses-info-toggle"
                     type="button"
                     className={s.infoButton}
                     onClick={() => setShowFrequencyInfo((prev) => !prev)}
@@ -37,7 +38,7 @@ export default function RepeatedExpensesPage() {
             </header>
 
             {showFrequencyInfo && (
-                <section className={s.infoCard}>
+                <section className={s.infoCard} data-testid="repeated-expenses-info-card">
                     <p>
                         A frequência representa em quantos meses diferentes esse gasto apareceu ao
                         menos uma vez.
@@ -50,13 +51,13 @@ export default function RepeatedExpensesPage() {
             )}
 
             {isLoading ? (
-                <div className={s.loading}>Carregando...</div>
+                <div className={s.loading} data-testid="repeated-expenses-loading">Carregando...</div>
             ) : items.length === 0 ? (
-                <div className={s.empty}>
+                <div className={s.empty} data-testid="repeated-expenses-empty">
                     <p>Nenhum gasto recorrente encontrado</p>
                 </div>
             ) : (
-                <div className={s.tableCard}>
+                <div className={s.tableCard} data-testid="repeated-expenses-table-card">
                     <table className={s.table}>
                         <thead>
                             <tr>
@@ -69,7 +70,7 @@ export default function RepeatedExpensesPage() {
                         </thead>
                         <tbody>
                             {items.map((expense: RepeatedExpense, index: number) => (
-                                <tr key={index}>
+                                <tr key={index} data-testid="repeated-expense-row">
                                     <td>{expense.description}</td>
                                     <td>{expense.category}</td>
                                     <td>{expense.subcategory}</td>
