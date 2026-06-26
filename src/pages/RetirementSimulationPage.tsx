@@ -150,7 +150,7 @@ export default function RetirementSimulationPage() {
   };
 
   return (
-    <div className={styles.container}>
+    <div className={styles.container} data-testid="retirement-simulation-page">
       <InterestRateConverterModal
         show={showRateConverter}
         onClose={() => setShowRateConverter(false)}
@@ -185,6 +185,7 @@ export default function RetirementSimulationPage() {
                     <InputGroup.Text>R$</InputGroup.Text>
                     <Form.Control
                       placeholder="3.000,00"
+                      data-testid="retirement-desired-income"
                       {...register('desiredMonthlyIncome')}
                       isInvalid={!!errors.desiredMonthlyIncome}
                     />
@@ -206,10 +207,12 @@ export default function RetirementSimulationPage() {
                       <InputGroup.Text>%</InputGroup.Text>
                       <Form.Control
                         placeholder="8,50"
+                        data-testid="retirement-interest-rate"
                         {...register('interestRate')}
                         isInvalid={!!errors.interestRate}
                       />
                       <Form.Select
+                        data-testid="retirement-rate-type"
                         {...register('rateType')}
                         isInvalid={!!errors.rateType}
                         style={{ maxWidth: '140px' }}
@@ -221,6 +224,7 @@ export default function RetirementSimulationPage() {
                     <Button
                       variant="outline-primary"
                       size="sm"
+                      data-testid="retirement-rate-converter"
                       onClick={() => setShowRateConverter(true)}
                       style={{ whiteSpace: 'nowrap' }}
                     >
@@ -242,10 +246,12 @@ export default function RetirementSimulationPage() {
                     <Form.Control
                       type="number"
                       placeholder="30"
+                      data-testid="retirement-period"
                       {...register('period')}
                       isInvalid={!!errors.period}
                     />
                     <Form.Select
+                      data-testid="retirement-period-type"
                       {...register('periodType')}
                       isInvalid={!!errors.periodType}
                       style={{ maxWidth: '140px' }}
@@ -276,6 +282,7 @@ export default function RetirementSimulationPage() {
                       <InputGroup.Text>%</InputGroup.Text>
                       <Form.Control
                         placeholder="2,50"
+                        data-testid="retirement-annual-inflation"
                         {...register('annualInflationRate')}
                         isInvalid={!!errors.annualInflationRate}
                       />
@@ -296,6 +303,7 @@ export default function RetirementSimulationPage() {
                       <InputGroup.Text>%</InputGroup.Text>
                       <Form.Control
                         placeholder="4,00"
+                        data-testid="retirement-safe-withdrawal"
                         {...register('safeWithdrawalRate')}
                         isInvalid={!!errors.safeWithdrawalRate}
                       />
@@ -316,6 +324,7 @@ export default function RetirementSimulationPage() {
                 <Button
                   variant="primary"
                   type="submit"
+                  data-testid="retirement-submit"
                   disabled={isSubmitting || loading}
                   style={{ fontSize: '1rem' }}
                 >
@@ -340,6 +349,7 @@ export default function RetirementSimulationPage() {
                 </Button>
                 <Button
                   variant="secondary"
+                  data-testid="retirement-clear"
                   onClick={handleClear}
                   disabled={isSubmitting || loading}
                   style={{ fontSize: '1rem' }}
@@ -353,48 +363,48 @@ export default function RetirementSimulationPage() {
         </Card>
 
         {/* RESULTADOS */}
-        <Card className={styles.resultsCard}>
+        <Card className={styles.resultsCard} data-testid="retirement-results-card">
           <Card.Header className="bg-light border-bottom" style={{ padding: '16px' }}>
             <h5 style={{ margin: 0 }}>Resultados da Simulação</h5>
           </Card.Header>
           <Card.Body>
             {loading ? (
-              <div className={styles.loadingSpinner}>
+              <div className={styles.loadingSpinner} data-testid="retirement-loading">
                 <Spinner animation="border" role="status">
                   <span className="visually-hidden">Carregando...</span>
                 </Spinner>
               </div>
             ) : result ? (
-              <div>
-                <div className={styles.resultItem}>
+              <div data-testid="retirement-results">
+                <div className={styles.resultItem} data-testid="retirement-result-income">
                   <span className={styles.resultLabel}>Renda Desejada</span>
                   <span className={`${styles.resultValue} ${styles.currencyValue}`}>
                     {currencyFormatter.format(result.desiredMonthlyIncome)}
                   </span>
                 </div>
 
-                <div className={styles.resultItem}>
+                <div className={styles.resultItem} data-testid="retirement-result-inflation-income">
                   <span className={styles.resultLabel}>Renda Ajustada por Inflação</span>
                   <span className={`${styles.resultValue} ${styles.currencyValue}`}>
                     {currencyFormatter.format(result.inflationAdjustedMonthlyIncome)}
                   </span>
                 </div>
 
-                <div className={styles.resultItem}>
+                <div className={styles.resultItem} data-testid="retirement-result-target-amount">
                   <span className={styles.resultLabel}>Valor Alvo para Aposentadoria</span>
                   <span className={`${styles.resultValue} ${styles.currencyValue}`}>
                     {currencyFormatter.format(result.targetAmount)}
                   </span>
                 </div>
 
-                <div className={styles.resultItem}>
+                <div className={styles.resultItem} data-testid="retirement-result-monthly-contribution">
                   <span className={styles.resultLabel}>Aporte Mensal Necessário</span>
                   <span className={`${styles.resultValue} ${styles.currencyValue}`}>
                     {currencyFormatter.format(result.requiredMonthlyContribution)}
                   </span>
                 </div>
 
-                <div className={styles.resultItem}>
+                <div className={styles.resultItem} data-testid="retirement-result-months">
                   <span className={styles.resultLabel}>Período até Aposentadoria</span>
                   <span className={`${styles.resultValue} ${styles.timeValue}`}>
                     {result.monthsToRetirement} meses
@@ -404,13 +414,13 @@ export default function RetirementSimulationPage() {
                 <div className={styles.summarySection}>
                   <div className={styles.summaryTitle}>Configurações Utilizadas</div>
                   <div className={styles.summaryGrid}>
-                    <div className={styles.summaryItem}>
+                    <div className={styles.summaryItem} data-testid="retirement-result-used-inflation">
                       <div className={styles.summaryItemLabel}>Taxa de Inflação Anual</div>
                       <div className={styles.summaryItemValue}>
                         {numberFormatter.format(result.usedAnnualInflationRate)}%
                       </div>
                     </div>
-                    <div className={styles.summaryItem}>
+                    <div className={styles.summaryItem} data-testid="retirement-result-used-withdrawal">
                       <div className={styles.summaryItemLabel}>Taxa de Retirada Segura</div>
                       <div className={styles.summaryItemValue}>
                         {numberFormatter.format(result.usedSafeWithdrawalRate)}%
@@ -420,7 +430,7 @@ export default function RetirementSimulationPage() {
                 </div>
               </div>
             ) : (
-              <div className={styles.emptyState}>
+              <div className={styles.emptyState} data-testid="retirement-empty">
                 <div className={styles.emptyStateIcon}>📊</div>
                 <div className={styles.emptyStateText}>
                   Preencha os parâmetros e clique em "Simular" para ver os resultados
